@@ -1,6 +1,7 @@
 import { Base } from "./Base";
 
 export class Selectable extends Base {
+    public selected: boolean = false;
     public selection_index: number | null = null;
 
     public getClassNames(selected_index: number): string[] {
@@ -12,13 +13,6 @@ export class Selectable extends Base {
             classNames.add('selected');
         }
         return Array.from(classNames);
-    }
-
-    public containsSelected(selected_index: number): boolean {
-        if (this.selection_index === null) {
-            return false;
-        }
-        return this.selection_index <= selected_index;
     }
 
 }

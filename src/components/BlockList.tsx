@@ -3,17 +3,17 @@ import React, { Dispatch, SetStateAction, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { List } from '../data';
 import { BlockFactoryContext, SelectedStepContext } from '../hooks';
-import { Variant, borderColor } from './theme';
+import { borderColor } from './theme';
 
 interface BlockListProps {
     className?: string;
     list: List;
-    variant: Variant;
-    setVariant: Dispatch<SetStateAction<Variant>>;
+    selected: boolean | Dispatch<SetStateAction<boolean>>;
+    onSelected?: (selected: boolean) => void;
     key: any;
 }
 
-export const BlockListComponent = ({className, list, variant, setVariant, key}: BlockListProps) => {
+export const BlockListComponent = ({className, list, selected, onSelected, key}: BlockListProps) => {
 
     const {step, setStep} = useContext(SelectedStepContext);
     const {factory, setFactory} = useContext(BlockFactoryContext);
@@ -31,7 +31,7 @@ export const BlockListComponent = ({className, list, variant, setVariant, key}: 
 
     return <div className={getClasses()}>
         { list.items.map((item, index) => {
-            return factory?.build(item, index, list);
+            return factory?.build(item, list);
         }) }
     </div>;
 }

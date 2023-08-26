@@ -1,36 +1,24 @@
 
-import React, { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useContext, useRef } from 'react';
 import styled from 'styled-components';
-import theme from 'styled-theming';
-import { Span } from "../data";
+import { Selectable, Span } from "../data";
 import { SelectedElementContext, SelectedStepContext } from '../hooks';
-import { Variant } from './theme';
+import { selectedVariants } from './theme';
 
 interface ContentSpanProps {
   className?: string;
   span: Span;
-  variant: Variant;
-  setVariant: Dispatch<SetStateAction<Variant>>;
+  selected: boolean | Dispatch<SetStateAction<boolean>>;
+  onSelected?: (selected: boolean) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   key: any;
 }
 
-const ContentSpanComponent = ({className, span, variant, setVariant, key}: ContentSpanProps) => {
+const ContentSpanComponent = ({className, span, selected, onSelected, onClick, key}: ContentSpanProps) => {
 
     const {step, setStep} = useContext(SelectedStepContext);
     const {element, setElement} = useContext(SelectedElementContext);
-
-    const el = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      if (step === span.selection_index) {
-        setVariant('selected');
-        if (el.current !== null) {
-            setElement(el.current);
-        }
-      } else {  
-        setVariant('default');
-      }
-    }, [step]);
+    const el = useRef<HTMLSpanElement>(null);
 
     const getClasses = () => {
       const classes = span.getClassNames(step);
@@ -41,27 +29,31 @@ const ContentSpanComponent = ({className, span, variant, setVariant, key}: Conte
       return classes.join(' ');
     };
 
-    const handleClick = (obj: any ) => ((e: MouseEvent) => {
-      if (obj.step !== null) {
-        setStep(obj.step);
+    const handleClick = (obj: Selectable ) => ((e: MouseEvent) => {
+      if (obj.selection_index !== null) {
+        setStep(obj.selection_index);
       }
     });
 
-    return <span className={getClasses()} onClick={handleClick(span)} dangerouslySetInnerHTML={{ 
+    return <span ref={el} className={getClasses()} onClick={handleClick(span)} dangerouslySetInnerHTML={{ 
             __html: span.content }}></span>;
 };
 
-const spanTextColor = theme.variants('mode', 'variant', {
+const spanTextColor = selectedVariants('mode', {
     default: { light: '#222', dark: '#eee' },
     selected: { light: '#222', dark: '#ffde98' },
 });
 
-const spanBackgroundColor = theme.variants('mode', 'variant', {
-    default: { light: 'transparent', dark: 'rgb(253 235 184)' },
-    selected: { light: 'transparent', dark: 'rgb(73 69 61)' },
+const spanBackgroundColor = selectedVariants('mode', {
+    default: { light: 'transparent', dark: 'transparent' },
+    selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' },
 });
 
 export const ContentSpan = styled(ContentSpanComponent)`
   color: ${spanTextColor};
   background-color: ${spanBackgroundColor};
+
+  a {
+    color: ${spanTextColor};
+  }
 `;

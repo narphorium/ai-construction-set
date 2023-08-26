@@ -2,6 +2,15 @@ import theme from 'styled-theming';
 
 export type Variant = 'default' | 'selected';
 
+
+export const selectedVariants = (mode: string, values: any) => {
+  return (props: any) => {
+    const variant = props['selected'] ? 'selected' : 'default';
+    return theme(mode, values[variant])(props);
+  };
+};
+
+
 export const backgroundColor = theme('mode', {
   light: '#fff',
   dark: '#000',

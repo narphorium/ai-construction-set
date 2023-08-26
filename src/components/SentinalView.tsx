@@ -3,8 +3,8 @@ import { Selectable } from '../data';
 import { SelectedElementContext, SelectedStepContext } from '../hooks';
 
 interface SentinalViewProps {
-  sentinal: Selectable,
-  key: any
+  sentinal: Selectable;
+  key: any;
 }
 
 export const SentinalView = ({sentinal, key}: SentinalViewProps) => {

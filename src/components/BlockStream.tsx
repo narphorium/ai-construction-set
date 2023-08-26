@@ -17,7 +17,7 @@ export const BlockStream = ({blocks}: BlockStreamProps) => {
 
     return <BlockStreamStyled className="aics-block-stream">
         { blocks.map((block, index) => {
-            return factory?.build(block, index);
+            return factory?.build(block);
         }) }
     </BlockStreamStyled>;
 };

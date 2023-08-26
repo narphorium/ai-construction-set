@@ -1,53 +1,47 @@
 
-import React, { Dispatch, MouseEvent, SetStateAction, useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { Section } from "../data";
 import { BlockFactoryContext, SelectedElementContext, SelectedStepContext } from '../hooks';
-import { Variant, fontWeight } from './theme';
+import { fontWeight } from './theme';
 
 interface ContentSectionProps {
   className?: string;
   section: Section;
-  variant: Variant;
-    setVariant: Dispatch<SetStateAction<Variant>>;
+  selected: boolean | Dispatch<SetStateAction<boolean>>;
+  onSelected?: (selected: boolean) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   key: any;
 }
 
-const ContentSectionComponent = ({className, section, variant, setVariant, key}: ContentSectionProps) => {
+const ContentSectionComponent = ({className, section, selected, onSelected, onClick, key}: ContentSectionProps) => {
 
-    const {step, setStep} = useContext(SelectedStepContext);
-    const {element, setElement} = useContext(SelectedElementContext);
-    const {factory, setFactory} = useContext(BlockFactoryContext);
+  const {step, setStep} = useContext(SelectedStepContext);
+  const {element, setElement} = useContext(SelectedElementContext);
+  const el = useRef<HTMLDivElement>(null);
+  const {factory, setFactory} = useContext(BlockFactoryContext);
 
-    const el = useRef<HTMLDivElement>(null);
+  const getClasses = () => {
+    const classes = section.getClassNames(step);
+    if (className) {
+      classes.push(className);
+    }
+    classes.push('aics-content-section');
+    return classes.join(' ');
+  };
 
-    useEffect(() => {
-      if (step === section.selection_index && el.current !== null) {
-        setElement(el.current);
-      }
-    }, [step]);
+  const handleClick = (obj: any ) => ((e: MouseEvent) => {
+    if (obj.step !== null) {
+      setStep(obj.step);
+    }
+  });
 
-    const getClasses = () => {
-      const classes = section.getClassNames(step);
-      if (className) {
-        classes.push(className);
-      }
-      classes.push('aics-content-section');
-      return classes.join(' ');
-    };
-
-    const handleClick = (obj: any ) => ((e: MouseEvent) => {
-      if (obj.step !== null) {
-        setStep(obj.step);
-      }
-    });
-
-    return <div ref={el} className={ getClasses() } onClick={handleClick(section)}>
-        <label>{ section.name ? section.name + ': ' : '' }</label>
-        { section.spans.map((span, index) => {
-          return factory?.build(span, index, section);
-        }) }
-    </div>;
+  return <div ref={el} className={ getClasses() } onClick={handleClick(section)}>
+      <label>{ section.name ? section.name + ': ' : '' }</label>
+      { section.spans.map((span) => {
+        return factory?.build(span, section);
+      }) }
+  </div>;
 };
 
 export const ContentSection = styled(ContentSectionComponent)`

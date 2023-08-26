@@ -1,15 +1,16 @@
 import React, { Dispatch, SetStateAction, useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { ScrollFlagContext, SelectedStepContext } from '../hooks';
+import { ScrollFlagContext } from '../hooks';
 import { defaultFont, textColor } from './theme';
 
 
 interface CollapsibleBlockProps {
-  children: string | JSX.Element | (JSX.Element | undefined)[],
-    className?: string,
-    title: string,
-    collapsed: boolean,
-    setCollapsed: Dispatch<SetStateAction<boolean>>,
+    children: string | JSX.Element | (JSX.Element | undefined)[];
+    className?: string;
+    title: string;
+    collapsed: boolean | Dispatch<SetStateAction<boolean>>;
+    onToggle?: (collapsed: boolean) => void;
+    // setCollapsed: Dispatch<SetStateAction<boolean>>;
 }
 
 const CollapsibleBlockStyled = styled.div`
@@ -42,7 +43,7 @@ const CollapsibleBlockControlStyled = styled.button`
   vertical-align: text-top;
   height: 1em;
   transition: all 0.2s;
-  margin: 2px 2px 0 6px;
+  margin: 5px 2px 0 6px;
   outline: 0;
 
   &:focus {
@@ -84,11 +85,14 @@ const CollapsibleBlockContentStyled = styled.div`
 const CollapsibleBlockInnerStyled = styled.div`
   font-size: 10pt;
   transition: margin-top ease 0.2s;
+
+  & > .aics-content-section {
+    margin: 4px 8px;
+  }
 `;
 
-export const CollapsibleBlock = ({ className, children, title, collapsed, setCollapsed }: CollapsibleBlockProps) => {
+export const CollapsibleBlock = ({ className, children, title, collapsed, onToggle }: CollapsibleBlockProps) => {
 
-  const stepContext =  useContext(SelectedStepContext);
   const inner = useRef<HTMLDivElement>(null);
 
   const {flag, toggle} = useContext(ScrollFlagContext);
@@ -123,11 +127,13 @@ export const CollapsibleBlock = ({ className, children, title, collapsed, setCol
   return (<CollapsibleBlockStyled className={getClasses()}>
       <CollapsibleBlockHeaderStyled className="aics-collapsible-block-header">
         <CollapsibleBlockControlStyled className="aics-collapsible-block-control" onClick={(e) => {
-          setCollapsed(!collapsed);
+          // setCollapsed(!collapsed);
+          onToggle?.(collapsed as boolean);
           e.stopPropagation();
         }}><i className={'codicon codicon-chevron-down'}/></CollapsibleBlockControlStyled>
         <CollapsibleBlockTitleStyled className="aics-collapsible-block-title" onClick={(e) => {
-          setCollapsed(!collapsed);
+          onToggle?.(collapsed as boolean);
+          // setCollapsed(!collapsed);
           e.stopPropagation();
         }}>{title}</CollapsibleBlockTitleStyled>
       </CollapsibleBlockHeaderStyled>
