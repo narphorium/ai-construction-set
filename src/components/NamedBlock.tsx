@@ -1,48 +1,33 @@
 
-import React, { Dispatch, SetStateAction, useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, ForwardedRef, SetStateAction, forwardRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { NamedContent } from '../data';
-import { BlockFactoryContext, SelectedElementContext, SelectedStepContext } from '../hooks';
+import { BlockFactoryContext } from '../hooks';
 import { CollapsibleBlock, } from './CollapsibleBlock';
 import { selectedVariants } from './theme';
 
 interface NamedBlockProps {
-    className?: string | string[],
-    content: NamedContent, 
-    collapsed: boolean | Dispatch<SetStateAction<boolean>>,
-    selected: boolean | Dispatch<SetStateAction<boolean>>,
-    onToggle?: (collapsed: boolean) => void,
+    className?: string | string[];
+    content: NamedContent;
+    collapsed: boolean | Dispatch<SetStateAction<boolean>>;
+    selected?: boolean | Dispatch<SetStateAction<boolean>>;
+    onToggle?: (collapsed: boolean) => void;
     onSelected?: (selected: boolean) => void;
-    key: any
+    key: any;
 }
 
-const NamedBlockComponent = ({className, content, collapsed, selected, onToggle, onSelected, key}: NamedBlockProps) => {
+const NamedBlockComponent = forwardRef(({className, content, collapsed, selected, onToggle, onSelected, key}: NamedBlockProps, ref: ForwardedRef<HTMLDivElement>) => {
 
-    const {step, setStep} = useContext(SelectedStepContext);
-    const {element, setElement} = useContext(SelectedElementContext);
-    const el = useRef<HTMLDivElement>(null);
     const {factory, setFactory} = useContext(BlockFactoryContext);
 
-    // useEffect(() => {
-    //     if (step === content.selection_index) {
-    //         setVariant('selected');
-    //       if (el.current !== null) {
-    //           setElement(el.current);
-    //       }
-    //     } else {  
-    //         setVariant('default');
-    //     }
-    //     setCollapsed(!content.containsSelected(step));
-    // }, [step]);
-
     useEffect(() => {
-        if (step === content.selection_index && el.current !== null) {
-            setElement(el.current);
+        if (onSelected !== undefined) {
+            onSelected(selected as boolean);
         }
-    }, [collapsed]);
+    }, [selected]);
 
     const getClasses = () => {
-        let classes = content.getClassNames(step);
+        let classes = ['aics-named-block'];
         if (className) {
             if (typeof className === 'string') {
                 classes.push(className);
@@ -50,7 +35,9 @@ const NamedBlockComponent = ({className, content, collapsed, selected, onToggle,
                 classes = classes.concat(className);
             }
         }
-        classes.push('aics-named-block');
+        if (selected) {
+            classes.push('selected');
+        }
         if (collapsed) {
             classes.push('collapsed');
         }
@@ -58,22 +45,19 @@ const NamedBlockComponent = ({className, content, collapsed, selected, onToggle,
     };
 
     const handleClick = () => {
-        if (content.selection_index !== null) {
-            setStep(content.selection_index);
-        }
         if (onToggle) {
             onToggle(!collapsed);
         }
     };
 
-    return <div ref={el} className={getClasses()} onClick={handleClick} >
+    return <div ref={ref} className={getClasses()} onClick={handleClick} >
         <CollapsibleBlock title={content.name} collapsed={collapsed} onToggle={onToggle}>
         { content.children.map((child, index) => {
             return factory?.build(child, content);
          })}
         </CollapsibleBlock>
     </div>;
-}
+});
 
 const textColor = selectedVariants('mode', {
     default: { light: '#222', dark: '#292b2f' },

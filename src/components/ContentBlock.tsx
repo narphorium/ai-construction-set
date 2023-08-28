@@ -1,23 +1,20 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, ForwardedRef, MouseEvent, SetStateAction, forwardRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Content } from '../data';
-import { BlockFactoryContext, SelectedElementContext, SelectedStepContext } from '../hooks';
+import { BlockFactoryContext } from '../hooks';
 import { selectedVariants } from './theme';
 
 interface ContentBlockProps {
     className?: string;
     content: Content;
-    selected: boolean | Dispatch<SetStateAction<boolean>>;
+    selected?: boolean | Dispatch<SetStateAction<boolean>>;
     onSelected?: (selected: boolean) => void;
-    onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    onClick?: (e: MouseEvent<HTMLDivElement>) => void;
     key: any;
 }
 
-export const ContentBlockComponent = ({className, content, selected, onSelected, onClick, key}: ContentBlockProps) => {
+export const ContentBlockComponent = forwardRef(({className, content, selected, onSelected, onClick, key}: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>) => {
 
-    const {step, setStep} = useContext(SelectedStepContext);
-    const {element, setElement} = useContext(SelectedElementContext);
-    const el = useRef<HTMLDivElement>(null);
     const {factory, setFactory} = useContext(BlockFactoryContext);
 
     useEffect(() => {
@@ -27,29 +24,28 @@ export const ContentBlockComponent = ({className, content, selected, onSelected,
     }, [selected]);
 
     const getClasses = () => {
-        const classes = content.getClassNames(step);
+        const classes = ['aics-content-block'];
         if (className) {
             classes.push(className);
         }
-        classes.push('aics-content-block');
+        if (selected) {
+            classes.push('selected');
+        }
         return classes.join(' ');
     };
 
-    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        // if (content.selection_index !== null) {
-        //     setStep(content.selection_index);
-        // }
+    const handleClick = (e: MouseEvent<HTMLDivElement>) => {
         if (onClick !== undefined) {
             onClick(e);
         }
     };
 
-    return <div ref={el} className={getClasses()} onClick={handleClick}>
+    return <div ref={ref} className={getClasses()} onClick={handleClick}>
          { content.children.map((child) => {
             return factory?.build(child, content);
          })}
     </div>;
-};
+});
 
 const textColor = selectedVariants('mode', {
     default: { light: '#222', dark: '#292b2f' },

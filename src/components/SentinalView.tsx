@@ -1,24 +1,20 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, ForwardedRef, SetStateAction, forwardRef, useEffect } from 'react';
 import { Selectable } from '../data';
-import { SelectedElementContext, SelectedStepContext } from '../hooks';
 
 interface SentinalViewProps {
   sentinal: Selectable;
+  selected?: boolean | Dispatch<SetStateAction<boolean>>;
+  onSelected?: (selected: boolean) => void;
   key: any;
 }
 
-export const SentinalView = ({sentinal, key}: SentinalViewProps) => {
-
-    const {step, setStep} = useContext(SelectedStepContext);
-    const {element, setElement} = useContext(SelectedElementContext);
-
-    const el = useRef<HTMLDivElement>(null);
+export const SentinalView = forwardRef(({sentinal, selected, onSelected, key}: SentinalViewProps, ref: ForwardedRef<HTMLDivElement>) => {
 
     useEffect(() => {
-      if (step === sentinal.selection_index && el.current !== null) {
-        setElement(el.current);
-      }
-    }, [step]);
+        if (onSelected !== undefined) {
+            onSelected(selected as boolean);
+        }
+    }, [selected]);
 
-    return <div ref={el} className="aics-sentinal"></div>;
-};
+    return <div ref={ref} className="aics-sentinal"></div>;
+});

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ScrollFlagContext } from '../hooks';
 import { defaultFont, textColor } from './theme';
@@ -10,7 +10,6 @@ interface CollapsibleBlockProps {
     title: string;
     collapsed: boolean | Dispatch<SetStateAction<boolean>>;
     onToggle?: (collapsed: boolean) => void;
-    // setCollapsed: Dispatch<SetStateAction<boolean>>;
 }
 
 const CollapsibleBlockStyled = styled.div`
@@ -25,9 +24,12 @@ const CollapsibleBlockStyled = styled.div`
     }
   }
 
-  &.collapsed > .aics-collapsible-block-header > .aics-collapsible-block-control {
-    transform: rotate(-90deg);
+  & > .aics-collapsible-block-header > .aics-collapsible-block-control i {
     transition: all 0.2s;
+  }
+
+  &.collapsed > .aics-collapsible-block-header > .aics-collapsible-block-control i {
+    transform: rotate(-90deg);
   }
 `;
 
@@ -74,6 +76,7 @@ const CollapsibleBlockContentStyled = styled.div`
   margin-right: 16px;
 
   &:last-child {
+    padding-top: 4px;
     padding-bottom: 4px;
   }
 
@@ -94,10 +97,17 @@ const CollapsibleBlockInnerStyled = styled.div`
 export const CollapsibleBlock = ({ className, children, title, collapsed, onToggle }: CollapsibleBlockProps) => {
 
   const inner = useRef<HTMLDivElement>(null);
-
   const {flag, toggle} = useContext(ScrollFlagContext);
 
   useEffect(() => {
+    updateInner();
+  }, []);
+
+  useEffect(() => {
+    updateInner();
+  }, [collapsed]);
+
+  const updateInner = useCallback(() => {
     if (inner.current) {
       if (collapsed) {
         // Animate block collapsing based on the height of the inner content
@@ -105,13 +115,13 @@ export const CollapsibleBlock = ({ className, children, title, collapsed, onTogg
         //   const h = - (inner.current.scrollHeight + 10);
         //   inner.current.setAttribute('style', collapsed ? 'margin-top: 0px' : 'margin-top: ' + h + 'px');
         // }
-        const h = - (inner.current.scrollHeight + 30);
+        const h = - (inner.current.scrollHeight + 40);
         inner.current.setAttribute('style', 'margin-top: ' + h + 'px');
       } else {
         inner.current.setAttribute('style', 'margin-top: 0px');
       }
     }
-  }, [collapsed]);
+  }, [inner, collapsed]);
 
   const getClasses = () => {
     const classes = ['collapsible-block'];
@@ -127,18 +137,16 @@ export const CollapsibleBlock = ({ className, children, title, collapsed, onTogg
   return (<CollapsibleBlockStyled className={getClasses()}>
       <CollapsibleBlockHeaderStyled className="aics-collapsible-block-header">
         <CollapsibleBlockControlStyled className="aics-collapsible-block-control" onClick={(e) => {
-          // setCollapsed(!collapsed);
           onToggle?.(collapsed as boolean);
           e.stopPropagation();
         }}><i className={'codicon codicon-chevron-down'}/></CollapsibleBlockControlStyled>
         <CollapsibleBlockTitleStyled className="aics-collapsible-block-title" onClick={(e) => {
           onToggle?.(collapsed as boolean);
-          // setCollapsed(!collapsed);
           e.stopPropagation();
         }}>{title}</CollapsibleBlockTitleStyled>
       </CollapsibleBlockHeaderStyled>
       <CollapsibleBlockContentStyled className='aics-collapsible-block-content'>
-        <CollapsibleBlockInnerStyled className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={toggle}>
+        <CollapsibleBlockInnerStyled className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={toggle} onResize={updateInner}>
         { children }
         </CollapsibleBlockInnerStyled>
       </CollapsibleBlockContentStyled>

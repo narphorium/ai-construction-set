@@ -1,56 +1,77 @@
 
-import React, { Dispatch, MouseEvent, SetStateAction, useContext, useRef } from 'react';
+import React, { Dispatch, ForwardedRef, MouseEvent, SetStateAction, forwardRef, useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Section } from "../data";
-import { BlockFactoryContext, SelectedElementContext, SelectedStepContext } from '../hooks';
-import { fontWeight } from './theme';
+import { BlockFactoryContext } from '../hooks';
+import { fontWeight, selectedVariants } from './theme';
 
 interface ContentSectionProps {
   className?: string;
   section: Section;
-  selected: boolean | Dispatch<SetStateAction<boolean>>;
+  selected?: boolean | Dispatch<SetStateAction<boolean>>;
   onSelected?: (selected: boolean) => void;
-  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onClick?: (e: MouseEvent<HTMLDivElement>) => void;
   key: any;
 }
 
-const ContentSectionComponent = ({className, section, selected, onSelected, onClick, key}: ContentSectionProps) => {
+const ContentSectionComponent = forwardRef(({className, section, selected, onSelected, onClick, key}: ContentSectionProps, ref: ForwardedRef<HTMLDivElement>) => {
 
-  const {step, setStep} = useContext(SelectedStepContext);
-  const {element, setElement} = useContext(SelectedElementContext);
-  const el = useRef<HTMLDivElement>(null);
   const {factory, setFactory} = useContext(BlockFactoryContext);
 
+  useEffect(() => {
+    if (onSelected !== undefined) {
+      onSelected(selected as boolean);
+    }
+  }, [selected]);
+
   const getClasses = () => {
-    const classes = section.getClassNames(step);
+    const classes = ['aics-content-section'];
     if (className) {
       classes.push(className);
     }
-    classes.push('aics-content-section');
+    if (selected) {
+      classes.push('selected');
+    }
     return classes.join(' ');
   };
 
-  const handleClick = (obj: any ) => ((e: MouseEvent) => {
-    if (obj.step !== null) {
-      setStep(obj.step);
+  const handleClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    if (onClick !== undefined) {
+      onClick(e);
     }
-  });
+  }, [onClick]);
 
-  return <div ref={el} className={ getClasses() } onClick={handleClick(section)}>
+  return <div ref={ref} className={ getClasses() } onClick={handleClick}>
+    <span>
       <label>{ section.name ? section.name + ': ' : '' }</label>
       { section.spans.map((span) => {
         return factory?.build(span, section);
       }) }
+    </span>
   </div>;
-};
+});
+
+const textColor = selectedVariants('mode', {
+  default: { light: '#222', dark: '#eee' },
+  selected: { light: '#222', dark: '#ffde98' },
+});
+
+const backgroundColor = selectedVariants('mode', {
+  default: { light: 'transparent', dark: 'transparent' },
+  selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' },
+});
 
 export const ContentSection = styled(ContentSectionComponent)`
-  line-height: 1.3em;
   font-size: 11pt;
   margin: 12px 16px;
 
-  & > label {
+  & label {
     font-weight: calc(${fontWeight} + 200);
+  }
+
+  &.selected > span {
+    color: ${textColor};
+    background-color: ${backgroundColor};
   }
 `;
 

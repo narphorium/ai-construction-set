@@ -1,8 +1,8 @@
 
-import React, { Dispatch, SetStateAction, useContext, useRef } from 'react';
+import React, { Dispatch, ForwardedRef, SetStateAction, forwardRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { List } from '../data';
-import { BlockFactoryContext, SelectedStepContext } from '../hooks';
+import { BlockFactoryContext } from '../hooks';
 import { borderColor } from './theme';
 
 interface BlockListProps {
@@ -13,28 +13,33 @@ interface BlockListProps {
     key: any;
 }
 
-export const BlockListComponent = ({className, list, selected, onSelected, key}: BlockListProps) => {
+export const BlockListComponent = forwardRef(({className, list, selected, onSelected, key}: BlockListProps, ref: ForwardedRef<HTMLDivElement>) => {
 
-    const {step, setStep} = useContext(SelectedStepContext);
     const {factory, setFactory} = useContext(BlockFactoryContext);
 
-    const el = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (onSelected !== undefined) {
+            onSelected(selected as boolean);
+        }
+    }, [selected]);
 
     const getClasses = () => {
-        const classes = list.getClassNames(step);
+        const classes = ['aics-block-list'];
         if (className != undefined) {
             classes.push(className);
         }
-        classes.push('aics-block-list');
+        if (selected) {
+            classes.push('selected');
+        }
         return classes.join(' ');
     };
 
-    return <div className={getClasses()}>
+    return <div ref={ref} className={getClasses()}>
         { list.items.map((item, index) => {
             return factory?.build(item, list);
         }) }
     </div>;
-}
+});
 
 export const BlockList = styled(BlockListComponent)`
     border-width: 1px;
