@@ -13,10 +13,11 @@ interface NamedBlockProps {
     selected?: boolean | Dispatch<SetStateAction<boolean>>;
     onToggle?: (collapsed: boolean) => void;
     onSelected?: (selected: boolean) => void;
+    onTransitionEnd?: () => void;
     key: any;
 }
 
-const NamedBlockComponent = forwardRef(({className, content, collapsed, selected, onToggle, onSelected, key}: NamedBlockProps, ref: ForwardedRef<HTMLDivElement>) => {
+const NamedBlockComponent = forwardRef(({className, content, collapsed, selected, onToggle, onSelected, onTransitionEnd, key}: NamedBlockProps, ref: ForwardedRef<HTMLDivElement>) => {
 
     const {factory, setFactory} = useContext(BlockFactoryContext);
 
@@ -51,7 +52,7 @@ const NamedBlockComponent = forwardRef(({className, content, collapsed, selected
     };
 
     return <div ref={ref} className={getClasses()} onClick={handleClick} >
-        <CollapsibleBlock title={content.name} collapsed={collapsed} onToggle={onToggle}>
+        <CollapsibleBlock title={content.name} collapsed={collapsed} onToggle={onToggle} onTransitionEnd={onTransitionEnd}>
         { content.children.map((child, index) => {
             return factory?.build(child, content);
          })}
@@ -81,17 +82,35 @@ const itemBorderColor = selectedVariants('mode', {
 });
 
 export const NamedBlock = styled(NamedBlockComponent)`
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 4px;
-  color: ${textColor};
-  background-color: ${backgroundColor};
-  border-color: ${borderColor};
+    padding: 4px 0;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    color: ${textColor};
+    background-color: ${backgroundColor};
+    border-color: ${borderColor};
+
+    & .aics-content-section,
+    & .aics-block-list,
+    & .aics-name-block {
+        margin: 8px 0;
+    }
+
+    & .aics-content-section:first-child,
+    & .aics-block-list:first-child,
+    & .aics-name-block:first-child {
+        margin-top: 0;
+    }
+
+    & .aics-content-section:last-child,
+    & .aics-block-list:first-child,
+    & .aics-name-block:first-child {
+        margin-bottom: 0;
+    }
 `;
 
 export const BlockListItem = styled(NamedBlock)`
     margin: 0;
-    padding: 4px 4px 0 0;
     border-width: 0 0 1px 0;
     border-bottom: 1px solid ${itemBorderColor};
     border-radius: 0;

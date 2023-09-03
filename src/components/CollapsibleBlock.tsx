@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef } from 'react';
+import { useResizeDetector } from 'react-resize-detector';
 import styled from 'styled-components';
-import { ScrollFlagContext } from '../hooks';
 import { defaultFont, textColor } from './theme';
 
 
@@ -10,17 +10,19 @@ interface CollapsibleBlockProps {
     title: string;
     collapsed: boolean | Dispatch<SetStateAction<boolean>>;
     onToggle?: (collapsed: boolean) => void;
+    onTransitionEnd?: () => void;
 }
 
 const CollapsibleBlockStyled = styled.div`
   position: relative;
-  padding-top: 2px;
-  padding-bottom: 2px;
 
   &.collapsed {
     .aics-collapsible-block-inner {
       margin-top: 0;
       transition: margin-top ease 0.2s;
+    }
+    .aics-collapsible-block-content {
+      padding: 0;
     }
   }
 
@@ -34,18 +36,23 @@ const CollapsibleBlockStyled = styled.div`
 `;
 
 const CollapsibleBlockHeaderStyled = styled.div`
-
+  position: relative;
+  font-size: 11pt;
 `;
 
 const CollapsibleBlockControlStyled = styled.button`
+  position: absolute;
+  top: 2px;
+  left: 4px;
   background-color: transparent;
   border: none;
   color: ${textColor};
   padding: 0;
+  margin: 0;
+  font-size: 11pt;
   vertical-align: text-top;
   height: 1em;
   transition: all 0.2s;
-  margin: 5px 2px 0 6px;
   outline: 0;
 
   &:focus {
@@ -56,6 +63,7 @@ const CollapsibleBlockControlStyled = styled.button`
 const CollapsibleBlockTitleStyled = styled.div`
   display: inline-block;
   margin: 2px 0;
+  padding-left: 22px;
   font-family: ${defaultFont};
   font-size: 11pt;
   user-select: none;
@@ -74,30 +82,25 @@ const CollapsibleBlockContentStyled = styled.div`
   overflow: hidden;
   margin-left: 16px;
   margin-right: 16px;
+  font-size: 10pt;
 
   &:last-child {
     padding-top: 4px;
     padding-bottom: 4px;
-  }
-
-  & .aics-collapsible-block-content:last-child {
-    padding-bottom: 0;
   }
 `;
 
 const CollapsibleBlockInnerStyled = styled.div`
   font-size: 10pt;
   transition: margin-top ease 0.2s;
-
-  & > .aics-content-section {
-    margin: 4px 8px;
-  }
 `;
 
-export const CollapsibleBlock = ({ className, children, title, collapsed, onToggle }: CollapsibleBlockProps) => {
+export const CollapsibleBlock = ({ className, children, title, collapsed, onToggle, onTransitionEnd }: CollapsibleBlockProps) => {
 
   const inner = useRef<HTMLDivElement>(null);
-  const {flag, toggle} = useContext(ScrollFlagContext);
+  useResizeDetector({targetRef: inner, onResize: () => {
+    updateInner();
+  }});
 
   useEffect(() => {
     updateInner();
@@ -110,12 +113,7 @@ export const CollapsibleBlock = ({ className, children, title, collapsed, onTogg
   const updateInner = useCallback(() => {
     if (inner.current) {
       if (collapsed) {
-        // Animate block collapsing based on the height of the inner content
-        // if (inner.current) {
-        //   const h = - (inner.current.scrollHeight + 10);
-        //   inner.current.setAttribute('style', collapsed ? 'margin-top: 0px' : 'margin-top: ' + h + 'px');
-        // }
-        const h = - (inner.current.scrollHeight + 40);
+        const h = - (inner.current.offsetHeight + 40);
         inner.current.setAttribute('style', 'margin-top: ' + h + 'px');
       } else {
         inner.current.setAttribute('style', 'margin-top: 0px');
@@ -146,7 +144,7 @@ export const CollapsibleBlock = ({ className, children, title, collapsed, onTogg
         }}>{title}</CollapsibleBlockTitleStyled>
       </CollapsibleBlockHeaderStyled>
       <CollapsibleBlockContentStyled className='aics-collapsible-block-content'>
-        <CollapsibleBlockInnerStyled className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={toggle} onResize={updateInner}>
+        <CollapsibleBlockInnerStyled className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={onTransitionEnd}>
         { children }
         </CollapsibleBlockInnerStyled>
       </CollapsibleBlockContentStyled>

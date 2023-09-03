@@ -5,7 +5,7 @@ import { BlockFactoryContext } from '../hooks';
 import { selectedVariants } from './theme';
 
 interface ContentBlockProps {
-    className?: string;
+    className?: string | string[];
     content: Content;
     selected?: boolean | Dispatch<SetStateAction<boolean>>;
     onSelected?: (selected: boolean) => void;
@@ -24,9 +24,13 @@ export const ContentBlockComponent = forwardRef(({className, content, selected, 
     }, [selected]);
 
     const getClasses = () => {
-        const classes = ['aics-content-block'];
+        let classes = ['aics-content-block'];
         if (className) {
-            classes.push(className);
+            if (typeof className === 'string') {
+                classes.push(className);
+            } else if (Array.isArray(className)) {
+                classes = classes.concat(className);
+            }
         }
         if (selected) {
             classes.push('selected');

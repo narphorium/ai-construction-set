@@ -5,7 +5,7 @@ import { Selectable, Span } from "../data";
 import { selectedVariants } from './theme';
 
 interface ContentSpanProps {
-  className?: string;
+  className?: string | string[];
   span: Span;
   selected?: boolean | Dispatch<SetStateAction<boolean>>;
   onSelected?: (selected: boolean) => void;
@@ -22,9 +22,13 @@ const ContentSpanComponent = forwardRef(({className, span, selected, onSelected,
     }, [selected]);
 
     const getClasses = () => {
-      const classes = ['aics-content-span'];
+      let classes = ['aics-content-span'];
       if (className) {
-        classes.push(className);
+        if (typeof className === 'string') {
+            classes.push(className);
+        } else if (Array.isArray(className)) {
+            classes = classes.concat(className);
+        }
       }
       if (selected) {
         classes.push('selected');

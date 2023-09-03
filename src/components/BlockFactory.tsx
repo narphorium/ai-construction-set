@@ -29,38 +29,57 @@ export class DefaultBlockFactory implements BlockFactory {
     buildNamedContent(block: NamedContent, parent?: Base): JSX.Element {
         const {collapsed, toggleCollapsed} = this.useCollapsed(block);
         const ref = useRef<HTMLDivElement>(null);
-        return <NamedBlock ref={ref} content={block} collapsed={collapsed} onToggle={toggleCollapsed} key={block.uuid}/>;
+        return <NamedBlock ref={ref} 
+            content={block} 
+            collapsed={collapsed} 
+            onToggle={toggleCollapsed} 
+            key={block.uuid}/>;
     }
 
     buildListItem(block: NamedContent, parent?: Base): JSX.Element {
         const {collapsed, toggleCollapsed} = this.useCollapsed(block);
         const ref = useRef<HTMLDivElement>(null);
-        return <BlockListItem ref={ref} content={block} collapsed={collapsed} onToggle={toggleCollapsed} key={block.uuid}/>;    
+        return <BlockListItem ref={ref} 
+            content={block} 
+            collapsed={collapsed} 
+            onToggle={toggleCollapsed} 
+            key={block.uuid}/>;    
     }
 
     buildContent(block: Content, parent?: Base): JSX.Element {
         const ref = useRef<HTMLDivElement>(null);
-        return <ContentBlock ref={ref} content={block} key={block.uuid} />;
+        return <ContentBlock ref={ref} 
+            content={block} 
+            key={block.uuid} />;
     }
 
     buildSection(block: Section, parent?: Base): JSX.Element {
         const ref = useRef<HTMLDivElement>(null);
-        return <ContentSection ref={ref} section={block} key={block.uuid} />;
+        return <ContentSection ref={ref} 
+            section={block} 
+            key={block.uuid} />;
     }
 
     buildList(block: List, parent?: Base): JSX.Element {
         const ref = useRef<HTMLDivElement>(null);
-        return <BlockList ref={ref} list={block} selected={false} key={block.uuid} />;
+        return <BlockList ref={ref} 
+            list={block} 
+            selected={false} 
+            key={block.uuid} />;
     }
 
     buildSpan(block: Span, parent?: Base): JSX.Element {
         const ref = useRef<HTMLSpanElement>(null);
-        return <ContentSpan ref={ref} span={block} key={block.uuid} />;
+        return <ContentSpan ref={ref} 
+            span={block} 
+            key={block.uuid} />;
     }
 
     buildSentinal(block: Selectable, parent?: Base): JSX.Element {
         const ref = useRef<HTMLDivElement>(null);
-        return <SentinalView ref={ref} sentinal={block} key={block.uuid} />;
+        return <SentinalView ref={ref} 
+            sentinal={block} 
+            key={block.uuid} />;
     }
 
     build(block: Base, parent?: Base): JSX.Element {

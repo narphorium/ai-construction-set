@@ -6,7 +6,7 @@ import { BlockFactoryContext } from '../hooks';
 import { fontWeight, selectedVariants } from './theme';
 
 interface ContentSectionProps {
-  className?: string;
+  className?: string | string[];
   section: Section;
   selected?: boolean | Dispatch<SetStateAction<boolean>>;
   onSelected?: (selected: boolean) => void;
@@ -25,9 +25,13 @@ const ContentSectionComponent = forwardRef(({className, section, selected, onSel
   }, [selected]);
 
   const getClasses = () => {
-    const classes = ['aics-content-section'];
+    let classes = ['aics-content-section'];
     if (className) {
-      classes.push(className);
+      if (typeof className === 'string') {
+        classes.push(className);
+    } else if (Array.isArray(className)) {
+        classes = classes.concat(className);
+    }
     }
     if (selected) {
       classes.push('selected');

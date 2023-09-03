@@ -6,7 +6,7 @@ import { BlockFactoryContext } from '../hooks';
 import { borderColor } from './theme';
 
 interface BlockListProps {
-    className?: string;
+    className?: string | string[];
     list: List;
     selected: boolean | Dispatch<SetStateAction<boolean>>;
     onSelected?: (selected: boolean) => void;
@@ -24,9 +24,13 @@ export const BlockListComponent = forwardRef(({className, list, selected, onSele
     }, [selected]);
 
     const getClasses = () => {
-        const classes = ['aics-block-list'];
+        let classes = ['aics-block-list'];
         if (className != undefined) {
-            classes.push(className);
+            if (typeof className === 'string') {
+                classes.push(className);
+            } else if (Array.isArray(className)) {
+                classes = classes.concat(className);
+            }
         }
         if (selected) {
             classes.push('selected');
