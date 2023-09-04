@@ -1,6 +1,7 @@
 
 import React, { Dispatch, ForwardedRef, MouseEvent, SetStateAction, forwardRef, useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import theme from 'styled-theming';
 import { Section } from "../data";
 import { BlockFactoryContext } from '../hooks';
 import { fontWeight, selectedVariants } from './theme';
@@ -65,6 +66,11 @@ const backgroundColor = selectedVariants('mode', {
   selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' },
 });
 
+const selectedLabelColor = theme('mode', {
+  light: '#222',
+  dark: '#ffde98',
+})
+
 export const ContentSection = styled(ContentSectionComponent)`
   font-size: 11pt;
   margin: 12px 16px;
@@ -76,6 +82,14 @@ export const ContentSection = styled(ContentSectionComponent)`
   &.selected > span {
     color: ${textColor};
     background-color: ${backgroundColor};
+  }
+
+  & > span > label {
+    color: ${textColor} !important;
+  }
+
+  .selected & > span > label {
+    color: ${selectedLabelColor} !important;
   }
 `;
 

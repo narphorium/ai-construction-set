@@ -1,6 +1,7 @@
 
 import React, { Dispatch, ForwardedRef, MouseEvent, SetStateAction, forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
+import theme from 'styled-theming';
 import { Selectable, Span } from "../data";
 import { selectedVariants } from './theme';
 
@@ -56,9 +57,18 @@ const spanBackgroundColor = selectedVariants('mode', {
     selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' },
 });
 
+const selectedChildSpanColor = theme('mode', {
+    light: '#222',
+    dark: '#ffde98',
+})
+
 export const ContentSpan = styled(ContentSpanComponent)`
   color: ${spanTextColor};
   background-color: ${spanBackgroundColor};
+
+  .selected & {
+    color: ${selectedChildSpanColor} !important;
+  }
 
   a {
     color: ${spanTextColor};
