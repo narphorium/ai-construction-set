@@ -1,0 +1,11 @@
+import theme from 'styled-theming';
+export type Variant = 'default' | 'selected';
+export declare const selectedVariants: (mode: string, values: any) => (props: any) => string;
+export declare const backgroundColor: theme.ThemeSet;
+export declare const selectedBackgroundColor: theme.ThemeSet;
+export declare const borderColor: theme.ThemeSet;
+export declare const selectedBorderColor: theme.ThemeSet;
+export declare const textColor: theme.ThemeSet;
+export declare const selectedTextColor: theme.ThemeSet;
+export declare const defaultFont: theme.ThemeSet;
+export declare const fontWeight: theme.ThemeSet;
