@@ -8,16 +8,16 @@ interface BlockStreamProps {
     blocks: Base[]
 }
 
-const BlockStreamStyled = styled.div`
-`;
-
-export const BlockStream = ({blocks}: BlockStreamProps) => {
+export const BlockStreamComponent = ({blocks}: BlockStreamProps) => {
 
     const {factory, setFactory} = useContext(BlockFactoryContext);
 
-    return <BlockStreamStyled className="aics-block-stream">
+    return <div className="aics-block-stream">
         { blocks.map((block, index) => {
             return factory?.build(block);
         }) }
-    </BlockStreamStyled>;
+    </div>;
 };
+
+export const BlockStreamStyled = styled(BlockStreamComponent)`
+`;

@@ -1,7 +1,11 @@
 import commonjs from "@rollup/plugin-commonjs";
+import image from '@rollup/plugin-image';
 import resolve from "@rollup/plugin-node-resolve";
+import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
+import postcssPresetEnv from 'postcss-preset-env';
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import postcss from 'rollup-plugin-postcss';
 
 const packageJson = require("./package.json");
 
@@ -25,10 +29,18 @@ const plugins = [
   resolve({
     browser: true
   }),
+  postcss({
+    extensions: [ '.css' ],
+    plugins: [
+      postcssPresetEnv(),
+    ]
+  }),
+  image(),
   commonjs(),
   typescript({
     tsconfig: './tsconfig.json'
-  })
+  }),
+  terser(),
 ];
 
 export default [{

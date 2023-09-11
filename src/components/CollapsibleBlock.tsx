@@ -1,8 +1,9 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import styled from 'styled-components';
+import { chevronRight } from '../assets/icons';
+import { Icon } from './Icon';
 import { defaultFont, textColor } from './theme';
-
 
 interface CollapsibleBlockProps {
     children: string | JSX.Element | (JSX.Element | undefined)[];
@@ -137,7 +138,7 @@ export const CollapsibleBlock = ({ className, children, title, collapsed, onTogg
         <CollapsibleBlockControlStyled className="aics-collapsible-block-control" onClick={(e) => {
           onToggle?.(collapsed as boolean);
           e.stopPropagation();
-        }}><i className={'codicon codicon-chevron-down'}/></CollapsibleBlockControlStyled>
+        }}><Icon svg={chevronRight}/></CollapsibleBlockControlStyled>
         <CollapsibleBlockTitleStyled className="aics-collapsible-block-title" onClick={(e) => {
           onToggle?.(collapsed as boolean);
           e.stopPropagation();
