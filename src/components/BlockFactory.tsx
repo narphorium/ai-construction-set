@@ -1,7 +1,8 @@
 
 import React, { useCallback, useRef, useState } from 'react';
-import { Base, Content, List, NamedContent, Section, Selectable, Span } from '../data';
+import { Base, Content, List, NamedContent, Section, Selectable, Span, Stream } from '../data';
 import { BlockList } from './BlockList';
+import { BlockStream } from './BlockStream';
 import { ContentBlock } from './ContentBlock';
 import { ContentSection } from './ContentSection';
 import { ContentSpan } from './ContentSpan';
@@ -82,6 +83,13 @@ export class DefaultBlockFactory implements BlockFactory {
             key={block.uuid} />;
     }
 
+    buildStream(stream: Stream, parent?: Base): JSX.Element {
+        const ref = useRef<HTMLDivElement>(null);
+        return <BlockStream ref={ref} 
+            stream={stream} 
+            key={stream.uuid} />;
+    }
+
     build(block: Base, parent?: Base): JSX.Element {
         if (block instanceof NamedContent) {
             if (parent instanceof List) {
@@ -97,6 +105,8 @@ export class DefaultBlockFactory implements BlockFactory {
             return this.buildList(block, parent);
         } else if (block instanceof Span) {
             return this.buildSpan(block, parent);
+        } else if (block instanceof Stream) {
+            return this.buildStream(block, parent);
         } else if (block instanceof Selectable) {
             return this.buildSentinal(block, parent);
         } else {

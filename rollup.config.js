@@ -16,13 +16,10 @@ const globals = {
   'react-dom': 'ReactDOM',
 };
 
-// const external = [/node_modules/];
 const external = [
   ...Object.keys(packageJson.devDependencies || {}),
   ...Object.keys(packageJson.peerDependencies || {}),
 ];
-
-// const external = ['react'];
 
 const plugins = [
   peerDepsExternal(),
@@ -48,17 +45,6 @@ export default [{
   output: {
       file: packageJson.module,
       format: "esm",
-      sourcemap: true,
-      globals: globals
-    }
-  ,
-  plugins: plugins,
-  external: external
-},{
-  input: input,
-  output: {
-      file: packageJson.main,
-      format: "cjs",
       sourcemap: true,
       globals: globals
     }

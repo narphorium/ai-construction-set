@@ -1,8 +1,7 @@
 {
   "name": "ai-construction-set",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A set of building blocks for building tools for thought powered by AI.",
-  "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
   "files": [
@@ -11,8 +10,7 @@
   "jsx": "react-jsx",
   "scripts": {
     "build:clean": "rimraf dist",
-    "build": "rollup -c --bundleConfigAsCjs",
-    "prepare": "relative-deps"
+    "build": "rollup -c --bundleConfigAsCjs"
   },
   "repository": {
     "type": "git",
@@ -26,9 +24,9 @@
   "homepage": "https://github.com/narphorium/ai-construction-set#readme",
   "peerDependencies": {
     "@types/react": "^18.2.20",
+    "devicon": "^2.15.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "devicon": "^2.15.1",
     "react-resize-detector": "^9.1.0",
     "react-svg": "^16.1.23"
   },
@@ -54,9 +52,5 @@
     "styled-theming": "^2.2.0",
     "tslib": "^2.6.1",
     "typescript": "^5.1.6"
-  },
-  "relativeDependencies": {},
-  "dependencies": {
-    
   }
 }

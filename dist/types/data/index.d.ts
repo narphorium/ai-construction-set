@@ -6,3 +6,4 @@ export * from './NamedContent';
 export * from './Section';
 export * from './Selectable';
 export * from './Span';
+export * from './Stream';

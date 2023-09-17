@@ -1,23 +1,24 @@
-import React, { useContext } from 'react';
+import React, { ForwardedRef, forwardRef, useContext } from 'react';
 import styled from 'styled-components';
-import { Base } from '../data';
+import { Stream } from '../data';
 import { BlockFactoryContext } from '../hooks';
 
 
 interface BlockStreamProps {
-    blocks: Base[]
+    className?: string | string[];
+    stream: Stream;
 }
 
-export const BlockStreamComponent = ({blocks}: BlockStreamProps) => {
+export const BlockStreamComponent = forwardRef(({className, stream}: BlockStreamProps, ref: ForwardedRef<HTMLDivElement>) => {
 
     const {factory, setFactory} = useContext(BlockFactoryContext);
 
-    return <div className="aics-block-stream">
-        { blocks.map((block, index) => {
+    return <div ref={ref} className="aics-block-stream">
+        { stream.blocks.map((block, index) => {
             return factory?.build(block);
         }) }
     </div>;
-};
+});
 
-export const BlockStreamStyled = styled(BlockStreamComponent)`
+export const BlockStream = styled(BlockStreamComponent)`
 `;

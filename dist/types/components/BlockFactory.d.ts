@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { Base, Content, List, NamedContent, Section, Selectable, Span } from '../data';
+import { Base, Content, List, NamedContent, Section, Selectable, Span, Stream } from '../data';
 export interface BlockFactory {
     build(block: Base, parent?: Base): JSX.Element;
 }
@@ -16,5 +16,6 @@ export declare class DefaultBlockFactory implements BlockFactory {
     buildList(block: List, parent?: Base): JSX.Element;
     buildSpan(block: Span, parent?: Base): JSX.Element;
     buildSentinal(block: Selectable, parent?: Base): JSX.Element;
+    buildStream(stream: Stream, parent?: Base): JSX.Element;
     build(block: Base, parent?: Base): JSX.Element;
 }

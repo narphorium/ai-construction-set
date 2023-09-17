@@ -1,7 +1,14 @@
 import React from 'react';
-import { Base } from '../data';
+import { Stream } from '../data';
 interface BlockStreamProps {
-    blocks: Base[];
+    className?: string | string[];
+    stream: Stream;
 }
-export declare const BlockStream: ({ blocks }: BlockStreamProps) => React.JSX.Element;
+export declare const BlockStreamComponent: React.ForwardRefExoticComponent<BlockStreamProps & React.RefAttributes<HTMLDivElement>>;
+export declare const BlockStream: import("styled-components").IStyledComponent<"web", {
+    className?: string | string[] | undefined;
+    stream: Stream;
+    ref?: React.Ref<HTMLDivElement> | undefined;
+    key?: React.Key | null | undefined;
+}>;
 export {};
