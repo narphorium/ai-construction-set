@@ -27,12 +27,13 @@ const CollapsibleBlockStyled = styled.div`
     }
   }
 
-  & > .aics-collapsible-block-header > .aics-collapsible-block-control i {
+  & > .aics-collapsible-block-header > .aics-collapsible-block-control svg {
     transition: all 0.2s;
+    transform: rotate(90deg);
   }
 
-  &.collapsed > .aics-collapsible-block-header > .aics-collapsible-block-control i {
-    transform: rotate(-90deg);
+  &.collapsed > .aics-collapsible-block-header > .aics-collapsible-block-control svg {
+    transform: rotate(0deg);
   }
 `;
 
@@ -43,7 +44,7 @@ const CollapsibleBlockHeaderStyled = styled.div`
 
 const CollapsibleBlockControlStyled = styled.button`
   position: absolute;
-  top: 2px;
+  top: 0;
   left: 4px;
   background-color: transparent;
   border: none;
@@ -58,6 +59,10 @@ const CollapsibleBlockControlStyled = styled.button`
 
   &:focus {
     outline: 0;
+  }
+
+  & svg path {
+    fill: ${textColor};
   }
 `;
 
@@ -94,6 +99,10 @@ const CollapsibleBlockContentStyled = styled.div`
 const CollapsibleBlockInnerStyled = styled.div`
   font-size: 10pt;
   transition: margin-top ease 0.2s;
+
+  & > .aics-named-block {
+    margin-top: 4px;
+  }
 `;
 
 export const CollapsibleBlock = ({ className, children, title, collapsed, onToggle, onTransitionEnd }: CollapsibleBlockProps) => {
