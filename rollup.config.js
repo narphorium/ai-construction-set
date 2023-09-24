@@ -45,7 +45,7 @@ export default [{
   output: {
       file: packageJson.module,
       format: "esm",
-      sourcemap: true,
+      sourcemap: 'inline',
       globals: globals
     }
   ,

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { chevronRight } from '../assets/icons';
 import { Icon } from './Icon';
 import { defaultFont, textColor } from './theme';

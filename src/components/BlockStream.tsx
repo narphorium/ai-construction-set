@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef, useContext } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Stream } from '../data';
 import { BlockFactoryContext } from '../hooks';
 

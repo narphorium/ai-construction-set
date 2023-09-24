@@ -1,6 +1,6 @@
 
 import React, { Dispatch, ForwardedRef, SetStateAction, forwardRef, useContext, useEffect } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { List } from '../data';
 import { BlockFactoryContext } from '../hooks';
 import { borderColor } from './theme';

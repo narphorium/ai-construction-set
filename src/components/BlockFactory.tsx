@@ -1,6 +1,6 @@
 
 import React, { useCallback, useRef, useState } from 'react';
-import { Base, Content, List, NamedContent, Section, Selectable, Span, Stream } from '../data';
+import { Base, Content, List, ListItem, NamedContent, Section, Selectable, Span, Stream } from '../data';
 import { BlockList } from './BlockList';
 import { BlockStream } from './BlockStream';
 import { ContentBlock } from './ContentBlock';
@@ -11,9 +11,28 @@ import { SentinalView } from './SentinalView';
 
 export interface BlockFactory {
     build(block: Base, parent?: Base): JSX.Element;
+    registerBuilder(target_class: string, builder: ((block: Base, parent?: Base | undefined) => JSX.Element)): void;
 }
 
 export class DefaultBlockFactory implements BlockFactory {
+
+    builders: Map<string, (block: Base, parent?: Base) => JSX.Element> = new Map();
+
+    constructor() {
+        // Automatically register all build* methods
+        Object.keys(this).forEach((key) => {
+            if (key.startsWith('build')) {
+                const method = (this as any)[key];
+                if (typeof method === 'function') {
+                    this.registerBuilder(key.substring(5), method);
+                }
+            }
+        });
+    }
+
+    registerBuilder(target_class: string, builder: ((block: Base, parent?: Base | undefined) => JSX.Element)) {
+        this.builders.set(target_class, builder);
+    }
 
     getClassNames(block: Base, selected_index: number): string[] {
         const classNames = new Set(Array.from(block.classNames));
@@ -37,7 +56,7 @@ export class DefaultBlockFactory implements BlockFactory {
             key={block.uuid}/>;
     }
 
-    buildListItem(block: NamedContent, parent?: Base): JSX.Element {
+    buildListItem(block: ListItem, parent?: Base): JSX.Element {
         const {collapsed, toggleCollapsed} = this.useCollapsed(block);
         const ref = useRef<HTMLDivElement>(null);
         return <BlockListItem ref={ref} 
@@ -76,7 +95,7 @@ export class DefaultBlockFactory implements BlockFactory {
             key={block.uuid} />;
     }
 
-    buildSentinal(block: Selectable, parent?: Base): JSX.Element {
+    buildSelectable(block: Selectable, parent?: Base): JSX.Element {
         const ref = useRef<HTMLDivElement>(null);
         return <SentinalView ref={ref} 
             sentinal={block} 
@@ -91,26 +110,15 @@ export class DefaultBlockFactory implements BlockFactory {
     }
 
     build(block: Base, parent?: Base): JSX.Element {
-        if (block instanceof NamedContent) {
-            if (parent instanceof List) {
-                return this.buildListItem(block, parent);
+        if (this.builders.has(block.constructor.name)) {
+            const builder = this.builders.get(block.constructor.name);
+            if (builder) {
+                return builder(block, parent);
             } else {
-                return this.buildNamedContent(block, parent);
+                throw new Error("Builder not found for class: " + block.constructor.name);
             }
-        } else if (block instanceof Content) {
-            return this.buildContent(block, parent);
-        } else if (block instanceof Section) {
-            return this.buildSection(block, parent);
-        } else if (block instanceof List) {
-            return this.buildList(block, parent);
-        } else if (block instanceof Span) {
-            return this.buildSpan(block, parent);
-        } else if (block instanceof Stream) {
-            return this.buildStream(block, parent);
-        } else if (block instanceof Selectable) {
-            return this.buildSentinal(block, parent);
         } else {
-            throw new Error("Unknown block data type: " + block.constructor.name);
+            throw new Error("Builder not found for class: " + block.constructor.name);
         }
     }
 };
