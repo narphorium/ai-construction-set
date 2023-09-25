@@ -1,6 +1,6 @@
 
 import React, { Dispatch, ForwardedRef, MouseEvent, SetStateAction, forwardRef, useCallback, useContext, useEffect } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import theme from 'styled-theming';
 import { Section } from "../data";
 import { BlockFactoryContext } from '../hooks';

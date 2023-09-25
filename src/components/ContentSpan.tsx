@@ -1,6 +1,6 @@
 
 import React, { Dispatch, ForwardedRef, MouseEvent, SetStateAction, forwardRef, useEffect } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import theme from 'styled-theming';
 import { Selectable, Span } from "../data";
 import { selectedVariants } from './theme';

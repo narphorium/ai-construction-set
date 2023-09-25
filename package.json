@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "description": "A set of building blocks for building tools for thought powered by AI.",
   "type": "module",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.mjs",
   "types": "dist/types/index.d.ts",
   "files": [
     "dist/**/*"

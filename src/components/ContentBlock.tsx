@@ -1,5 +1,5 @@
 import React, { Dispatch, ForwardedRef, MouseEvent, SetStateAction, forwardRef, useContext, useEffect } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { Content } from '../data';
 import { BlockFactoryContext } from '../hooks';
 import { selectedVariants } from './theme';
