@@ -16,22 +16,34 @@ export interface BlockFactory {
 
 export class DefaultBlockFactory implements BlockFactory {
 
-    builders: Map<string, (block: Base, parent?: Base) => JSX.Element> = new Map();
+    block_types: any[] = [];
+    builders: ((block: any, parent?: any) => JSX.Element)[] = [];
 
     constructor() {
-        // Automatically register all build* methods
-        Object.keys(this).forEach((key) => {
-            if (key.startsWith('build')) {
-                const method = (this as any)[key];
-                if (typeof method === 'function') {
-                    this.registerBuilder(key.substring(5), method);
-                }
-            }
-        });
+        this.registerBuilder(ListItem, this.buildListItem);
+        this.registerBuilder(NamedContent, this.buildNamedContent);
+        this.registerBuilder(Content, this.buildContent);
+        this.registerBuilder(Section, this.buildSection);
+        this.registerBuilder(List, this.buildList);
+        this.registerBuilder(Span, this.buildSpan);
+        this.registerBuilder(Selectable, this.buildSelectable);
+        this.registerBuilder(Stream, this.buildStream);
     }
 
-    registerBuilder(target_class: string, builder: ((block: Base, parent?: Base | undefined) => JSX.Element)) {
-        this.builders.set(target_class, builder);
+    registerBuilder(target_class: any, builder: ((block: any, parent?: any | undefined) => JSX.Element)) {
+        this.block_types.push(target_class);
+        this.builders.push(builder.bind(this));
+    }
+
+    build(block: Base, parent?: Base): JSX.Element {
+        for (let j=0; j<this.builders.length; j++) {
+            const target_class = this.block_types[j];
+            const handler = this.builders[j];
+            if (block instanceof target_class) {
+                return handler(block, parent);
+            }
+        }
+        throw new Error("Builder not found for: " + block.constructor.name);
     }
 
     getClassNames(block: Base, selected_index: number): string[] {
@@ -107,18 +119,5 @@ export class DefaultBlockFactory implements BlockFactory {
         return <BlockStream ref={ref} 
             stream={stream} 
             key={stream.uuid} />;
-    }
-
-    build(block: Base, parent?: Base): JSX.Element {
-        if (this.builders.has(block.constructor.name)) {
-            const builder = this.builders.get(block.constructor.name);
-            if (builder) {
-                return builder(block, parent);
-            } else {
-                throw new Error("Builder not found for class: " + block.constructor.name);
-            }
-        } else {
-            throw new Error("Builder not found for class: " + block.constructor.name);
-        }
     }
 };

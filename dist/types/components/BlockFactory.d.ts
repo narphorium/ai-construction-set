@@ -5,9 +5,11 @@ export interface BlockFactory {
     registerBuilder(target_class: string, builder: ((block: Base, parent?: Base | undefined) => JSX.Element)): void;
 }
 export declare class DefaultBlockFactory implements BlockFactory {
-    builders: Map<string, (block: Base, parent?: Base) => JSX.Element>;
+    block_types: any[];
+    builders: ((block: any, parent?: any) => JSX.Element)[];
     constructor();
-    registerBuilder(target_class: string, builder: ((block: Base, parent?: Base | undefined) => JSX.Element)): void;
+    registerBuilder(target_class: any, builder: ((block: any, parent?: any | undefined) => JSX.Element)): void;
+    build(block: Base, parent?: Base): JSX.Element;
     getClassNames(block: Base, selected_index: number): string[];
     useCollapsed(block: NamedContent): {
         collapsed: boolean;
@@ -21,5 +23,4 @@ export declare class DefaultBlockFactory implements BlockFactory {
     buildSpan(block: Span, parent?: Base): JSX.Element;
     buildSelectable(block: Selectable, parent?: Base): JSX.Element;
     buildStream(stream: Stream, parent?: Base): JSX.Element;
-    build(block: Base, parent?: Base): JSX.Element;
 }
