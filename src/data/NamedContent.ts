@@ -1,9 +1,9 @@
-import { Content } from "./Content";
+import { Content } from './Content'
 
 export class NamedContent extends Content {
-    public collapsed: boolean = true;
+  public collapsed: boolean = true
 
-    constructor(uuid: string, public name: string) {
-        super(uuid);
-    }
+  constructor (uuid: string, public name: string) {
+    super(uuid)
+  }
 }

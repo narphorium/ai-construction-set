@@ -1,6 +1,6 @@
 {
   "name": "ai-construction-set",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A set of building blocks for building tools for thought powered by AI.",
   "type": "module",
   "module": "dist/index.mjs",
@@ -39,7 +39,15 @@
     "@rollup/plugin-typescript": "^11.1.2",
     "@types/react": "^18.2.20",
     "@types/styled-theming": "^2.2.5",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
     "devicon": "^2.15.1",
+    "eslint": "^8.50.0",
+    "eslint-config-standard-with-typescript": "^39.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss-inline-svg": "^6.0.0",
     "postcss-preset-env": "^9.1.3",
     "react": "^18.2.0",
@@ -54,6 +62,6 @@
     "styled-components": "^6.0.7",
     "styled-theming": "^2.2.0",
     "tslib": "^2.6.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   }
 }

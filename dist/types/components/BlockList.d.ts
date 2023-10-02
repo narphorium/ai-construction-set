@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { List } from '../data';
+import React, { type Dispatch, type SetStateAction } from 'react';
+import { type List } from '../data';
 interface BlockListProps {
     className?: string | string[];
     list: List;

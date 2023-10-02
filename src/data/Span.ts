@@ -1,7 +1,7 @@
-import { Selectable } from "./Selectable";
+import { Selectable } from './Selectable'
 
 export class Span extends Selectable {
-    constructor(public uuid: string, public content: string) {
-        super(uuid);
-    }
+  constructor (public uuid: string, public content: string) {
+    super(uuid)
+  }
 }

@@ -1,5 +1,5 @@
-import React, { MouseEvent } from 'react';
-import { Span } from "../data";
+import React, { type MouseEvent } from 'react';
+import { type Span } from '../data';
 export declare const ContentSpan: import("styled-components").IStyledComponent<"web", {
     className?: string | string[] | undefined;
     span: Span;

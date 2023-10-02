@@ -1,6 +1,6 @@
-import React from 'react';
+/// <reference types="react" />
 interface IconProps {
     svg: string;
 }
-export declare const Icon: ({ svg }: IconProps) => React.JSX.Element;
+export declare const Icon: ({ svg }: IconProps) => JSX.Element;
 export {};

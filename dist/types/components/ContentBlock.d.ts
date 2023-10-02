@@ -1,5 +1,5 @@
-import React, { Dispatch, MouseEvent, SetStateAction } from 'react';
-import { Content } from '../data';
+import React, { type Dispatch, type MouseEvent, type SetStateAction } from 'react';
+import { type Content } from '../data';
 interface ContentBlockProps {
     className?: string | string[];
     content: Content;

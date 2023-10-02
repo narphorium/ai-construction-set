@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 
 interface IconProps {
-  svg: string;
+  svg: string
 }
 
-export const Icon = ({svg}: IconProps) => {
-    return <span dangerouslySetInnerHTML={{ __html: svg }}></span>;
-};
+export const Icon = function Icon ({ svg }: IconProps): JSX.Element {
+  return <span dangerouslySetInnerHTML={{ __html: svg }}></span>
+}

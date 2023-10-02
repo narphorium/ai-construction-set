@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { Selectable } from '../data';
+import React, { type Dispatch, type SetStateAction } from 'react';
+import { type Selectable } from '../data';
 interface SentinalViewProps {
     sentinal: Selectable;
     selected?: boolean | Dispatch<SetStateAction<boolean>>;

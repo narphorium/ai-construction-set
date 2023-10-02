@@ -1,6 +1,7 @@
-import { Base } from "./Base";
+import { Base } from './Base'
 
 export class Stream extends Base {
-    public name?: string
-    public blocks: Base[] = [];
+  public name?: string
+  public parent?: string
+  public blocks: Base[] = []
 }

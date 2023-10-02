@@ -8,3 +8,5 @@ export * from './ContentSpan';
 export * from './NamedBlock';
 export * from './SentinalView';
 export * from './theme';
+export * from './withCollapsible';
+export * from './withRef';

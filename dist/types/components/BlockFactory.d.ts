@@ -1,20 +1,16 @@
 /// <reference types="react" />
-import { Base, Content, List, ListItem, NamedContent, Section, Selectable, Span, Stream } from '../data';
+import { Content, List, ListItem, NamedContent, Section, Selectable, Span, Stream, type Base } from '../data';
 export interface BlockFactory {
-    build(block: Base, parent?: Base): JSX.Element;
-    registerBuilder(target_class: string, builder: ((block: Base, parent?: Base | undefined) => JSX.Element)): void;
+    build: (block: Base, parent?: Base) => JSX.Element;
+    registerBuilder: (target_class: string, builder: ((block: Base, parent?: Base | undefined) => JSX.Element)) => void;
 }
 export declare class DefaultBlockFactory implements BlockFactory {
     block_types: any[];
-    builders: ((block: any, parent?: any) => JSX.Element)[];
+    builders: Array<(block: any, parent?: any) => JSX.Element>;
     constructor();
-    registerBuilder(target_class: any, builder: ((block: any, parent?: any | undefined) => JSX.Element)): void;
+    registerBuilder(targetClass: any, builder: ((block: any, parent?: any | undefined) => JSX.Element)): void;
     build(block: Base, parent?: Base): JSX.Element;
-    getClassNames(block: Base, selected_index: number): string[];
-    useCollapsed(block: NamedContent): {
-        collapsed: boolean;
-        toggleCollapsed: (c: boolean) => void;
-    };
+    getClassNames(block: Base, selectedIndex: number): string[];
     buildNamedContent(block: NamedContent, parent?: Base): JSX.Element;
     buildListItem(block: ListItem, parent?: Base): JSX.Element;
     buildContent(block: Content, parent?: Base): JSX.Element;

@@ -1,17 +1,17 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef } from 'react';
-import { useResizeDetector } from 'react-resize-detector';
-import { styled } from 'styled-components';
-import { chevronRight } from '../assets/icons';
-import { Icon } from './Icon';
-import { defaultFont, textColor } from './theme';
+import React, { useCallback, useEffect, useRef, type Dispatch, type SetStateAction } from 'react'
+import { useResizeDetector } from 'react-resize-detector'
+import { styled } from 'styled-components'
+import { chevronRight } from '../assets/icons'
+import { Icon } from './Icon'
+import { defaultFont, textColor } from './theme'
 
 interface CollapsibleBlockProps {
-    children: string | JSX.Element | (JSX.Element | undefined)[];
-    className?: string;
-    title: string;
-    collapsed: boolean | Dispatch<SetStateAction<boolean>>;
-    onToggle?: (collapsed: boolean) => void;
-    onTransitionEnd?: () => void;
+  children: string | JSX.Element | Array<JSX.Element | undefined>
+  className?: string
+  title: string
+  collapsed?: boolean | Dispatch<SetStateAction<boolean>>
+  onToggle?: (collapsed: boolean) => void
+  onTransitionEnd?: () => void
 }
 
 const CollapsibleBlockStyled = styled.div`
@@ -35,12 +35,12 @@ const CollapsibleBlockStyled = styled.div`
   &.collapsed > .aics-collapsible-block-header > .aics-collapsible-block-control svg {
     transform: rotate(0deg);
   }
-`;
+`
 
 const CollapsibleBlockHeaderStyled = styled.div`
   position: relative;
   font-size: 11pt;
-`;
+`
 
 const CollapsibleBlockControlStyled = styled.button`
   position: absolute;
@@ -64,7 +64,7 @@ const CollapsibleBlockControlStyled = styled.button`
   & svg path {
     fill: ${textColor};
   }
-`;
+`
 
 const CollapsibleBlockTitleStyled = styled.div`
   display: inline-block;
@@ -82,7 +82,7 @@ const CollapsibleBlockTitleStyled = styled.div`
   & i {
     margin-right: 4px;
   }
-`;
+`
 
 const CollapsibleBlockContentStyled = styled.div`
   overflow: hidden;
@@ -94,7 +94,7 @@ const CollapsibleBlockContentStyled = styled.div`
     padding-top: 4px;
     padding-bottom: 4px;
   }
-`;
+`
 
 const CollapsibleBlockInnerStyled = styled.div`
   font-size: 10pt;
@@ -103,54 +103,57 @@ const CollapsibleBlockInnerStyled = styled.div`
   & > .aics-named-block {
     margin-top: 4px;
   }
-`;
+`
 
-export const CollapsibleBlock = ({ className, children, title, collapsed, onToggle, onTransitionEnd }: CollapsibleBlockProps) => {
-
-  const inner = useRef<HTMLDivElement>(null);
-  useResizeDetector({targetRef: inner, onResize: () => {
-    updateInner();
-  }});
-
-  useEffect(() => {
-    updateInner();
-  }, []);
-
-  useEffect(() => {
-    updateInner();
-  }, [collapsed]);
+export const CollapsibleBlock = function CollapsibleBlock ({ className, children, title, collapsed, onToggle, onTransitionEnd }: CollapsibleBlockProps): JSX.Element {
+  const inner = useRef<HTMLDivElement>(null)
 
   const updateInner = useCallback(() => {
-    if (inner.current) {
-      if (collapsed) {
-        const h = - (inner.current.offsetHeight + 40);
-        inner.current.setAttribute('style', 'margin-top: ' + h + 'px');
+    if (inner.current != null) {
+      if (collapsed === true) {
+        const h = -(inner.current.offsetHeight + 40)
+        inner.current.setAttribute('style', 'margin-top: ' + h + 'px')
       } else {
-        inner.current.setAttribute('style', 'margin-top: 0px');
+        inner.current.setAttribute('style', 'margin-top: 0px')
       }
     }
-  }, [inner, collapsed]);
+  }, [inner, collapsed])
 
-  const getClasses = () => {
-    const classes = ['collapsible-block'];
-    if (className != undefined) {
-      classes.push(className);
+  useResizeDetector({
+    targetRef: inner,
+    onResize: () => {
+      updateInner()
     }
-    if (collapsed) {
-      classes.push('collapsed');
+  })
+
+  useEffect(() => {
+    updateInner()
+  }, [])
+
+  useEffect(() => {
+    updateInner()
+  }, [collapsed, updateInner])
+
+  const getClasses = (): string => {
+    const classes = ['collapsible-block']
+    if (className !== undefined) {
+      classes.push(className)
     }
-    return classes.join(' ');
-  };
+    if (collapsed === true) {
+      classes.push('collapsed')
+    }
+    return classes.join(' ')
+  }
 
   return (<CollapsibleBlockStyled className={getClasses()}>
       <CollapsibleBlockHeaderStyled className="aics-collapsible-block-header">
         <CollapsibleBlockControlStyled className="aics-collapsible-block-control" onClick={(e) => {
-          onToggle?.(collapsed as boolean);
-          e.stopPropagation();
+          onToggle?.(collapsed as boolean)
+          e.stopPropagation()
         }}><Icon svg={chevronRight}/></CollapsibleBlockControlStyled>
         <CollapsibleBlockTitleStyled className="aics-collapsible-block-title" onClick={(e) => {
-          onToggle?.(collapsed as boolean);
-          e.stopPropagation();
+          onToggle?.(collapsed as boolean)
+          e.stopPropagation()
         }}>{title}</CollapsibleBlockTitleStyled>
       </CollapsibleBlockHeaderStyled>
       <CollapsibleBlockContentStyled className='aics-collapsible-block-content'>
@@ -159,5 +162,5 @@ export const CollapsibleBlock = ({ className, children, title, collapsed, onTogg
         </CollapsibleBlockInnerStyled>
       </CollapsibleBlockContentStyled>
     </CollapsibleBlockStyled>
-  );
-};
+  )
+}

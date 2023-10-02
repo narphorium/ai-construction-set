@@ -1,5 +1,5 @@
-import { Section } from "./Section";
+import { Section } from './Section'
 
 export class Code extends Section {
-    public language: string | null = null;
+  public language: string | null = null
 }
