@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, type Dispatch, type ForwardedRef, type Mo
 import { styled } from 'styled-components'
 import theme from 'styled-theming'
 import { type Selectable, type Span } from '../data'
-import { selectedVariants } from './theme'
+import { selectedVariants } from '../themes/theme'
 
 interface ContentSpanProps {
   className?: string | string[]

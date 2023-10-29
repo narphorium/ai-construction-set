@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import theme from 'styled-theming'
 import { type Section } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { fontWeight, selectedVariants } from './theme'
+import { fontWeight, selectedVariants } from '../themes/theme'
 
 interface ContentSectionProps {
   className?: string | string[]

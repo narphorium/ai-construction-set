@@ -2,8 +2,8 @@ import React, { forwardRef, useContext, useEffect, type Dispatch, type Forwarded
 import { styled } from 'styled-components'
 import { type NamedContent } from '../data'
 import { BlockFactoryContext } from '../hooks'
+import { selectedVariants } from '../themes/theme'
 import { CollapsibleBlock } from './CollapsibleBlock'
-import { selectedVariants } from './theme'
 
 interface NamedBlockProps {
   className?: string | string[]

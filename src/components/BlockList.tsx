@@ -2,7 +2,7 @@ import React, { forwardRef, useContext, useEffect, type Dispatch, type Forwarded
 import { styled } from 'styled-components'
 import { type List } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { borderColor } from './theme'
+import { borderColor } from '../themes/theme'
 
 interface BlockListProps {
   className?: string | string[]

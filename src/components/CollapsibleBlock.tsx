@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useRef, type Dispatch, type SetStateActi
 import { useResizeDetector } from 'react-resize-detector'
 import { styled } from 'styled-components'
 import { chevronRight } from '../assets/icons'
+import { defaultFont, textColor } from '../themes/theme'
 import { Icon } from './Icon'
-import { defaultFont, textColor } from './theme'
 
 interface CollapsibleBlockProps {
   children: string | JSX.Element | Array<JSX.Element | undefined>
