@@ -3,5 +3,5 @@ export declare abstract class Base {
     classNames: Set<string>;
     iteration?: number;
     constructor(uuid: string);
-    getClassNames(selected_index: number): string[];
+    getClassNames(selectedIndex: number): string[];
 }

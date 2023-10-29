@@ -2,7 +2,7 @@ import React, { forwardRef, useContext, useEffect, type Dispatch, type Forwarded
 import { styled } from 'styled-components'
 import { type Content } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { selectedVariants } from './theme'
+import { defaultFont, fontWeight, selectedVariants } from '../themes/theme'
 
 interface ContentBlockProps {
   className?: string | string[]
@@ -57,20 +57,22 @@ const textColor = selectedVariants('mode', {
 
 const backgroundColor = selectedVariants('mode', {
   default: { light: 'white', dark: '#292b2f' },
-  selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' }
+  selected: { light: 'yellow-800', dark: 'yellow-200' }
 })
 
 const borderColor = selectedVariants('mode', {
-  default: { light: '#ccc', dark: '#595b60' },
-  selected: { light: 'rgb(237, 211, 137)', dark: 'rgb(109 102 81)' }
+  default: { light: 'gray-800', dark: 'gray-200' },
+  selected: { light: 'yellow-600', dark: 'yellow-400' }
 })
 
 export const ContentBlock = styled(ContentBlockComponent)`
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 4px;
-  margin: 4px 0;
-  color: ${textColor};
-  background-color: ${backgroundColor};
-  border-color: ${borderColor};
+font-family: ${defaultFont};
+font-weight: ${fontWeight};
+border-width: 1px;
+border-style: solid;
+border-radius: 4px;
+margin: 4px 0;
+color: ${textColor};
+background-color: ${backgroundColor};
+border-color: ${borderColor};
 `

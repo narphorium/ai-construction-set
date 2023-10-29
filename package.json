@@ -1,6 +1,6 @@
 {
   "name": "ai-construction-set",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A set of building blocks for building tools for thought powered by AI.",
   "type": "module",
   "module": "dist/index.mjs",
@@ -11,7 +11,9 @@
   "jsx": "react-jsx",
   "scripts": {
     "build:clean": "rimraf dist",
-    "build": "rollup -c --bundleConfigAsCjs"
+    "build": "rollup -c --bundleConfigAsCjs",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "repository": {
     "type": "git",
@@ -32,11 +34,20 @@
     "styled-theming": "^2.2.0"
   },
   "devDependencies": {
+    "@react-theming/storybook-addon": "^1.1.10",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-image": "^3.0.2",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.2",
+    "@storybook/addon-essentials": "^7.5.1",
+    "@storybook/addon-interactions": "^7.5.1",
+    "@storybook/addon-links": "^7.5.1",
+    "@storybook/blocks": "^7.5.1",
+    "@storybook/builder-vite": "^7.5.1",
+    "@storybook/jest": "^0.2.3",
+    "@storybook/react": "^7.5.1",
+    "@storybook/react-vite": "^7.5.1",
     "@types/react": "^18.2.20",
     "@types/styled-theming": "^2.2.5",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
@@ -59,9 +70,12 @@
     "rollup": "^3.28.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
+    "storybook": "^7.5.1",
+    "storybook-react-context": "^0.6.0",
     "styled-components": "^6.0.7",
     "styled-theming": "^2.2.0",
     "tslib": "^2.6.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
   }
 }
