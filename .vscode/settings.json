@@ -1,3 +1,4 @@
 {
-    "jest.jestCommandLine": "NODE_OPTIONS=--experimental-vm-modules npx jest --verbose --config jest.config.ts"
+    "jest.jestCommandLine": "NODE_OPTIONS=--experimental-vm-modules npx jest --verbose --config jest.config.ts",
+    "editor.tabSize": 2
 }

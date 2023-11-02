@@ -22,32 +22,17 @@ export const fontWeight = theme('mode', {
   dark: 400
 })
 
-export const backgroundColor = theme('mode', {
-  light: '#fff',
-  dark: '#000'
+export const textColor = selectedVariants('mode', {
+  default: { light: 'gray-100', dark: '#292b2f' },
+  selected: { light: 'grey-100', dark: '#ffde98' }
 })
 
-export const selectedBackgroundColor = theme('mode', {
-  light: 'rgb(253 235 184)',
-  dark: 'rgb(73 69 61)'
+export const backgroundColor = selectedVariants('mode', {
+  default: { light: 'white', dark: '#292b2f' },
+  selected: { light: 'yellow-800', dark: 'yellow-200' }
 })
 
-export const borderColor = theme('mode', {
-  light: '#fff',
-  dark: '#000'
-})
-
-export const selectedBorderColor = theme('mode', {
-  light: 'rgb(237, 211, 137)',
-  dark: 'rgb(109 102 81)'
-})
-
-export const textColor = theme('mode', {
-  light: '#fff',
-  dark: '#eee'
-})
-
-export const selectedTextColor = theme('mode', {
-  light: '#222',
-  dark: '#ffde98'
+export const borderColor = selectedVariants('mode', {
+  default: { light: 'gray-800', dark: 'gray-200' },
+  selected: { light: 'yellow-600', dark: 'yellow-400' }
 })
