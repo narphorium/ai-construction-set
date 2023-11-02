@@ -30,6 +30,9 @@ export default {
 };
 
 const Template = (args: CodeSectionProps) => {
+  if (args.color !== undefined) {
+    args.code.color = args.color;
+  }
   const content = new Content(getGUID());
   content.children.push(args.code);
   return (
@@ -42,5 +45,11 @@ const Template = (args: CodeSectionProps) => {
 export const Default = Template.bind({});
 Default.args = {
   code: simplePythonCode(),
+};
+
+export const Colored = Template.bind({});
+Colored.args = {
+  code: simplePythonCode(),
+  color: 'blue',
 };
 

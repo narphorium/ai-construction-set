@@ -5,7 +5,7 @@ import React, { forwardRef, type Dispatch, type ForwardedRef, type MouseEvent, t
 import { styled } from 'styled-components'
 import theme from 'styled-theming'
 import { type Code } from '../data/Code'
-import { codeTheme } from '../themes/code'
+import { codeCodeTheme as codeColorTheme, codeTheme } from '../themes/code'
 import { getColor } from '../themes/colors'
 
 export interface CodeSectionProps {
@@ -16,12 +16,13 @@ export interface CodeSectionProps {
   onSelected?: (selected: boolean) => void
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
   onChange?: (value: string, viewUpdate: ViewUpdate) => void
+  color?: string
   editable: boolean
   key: string
 }
 
 const CodeSectionComponent = forwardRef(function CodeSection (
-  { className, code, extensions, selected, onSelected, onClick, onChange, editable, key }: CodeSectionProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+  { className, code, extensions, selected, onSelected, onClick, onChange, color, editable, key }: CodeSectionProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const getClasses = (): string => {
     let classes = ['aics-code-section']
     if (className !== undefined) {
@@ -38,6 +39,9 @@ const CodeSectionComponent = forwardRef(function CodeSection (
   }
 
   const getTheme = (): Extension => {
+    if (color !== undefined) {
+      return codeColorTheme(color)
+    }
     return codeTheme
   }
 
@@ -83,6 +87,11 @@ const backgroundColor = theme('mode', {
 export const CodeSection = styled(CodeSectionComponent)`
   background-color: ${backgroundColor};
   font-size: 9.5pt;
-  padding: 8px;
+  padding: 0;
   border-radius: 4px;
+
+  & .cm-editor {
+    border-radius: 3px;
+    padding: 8px 0 8px 8px;
+  }
 `

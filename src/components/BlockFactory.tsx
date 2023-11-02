@@ -1,7 +1,8 @@
 import React from 'react'
-import { Content, List, ListItem, NamedContent, Section, Selectable, Span, Stream, type Base } from '../data'
+import { Code, Content, List, ListItem, NamedContent, Section, Selectable, Span, Stream, type Base } from '../data'
 import { BlockList } from './BlockList'
 import { BlockStream } from './BlockStream'
+import { CodeSection } from './CodeSection'
 import { ContentBlock } from './ContentBlock'
 import { ContentSection } from './ContentSection'
 import { ContentSpan } from './ContentSpan'
@@ -24,6 +25,7 @@ export class DefaultBlockFactory implements BlockFactory {
     this.registerBuilder(NamedContent, this.buildNamedContent)
     this.registerBuilder(Content, this.buildContent)
     this.registerBuilder(Section, this.buildSection)
+    this.registerBuilder(Code, this.buildCodeSection)
     this.registerBuilder(List, this.buildList)
     this.registerBuilder(Span, this.buildSpan)
     this.registerBuilder(Selectable, this.buildSelectable)
@@ -78,6 +80,15 @@ export class DefaultBlockFactory implements BlockFactory {
     const ContentSectionWithRef = withSelectable(ContentSection, { selected: block.selected })
     return <ContentSectionWithRef
             section={block}
+            key={block.uuid} />
+  }
+
+  buildCodeSection (block: Code, parent?: Base): JSX.Element {
+    const CodeSectionWithRef = withSelectable(CodeSection, { selected: block.selected })
+    return <CodeSectionWithRef
+            code={block}
+            color={block.color}
+            editable={false}
             key={block.uuid} />
   }
 
