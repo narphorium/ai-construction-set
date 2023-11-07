@@ -5,14 +5,13 @@ import { tags as t } from '@lezer/highlight'
 import { getColor } from './colors'
 
 const unknown = '#cccccc'
-const chalky = getColor('yellow-600') ?? unknown
-const coral = getColor('orange-500') ?? unknown
 const invalid = '#ffffff'
-const ivory = getColor('gray-700') ?? unknown
-const stone = '#7d8799'
-const sage = getColor('green-500') ?? unknown
-const whiskey = '#d19a66'
-const violet = getColor('purple-600') ?? unknown
+
+const yellow = getColor('yellow-700') ?? unknown
+const orange = getColor('orange-600') ?? unknown
+const blue = getColor('blue-800') ?? unknown
+const green = getColor('green-500') ?? unknown
+const purple = getColor('purple-700') ?? unknown
 const darkBackground = getColor('gray-300') ?? unknown
 const highlightBackground = '#2c313a'
 const background = getColor('slate-200') ?? unknown
@@ -22,7 +21,7 @@ const cursor = '#528bff'
 
 export const darkTheme = EditorView.theme({
   '&': {
-    color: ivory,
+    color: blue,
     backgroundColor: background
   },
 
@@ -33,7 +32,7 @@ export const darkTheme = EditorView.theme({
   '.cm-cursor, .cm-dropCursor': { borderLeftColor: cursor },
   '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': { backgroundColor: selection },
 
-  '.cm-panels': { backgroundColor: darkBackground, color: ivory },
+  '.cm-panels': { backgroundColor: darkBackground, color: blue },
   '.cm-panels.cm-panels-top': { borderBottom: '2px solid black' },
   '.cm-panels.cm-panels-bottom': { borderTop: '2px solid black' },
 
@@ -54,7 +53,7 @@ export const darkTheme = EditorView.theme({
 
   '.cm-gutters': {
     backgroundColor: background,
-    color: stone,
+    color: blue,
     border: 'none'
   },
 
@@ -83,7 +82,7 @@ export const darkTheme = EditorView.theme({
   '.cm-tooltip-autocomplete': {
     '& > ul > li[aria-selected]': {
       backgroundColor: highlightBackground,
-      color: ivory
+      color: blue
     }
   }
 }, { dark: true })
@@ -91,35 +90,35 @@ export const darkTheme = EditorView.theme({
 export const darkHighlightStyle = HighlightStyle.define([
   {
     tag: t.keyword,
-    color: violet
+    color: purple
   },
   {
     tag: [t.name, t.deleted, t.character, t.propertyName, t.macroName],
-    color: ivory
+    color: blue
   },
   {
     tag: [t.function(t.variableName), t.labelName],
-    color: chalky
+    color: yellow
   },
   {
     tag: [t.color, t.constant(t.name), t.standard(t.name)],
-    color: whiskey
+    color: green
   },
   {
     tag: [t.definition(t.name), t.separator],
-    color: ivory
+    color: blue
   },
   {
     tag: [t.typeName, t.className, t.number, t.changed, t.annotation, t.modifier, t.self, t.namespace],
-    color: chalky
+    color: green
   },
   {
     tag: [t.operator, t.operatorKeyword, t.url, t.escape, t.regexp, t.link, t.special(t.string)],
-    color: ivory
+    color: blue
   },
   {
     tag: [t.meta, t.comment],
-    color: stone
+    color: blue
   },
   {
     tag: t.strong,
@@ -135,21 +134,21 @@ export const darkHighlightStyle = HighlightStyle.define([
   },
   {
     tag: t.link,
-    color: stone,
+    color: blue,
     textDecoration: 'underline'
   },
   {
     tag: t.heading,
     fontWeight: 'bold',
-    color: coral
+    color: orange
   },
   {
     tag: [t.atom, t.bool, t.special(t.variableName)],
-    color: whiskey
+    color: green
   },
   {
     tag: [t.processingInstruction, t.string, t.inserted],
-    color: sage
+    color: orange
   },
   {
     tag: t.invalid,
@@ -159,10 +158,10 @@ export const darkHighlightStyle = HighlightStyle.define([
 
 export const codeTheme: Extension = [darkTheme, syntaxHighlighting(darkHighlightStyle)]
 
-export const codeCodeTheme = (color: string): Extension => {
-  const background = getColor(`${color}-900`) ?? unknown
+export const codeColorTheme = (color: string): Extension => {
+  const background = getColor(`faded-${color}-900`) ?? unknown
   const darkShade = getColor(`${color}-300`) ?? unknown
-  const lightShade = getColor(`${color}-500`) ?? unknown
+  const lightShade = getColor(`faded-${color}-600`) ?? unknown
 
   const colorTheme = EditorView.theme({
     '&': {
@@ -198,7 +197,7 @@ export const codeCodeTheme = (color: string): Extension => {
 
     '.cm-gutters': {
       backgroundColor: background,
-      color: stone,
+      color: blue,
       border: 'none'
     },
 

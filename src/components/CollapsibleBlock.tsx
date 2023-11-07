@@ -1,111 +1,16 @@
-import React, { useCallback, useEffect, useRef, type Dispatch, type SetStateAction } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
 import { styled } from 'styled-components'
-import { chevronRight } from '../assets/icons'
+import { themedIcon } from '../themes/icons'
 import { defaultFont, textColor } from '../themes/theme'
-import { Icon } from './Icon'
+import { type CollapsibleProps } from './Base'
 
-interface CollapsibleBlockProps {
-  children: string | JSX.Element | Array<JSX.Element | undefined>
-  className?: string
+export interface CollapsibleBlockProps extends CollapsibleProps {
+  children: string | JSX.Element | JSX.Element[] | undefined
   title: string
-  collapsed?: boolean | Dispatch<SetStateAction<boolean>>
-  onToggle?: (collapsed: boolean) => void
-  onTransitionEnd?: () => void
 }
 
-const CollapsibleBlockStyled = styled.div`
-  position: relative;
-
-  &.collapsed {
-    .aics-collapsible-block-inner {
-      margin-top: 0;
-      transition: margin-top ease 0.2s;
-    }
-    .aics-collapsible-block-content {
-      padding: 0;
-    }
-  }
-
-  & > .aics-collapsible-block-header > .aics-collapsible-block-control svg {
-    transition: all 0.2s;
-    transform: rotate(90deg);
-  }
-
-  &.collapsed > .aics-collapsible-block-header > .aics-collapsible-block-control svg {
-    transform: rotate(0deg);
-  }
-`
-
-const CollapsibleBlockHeaderStyled = styled.div`
-  position: relative;
-  font-size: 11pt;
-`
-
-const CollapsibleBlockControlStyled = styled.button`
-  position: absolute;
-  top: 0;
-  left: 4px;
-  background-color: transparent;
-  border: none;
-  color: ${textColor};
-  padding: 0;
-  margin: 0;
-  font-size: 11pt;
-  vertical-align: text-top;
-  height: 1em;
-  transition: all 0.2s;
-  outline: 0;
-
-  &:focus {
-    outline: 0;
-  }
-
-  & svg path {
-    fill: ${textColor};
-  }
-`
-
-const CollapsibleBlockTitleStyled = styled.div`
-  display: inline-block;
-  margin: 2px 0;
-  padding-left: 22px;
-  font-family: ${defaultFont};
-  font-size: 11pt;
-  user-select: none;
-  position: relative;
-
-  &:focus {
-    outline: 0;
-  }
-
-  & i {
-    margin-right: 4px;
-  }
-`
-
-const CollapsibleBlockContentStyled = styled.div`
-  overflow: hidden;
-  margin-left: 16px;
-  margin-right: 16px;
-  font-size: 10pt;
-
-  &:last-child {
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-`
-
-const CollapsibleBlockInnerStyled = styled.div`
-  font-size: 10pt;
-  transition: margin-top ease 0.2s;
-
-  & > .aics-named-block {
-    margin-top: 4px;
-  }
-`
-
-export const CollapsibleBlock = function CollapsibleBlock ({ className, children, title, collapsed, onToggle, onTransitionEnd }: CollapsibleBlockProps): JSX.Element {
+export const CollapsibleBlockComponent = function CollapsibleBlock ({ className, children, title, collapsed, onToggle, onTransitionEnd, variant }: CollapsibleBlockProps): JSX.Element {
   const inner = useRef<HTMLDivElement>(null)
 
   const updateInner = useCallback(() => {
@@ -135,9 +40,13 @@ export const CollapsibleBlock = function CollapsibleBlock ({ className, children
   }, [collapsed, updateInner])
 
   const getClasses = (): string => {
-    const classes = ['collapsible-block']
+    let classes = ['collapsible-block']
     if (className !== undefined) {
-      classes.push(className)
+      if (typeof className === 'string') {
+        classes.push(className)
+      } else if (Array.isArray(className)) {
+        classes = classes.concat(className)
+      }
     }
     if (collapsed === true) {
       classes.push('collapsed')
@@ -145,22 +54,112 @@ export const CollapsibleBlock = function CollapsibleBlock ({ className, children
     return classes.join(' ')
   }
 
-  return (<CollapsibleBlockStyled className={getClasses()}>
-      <CollapsibleBlockHeaderStyled className="aics-collapsible-block-header">
-        <CollapsibleBlockControlStyled className="aics-collapsible-block-control" onClick={(e) => {
+  return (<div className={getClasses()}>
+      <div className="aics-collapsible-block-header">
+        <div className="aics-collapsible-block-control" onClick={(e) => {
           onToggle?.(collapsed as boolean)
           e.stopPropagation()
-        }}><Icon svg={chevronRight}/></CollapsibleBlockControlStyled>
-        <CollapsibleBlockTitleStyled className="aics-collapsible-block-title" onClick={(e) => {
+        }}><span></span></div>
+        <div className="aics-collapsible-block-title" onClick={(e) => {
           onToggle?.(collapsed as boolean)
           e.stopPropagation()
-        }}>{title}</CollapsibleBlockTitleStyled>
-      </CollapsibleBlockHeaderStyled>
-      <CollapsibleBlockContentStyled className='aics-collapsible-block-content'>
-        <CollapsibleBlockInnerStyled className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={onTransitionEnd}>
+        }}>{title}</div>
+      </div>
+      <div className='aics-collapsible-block-content'>
+        <div className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={onTransitionEnd}>
         { children }
-        </CollapsibleBlockInnerStyled>
-      </CollapsibleBlockContentStyled>
-    </CollapsibleBlockStyled>
+        </div>
+      </div>
+    </div>
   )
 }
+
+export const CollapsibleBlock = styled(CollapsibleBlockComponent)`
+position: relative;
+
+  &.collapsed {
+    > .aics-collapsible-block-inner {
+      margin-top: 0;
+      transition: margin-top ease 0.2s;
+    }
+
+    > .aics-collapsible-block-header > .aics-collapsible-block-control ::before {
+      transform: rotate(0deg);
+    }
+
+    > .aics-collapsible-block-content {
+      margin: 0;
+    }
+  }
+
+  & > .aics-collapsible-block-header {
+    position: relative;
+    font-size: 11pt;
+
+    > .aics-collapsible-block-control ::before {
+      transition: all 0.2s;
+      transform: rotate(90deg);
+    }
+  }
+
+  & .aics-collapsible-block-control {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    background-color: transparent;
+    border: none;
+    color: ${textColor};
+    padding: 0;
+    margin: 0;
+    font-size: 11pt;
+    vertical-align: text-top;
+    
+    transition: all 0.2s;
+    outline: 0;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+
+    :focus {
+      outline: 0;
+    }
+
+    ::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background-image: ${themedIcon('chevron-right', textColor)};
+      background-repeat: no-repeat;
+    }
+  }
+
+  & .aics-collapsible-block-title {
+    display: inline-block;
+    margin: 2px 0;
+    padding-left: 22px;
+    font-family: ${defaultFont};
+    font-size: 11pt;
+    user-select: none;
+    position: relative;
+
+    :focus {
+      outline: 0;
+    }
+  }
+
+  & .aics-collapsible-block-content {
+    overflow: hidden;
+    margin: 4px 16px;
+    font-size: 10pt;
+  }
+
+  & .aics-collapsible-block-inner {
+    font-size: 10pt;
+    transition: margin-top ease 0.2s;
+
+    > .aics-named-block {
+      margin-top: 4px;
+    }
+  }
+`

@@ -1,6 +1,7 @@
 export abstract class Base {
   classNames = new Set<string>()
   iteration?: number
+  variant?: string
 
   public constructor (public uuid: string) {}
 

@@ -1,4 +1,4 @@
-const colorPalette = {
+export const colorPalette = {
   gray: {
     DEFAULT: '#a1a1a1',
     100: '#202020',
@@ -94,6 +94,78 @@ const colorPalette = {
     700: '#f9949c',
     800: '#fbb8bd',
     900: '#fddbde'
+  },
+  'faded-purple': {
+    DEFAULT: '#786c93',
+    100: '#18161d',
+    200: '#302b3b',
+    300: '#484158',
+    400: '#605775',
+    500: '#786c93',
+    600: '#938aa8',
+    700: '#aea7be',
+    800: '#c9c4d4',
+    900: '#e4e2e9'
+  },
+  'faded-blue': {
+    DEFAULT: '#5886a7',
+    100: '#121b21',
+    200: '#233643',
+    300: '#355064',
+    400: '#466b86',
+    500: '#5886a7',
+    600: '#799eb9',
+    700: '#9bb6ca',
+    800: '#bccfdc',
+    900: '#dee7ed'
+  },
+  'faded-green': {
+    DEFAULT: '#6c936f',
+    100: '#161d16',
+    200: '#2b3b2d',
+    300: '#415843',
+    400: '#577559',
+    500: '#6c936f',
+    600: '#8aa88c',
+    700: '#a7bea9',
+    800: '#c4d4c6',
+    900: '#e2e9e2'
+  },
+  'faded-yellow': {
+    DEFAULT: '#ab9454',
+    100: '#221e11',
+    200: '#443b22',
+    300: '#675932',
+    400: '#897643',
+    500: '#ab9454',
+    600: '#bca976',
+    700: '#cdbf98',
+    800: '#ddd4bb',
+    900: '#eeeadd'
+  },
+  'faded-orange': {
+    DEFAULT: '#b4694b',
+    100: '#24150f',
+    200: '#482a1e',
+    300: '#6c3f2d',
+    400: '#90543c',
+    500: '#b4694b',
+    600: '#c3876f',
+    700: '#d2a593',
+    800: '#e1c3b7',
+    900: '#f0e1db'
+  },
+  'faded-red': {
+    DEFAULT: '#b14e56',
+    100: '#231011',
+    200: '#471f22',
+    300: '#6a2f34',
+    400: '#8e3e45',
+    500: '#b14e56',
+    600: '#c17178',
+    700: '#d0959a',
+    800: '#e0b8bb',
+    900: '#efdcdd'
   }
 }
 
@@ -101,7 +173,11 @@ export const getColor = (key: string): string | undefined => {
   let name = key.toLowerCase()
   let shade = 'DEFAULT'
   if (name.includes('-')) {
-    [name, shade] = name.split('-')
+    const parts = name.split('-')
+    if ((/\d00/gm).exec(parts[parts.length - 1]) !== null) {
+      shade = parts.pop() as string
+      name = parts.join('-')
+    }
   }
   if (name in colorPalette) {
     const color = colorPalette[name as keyof typeof colorPalette]

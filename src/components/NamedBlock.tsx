@@ -1,22 +1,16 @@
-import React, { forwardRef, useContext, useEffect, type Dispatch, type ForwardedRef, type SetStateAction } from 'react'
+import React, { forwardRef, useContext, useEffect, type ForwardedRef } from 'react'
 import { styled } from 'styled-components'
 import { type NamedContent } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { selectedVariants } from '../themes/theme'
+import { backgroundColor, borderColor, textColor } from '../themes/theme'
+import { type CollapsibleProps, type SelectableProps } from './Base'
 import { CollapsibleBlock } from './CollapsibleBlock'
 
-interface NamedBlockProps {
-  className?: string | string[]
+export interface NamedBlockProps extends SelectableProps, CollapsibleProps {
   content: NamedContent
-  collapsed?: boolean | Dispatch<SetStateAction<boolean>>
-  selected?: boolean | Dispatch<SetStateAction<boolean>>
-  onToggle?: (collapsed: boolean) => void
-  onSelected?: (selected: boolean) => void
-  onTransitionEnd?: () => void
-  key: any
 }
 
-const NamedBlockComponent = forwardRef(function NamedBlock ({ className, content, collapsed, selected, onToggle, onSelected, onTransitionEnd, key }: NamedBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+const NamedBlockComponent = forwardRef(function NamedBlock ({ className, content, collapsed, selected, onToggle, onSelected, onTransitionEnd, variant, key }: NamedBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
   useEffect(() => {
@@ -50,33 +44,10 @@ const NamedBlockComponent = forwardRef(function NamedBlock ({ className, content
   }
 
   return <div ref={ref} className={getClasses()} onClick={handleClick} >
-        <CollapsibleBlock title={content.name} collapsed={collapsed} onToggle={onToggle} onTransitionEnd={onTransitionEnd}>
-        { content.children.map((child, index) => {
-          return factory?.build(child, content)
-        })}
+        <CollapsibleBlock title={content.name} collapsed={collapsed} onToggle={onToggle} onTransitionEnd={onTransitionEnd} variant={variant} key={content.uuid}>
+        { factory?.buildAll(content.children, content) }
         </CollapsibleBlock>
     </div>
-})
-
-const textColor = selectedVariants('mode', {
-  default: { light: '#222', dark: '#292b2f' },
-  selected: { light: '#222', dark: '#ffde98' }
-})
-
-const backgroundColor = selectedVariants('mode', {
-  default: { light: 'white', dark: '#292b2f' },
-  selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' }
-})
-
-const borderColor = selectedVariants('mode', {
-  default: { light: '#ccc', dark: '#595b60' },
-  selected: { light: 'rgb(237, 211, 137)', dark: 'rgb(109 102 81)' }
-})
-
-// FIXME:  Highlight border color of selected list item.
-const itemBorderColor = selectedVariants('mode', {
-  default: { light: '#ccc', dark: '#595b60' },
-  selected: { light: '#ccc', dark: '#595b60' }
 })
 
 export const NamedBlock = styled(NamedBlockComponent)`
@@ -110,7 +81,7 @@ export const NamedBlock = styled(NamedBlockComponent)`
 export const BlockListItem = styled(NamedBlock)`
     margin: 0;
     border-width: 0 0 1px 0;
-    border-bottom: 1px solid ${itemBorderColor};
+    border-bottom: 1px solid ${borderColor};
     border-radius: 0;
 
     &:first-child {

@@ -1,28 +1,24 @@
 import { python } from '@codemirror/lang-python'
 import { type ViewUpdate } from '@codemirror/view'
 import CodeMirror, { type Extension } from '@uiw/react-codemirror'
-import React, { forwardRef, type Dispatch, type ForwardedRef, type MouseEvent, type SetStateAction } from 'react'
+import React, { forwardRef, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
 import theme from 'styled-theming'
 import { type Code } from '../data/Code'
-import { codeCodeTheme as codeColorTheme, codeTheme } from '../themes/code'
+import { codeColorTheme, codeTheme } from '../themes/code'
 import { getColor } from '../themes/colors'
+import { type SelectableProps } from './Base'
 
-export interface CodeSectionProps {
-  className?: string | string[]
+export interface CodeSectionProps extends SelectableProps {
   code: Code
   extensions?: any[]
-  selected?: boolean | Dispatch<SetStateAction<boolean>>
-  onSelected?: (selected: boolean) => void
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
   onChange?: (value: string, viewUpdate: ViewUpdate) => void
-  color?: string
   editable: boolean
-  key: string
 }
 
 const CodeSectionComponent = forwardRef(function CodeSection (
-  { className, code, extensions, selected, onSelected, onClick, onChange, color, editable, key }: CodeSectionProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+  { className, code, extensions, selected, onSelected, onClick, onChange, variant, editable, key }: CodeSectionProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const getClasses = (): string => {
     let classes = ['aics-code-section']
     if (className !== undefined) {
@@ -39,8 +35,8 @@ const CodeSectionComponent = forwardRef(function CodeSection (
   }
 
   const getTheme = (): Extension => {
-    if (color !== undefined) {
-      return codeColorTheme(color)
+    if (code.variant !== undefined) {
+      return codeColorTheme(code.variant)
     }
     return codeTheme
   }
