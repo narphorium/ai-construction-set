@@ -1,11 +1,7 @@
-import React, { useState, type ComponentType, type Dispatch, type SetStateAction } from 'react'
+import React, { useState, type ComponentType } from 'react'
+import { type CollapsibleProps } from './Base'
 
-interface Base {
-  collapsed?: boolean | Dispatch<SetStateAction<boolean>>
-  toggleCollapsed?: (selected: boolean) => void
-}
-
-export const withCollapsible = <TProps extends Base>(
+export const withCollapsible = <TProps extends CollapsibleProps>(
   Component: ComponentType<TProps>,
   params: { collapsed: boolean }
 ) => {

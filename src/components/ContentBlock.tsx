@@ -1,19 +1,16 @@
-import React, { forwardRef, useContext, useEffect, type Dispatch, type ForwardedRef, type MouseEvent, type SetStateAction } from 'react'
+import React, { forwardRef, useContext, useEffect, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
 import { type Content } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { defaultFont, fontWeight, selectedVariants } from '../themes/theme'
+import { backgroundColor, borderColor, defaultFont, fontWeight, textColor } from '../themes/theme'
+import { type SelectableProps } from './Base'
 
-interface ContentBlockProps {
-  className?: string | string[]
+export interface ContentBlockProps extends SelectableProps {
   content: Content
-  selected?: boolean | Dispatch<SetStateAction<boolean>>
-  onSelected?: (selected: boolean) => void
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
-  key: any
 }
 
-export const ContentBlockComponent = forwardRef(function ContentBlock ({ className, content, selected, onSelected, onClick, key }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ContentBlockComponent = forwardRef(function ContentBlock ({ className, content, selected, onSelected, onClick, variant, key }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
   useEffect(() => {
@@ -44,25 +41,8 @@ export const ContentBlockComponent = forwardRef(function ContentBlock ({ classNa
   }
 
   return <div ref={ref} className={getClasses()} onClick={handleClick}>
-         { content.children.map((child) => {
-           return factory?.build(child, content)
-         })}
+         { factory?.buildAll(content.children, content) }
     </div>
-})
-
-const textColor = selectedVariants('mode', {
-  default: { light: '#222', dark: '#292b2f' },
-  selected: { light: '#222', dark: '#ffde98' }
-})
-
-const backgroundColor = selectedVariants('mode', {
-  default: { light: 'white', dark: '#292b2f' },
-  selected: { light: 'yellow-800', dark: 'yellow-200' }
-})
-
-const borderColor = selectedVariants('mode', {
-  default: { light: 'gray-800', dark: 'gray-200' },
-  selected: { light: 'yellow-600', dark: 'yellow-400' }
 })
 
 export const ContentBlock = styled(ContentBlockComponent)`

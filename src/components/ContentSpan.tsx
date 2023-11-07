@@ -1,19 +1,16 @@
-import React, { forwardRef, useEffect, type Dispatch, type ForwardedRef, type MouseEvent, type SetStateAction } from 'react'
+import React, { forwardRef, useEffect, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
 import theme from 'styled-theming'
 import { type Selectable, type Span } from '../data'
 import { selectedVariants } from '../themes/theme'
+import { type SelectableProps } from './Base'
 
-interface ContentSpanProps {
-  className?: string | string[]
+export interface ContentSpanProps extends SelectableProps {
   span: Span
-  selected?: boolean | Dispatch<SetStateAction<boolean>>
-  onSelected?: (selected: boolean) => void
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
-  key: any
 }
 
-const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span, selected, onSelected, onClick, key }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
+const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span, selected, onSelected, onClick, variant, key }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
   useEffect(() => {
     if (onSelected !== undefined) {
       onSelected(selected as boolean)
@@ -45,13 +42,25 @@ const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span,
 })
 
 const spanTextColor = selectedVariants('mode', {
-  default: { light: '#222', dark: '#eee' },
-  selected: { light: '#222', dark: '#ffde98' }
+  default: {
+    unselected: { light: '#222', dark: '#eee' },
+    selected: { light: '#222', dark: '#ffde98' }
+  },
+  blue: {
+    unselected: { light: '#222', dark: '#eee' },
+    selected: { light: '#222', dark: '#ffde98' }
+  }
 })
 
 const spanBackgroundColor = selectedVariants('mode', {
-  default: { light: 'transparent', dark: 'transparent' },
-  selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' }
+  default: {
+    unselected: { light: 'transparent', dark: 'transparent' },
+    selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' }
+  },
+  blue: {
+    unselected: { light: 'transparent', dark: 'transparent' },
+    selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' }
+  }
 })
 
 const selectedChildSpanColor = theme('mode', {

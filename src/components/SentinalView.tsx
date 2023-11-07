@@ -1,14 +1,12 @@
-import React, { forwardRef, useEffect, type Dispatch, type ForwardedRef, type SetStateAction } from 'react'
+import React, { forwardRef, useEffect, type ForwardedRef } from 'react'
 import { type Selectable } from '../data'
+import { type SelectableProps } from './Base'
 
-interface SentinalViewProps {
+export interface SentinalViewProps extends SelectableProps {
   sentinal: Selectable
-  selected?: boolean | Dispatch<SetStateAction<boolean>>
-  onSelected?: (selected: boolean) => void
-  key: any
 }
 
-export const SentinalView = forwardRef(function SentinalView ({ sentinal, selected, onSelected, key }: SentinalViewProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const SentinalView = forwardRef(function SentinalView ({ sentinal, selected, onSelected, variant, key }: SentinalViewProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   useEffect(() => {
     if (onSelected !== undefined) {
       onSelected(selected as boolean)

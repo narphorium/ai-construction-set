@@ -1,11 +1,7 @@
-import React, { useRef, useState, type ComponentType, type Dispatch, type SetStateAction } from 'react'
+import React, { useRef, useState, type ComponentType } from 'react'
+import { type SelectableProps } from './Base'
 
-interface Base {
-  selected?: boolean | Dispatch<SetStateAction<boolean>>
-  onSelected?: (selected: boolean) => void
-}
-
-export const withSelectable = <TProps extends Base>(
+export const withSelectable = <TProps extends SelectableProps>(
   Component: ComponentType<TProps>,
   params: { selected: boolean }
 ) => {
