@@ -1,5 +1,5 @@
 import React, { useRef, useState, type ComponentType } from 'react'
-import { type SelectableProps } from './Base'
+import { getClasses, type SelectableProps } from './Base'
 
 export const withSelectable = <TProps extends SelectableProps>(
   Component: ComponentType<TProps>,
@@ -11,6 +11,10 @@ export const withSelectable = <TProps extends SelectableProps>(
     const handleSelected = (s: boolean): void => {
       setSelected(s)
     }
-    return <Component ref={ref} selected={selected} onSelected={handleSelected} {...props} />
+    return <Component ref={ref}
+        selected={selected}
+        onSelected={handleSelected}
+        className={getClasses(props.className, () => selected ? ['selected'] : [])}
+        {...props} />
   }
 }

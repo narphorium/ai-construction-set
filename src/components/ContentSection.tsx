@@ -4,7 +4,7 @@ import theme from 'styled-theming'
 import { type Section } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { defaultFont, fontWeight, selectedVariants, textColor } from '../themes/theme'
-import { type SelectableProps } from './Base'
+import { getClasses, type SelectableProps } from './Base'
 
 export interface ContentSectionProps extends SelectableProps {
   section: Section
@@ -20,30 +20,14 @@ const ContentSectionComponent = forwardRef(function ContentSection ({ className,
     }
   }, [selected, onSelected])
 
-  const getClasses = (): string => {
-    let classes = ['aics-content-section']
-    if (className !== undefined) {
-      if (typeof className === 'string') {
-        classes.push(className)
-      } else if (Array.isArray(className)) {
-        classes = classes.concat(className)
-      }
-    }
-    if (selected === true) {
-      classes.push('selected')
-    }
-    return classes.join(' ')
-  }
-
   const handleClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
     if (onClick !== undefined) {
       onClick(e)
     }
   }, [onClick])
 
-  return <div ref={ref} className={ getClasses() } onClick={handleClick}>
+  return <div ref={ref} className={ getClasses('aics-content-section', className, section.classNames) } onClick={handleClick}>
     <span>
-      <label>{ section.name !== null ? section.name + ': ' : '' }</label>
       { factory?.buildAll(section.spans, section) }
     </span>
   </div>

@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { type NamedContent } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { backgroundColor, borderColor, textColor } from '../themes/theme'
-import { type CollapsibleProps, type SelectableProps } from './Base'
+import { getClasses, type CollapsibleProps, type SelectableProps } from './Base'
 import { CollapsibleBlock } from './CollapsibleBlock'
 
 export interface NamedBlockProps extends SelectableProps, CollapsibleProps {
@@ -19,31 +19,13 @@ const NamedBlockComponent = forwardRef(function NamedBlock ({ className, content
     }
   }, [selected, onSelected])
 
-  const getClasses = (): string => {
-    let classes = ['aics-named-block']
-    if (className !== undefined) {
-      if (typeof className === 'string') {
-        classes.push(className)
-      } else if (Array.isArray(className)) {
-        classes = classes.concat(className)
-      }
-    }
-    if (selected === true) {
-      classes.push('selected')
-    }
-    if (collapsed === true) {
-      classes.push('collapsed')
-    }
-    return classes.join(' ')
-  }
-
   const handleClick = (): void => {
     if (onToggle !== undefined && collapsed !== undefined) {
-      onToggle(!(collapsed as boolean))
+      onToggle(!(collapsed))
     }
   }
 
-  return <div ref={ref} className={getClasses()} onClick={handleClick} >
+  return <div ref={ref} className={getClasses('aics-named-block', className, content.classNames)} onClick={handleClick} >
         <CollapsibleBlock title={content.name} collapsed={collapsed} onToggle={onToggle} onTransitionEnd={onTransitionEnd} variant={variant} key={content.uuid}>
         { factory?.buildAll(content.children, content) }
         </CollapsibleBlock>
@@ -85,11 +67,13 @@ export const BlockListItem = styled(NamedBlock)`
     border-radius: 0;
 
     &:first-child {
-        border-radius: 4px 4px 0 0;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
     }
 
     &:last-child {
         border-bottom: none;
-        border-radius: 0 0 4px 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
     }
 `

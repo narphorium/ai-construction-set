@@ -19,6 +19,20 @@ export const withCascadingVariants = <TProps extends BaseProps>(
       currentBlock = factory?.getParent(currentBlock)
     }
     const variant = props.variant ?? parentVariant ?? 'default'
-    return <Component variant={variant} {...props} />
+
+    const getClasses = (): string[] => {
+      let classes: string[] = []
+      if (props.className !== undefined) {
+        if (typeof props.className === 'string') {
+          classes.push(props.className)
+        } else if (Array.isArray(props.className)) {
+          classes = classes.concat(props.className)
+        }
+      }
+      classes.push(`variant-${variant}`)
+      return classes
+    }
+
+    return <Component variant={variant} classNames={getClasses()} {...props} />
   }
 }

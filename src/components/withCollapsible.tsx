@@ -1,5 +1,5 @@
 import React, { useState, type ComponentType } from 'react'
-import { type CollapsibleProps } from './Base'
+import { getClasses, type CollapsibleProps } from './Base'
 
 export const withCollapsible = <TProps extends CollapsibleProps>(
   Component: ComponentType<TProps>,
@@ -10,6 +10,10 @@ export const withCollapsible = <TProps extends CollapsibleProps>(
     const toggleCollapsed = (c: boolean): void => {
       setCollapsed(!c)
     }
-    return <Component collapsed={collapsed} onToggle={toggleCollapsed} {...props} />
+    return <Component
+        collapsed={collapsed}
+        onToggle={toggleCollapsed}
+        className={getClasses(props.className, () => collapsed ? ['collapsed'] : [])}
+        {...props} />
   }
 }

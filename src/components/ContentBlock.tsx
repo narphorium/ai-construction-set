@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { type Content } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { backgroundColor, borderColor, defaultFont, fontWeight, textColor } from '../themes/theme'
-import { type SelectableProps } from './Base'
+import { getClasses, type SelectableProps } from './Base'
 
 export interface ContentBlockProps extends SelectableProps {
   content: Content
@@ -19,28 +19,13 @@ export const ContentBlockComponent = forwardRef(function ContentBlock ({ classNa
     }
   }, [selected, onSelected])
 
-  const getClasses = (): string => {
-    let classes = ['aics-content-block']
-    if (className !== undefined) {
-      if (typeof className === 'string') {
-        classes.push(className)
-      } else if (Array.isArray(className)) {
-        classes = classes.concat(className)
-      }
-    }
-    if (selected === true) {
-      classes.push('selected')
-    }
-    return classes.join(' ')
-  }
-
   const handleClick = (e: MouseEvent<HTMLDivElement>): void => {
     if (onClick !== undefined) {
       onClick(e)
     }
   }
 
-  return <div ref={ref} className={getClasses()} onClick={handleClick}>
+  return <div ref={ref} className={getClasses('aics-content-block', className, content.classNames)} onClick={handleClick}>
          { factory?.buildAll(content.children, content) }
     </div>
 })

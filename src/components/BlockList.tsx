@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { type List } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { borderColor } from '../themes/theme'
-import { type SelectableProps } from './Base'
+import { getClasses, type SelectableProps } from './Base'
 
 export interface BlockListProps extends SelectableProps {
   list: List
@@ -18,22 +18,7 @@ export const BlockListComponent = forwardRef(function BlockList ({ className, li
     }
   }, [selected, onSelected])
 
-  const getClasses = (): string => {
-    let classes = ['aics-block-list']
-    if (className !== undefined) {
-      if (typeof className === 'string') {
-        classes.push(className)
-      } else if (Array.isArray(className)) {
-        classes = classes.concat(className)
-      }
-    }
-    if (selected === true) {
-      classes.push('selected')
-    }
-    return classes.join(' ')
-  }
-
-  return <div ref={ref} className={getClasses()}>
+  return <div ref={ref} className={getClasses('aics-block-list', className, list.classNames)}>
         { factory?.buildAll(list.items, list) }
     </div>
 })

@@ -2,8 +2,9 @@ import React, { forwardRef, useEffect, type ForwardedRef, type MouseEvent } from
 import { styled } from 'styled-components'
 import theme from 'styled-theming'
 import { type Selectable, type Span } from '../data'
-import { selectedVariants } from '../themes/theme'
-import { type SelectableProps } from './Base'
+import { themedIcon } from '../themes/icons'
+import { fontWeight, selectedVariants, textColor } from '../themes/theme'
+import { getClasses, type SelectableProps } from './Base'
 
 export interface ContentSpanProps extends SelectableProps {
   span: Span
@@ -17,39 +18,16 @@ const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span,
     }
   }, [selected, onSelected])
 
-  const getClasses = (): string => {
-    let classes = ['aics-content-span']
-    if (className !== undefined) {
-      if (typeof className === 'string') {
-        classes.push(className)
-      } else if (Array.isArray(className)) {
-        classes = classes.concat(className)
-      }
-    }
-    if (selected === true) {
-      classes.push('selected')
-    }
-    return classes.join(' ')
-  }
-
   const handleClick = (obj: Selectable) => (e: MouseEvent<HTMLDivElement>) => {
     if (onClick !== undefined) {
       onClick(e)
     }
   }
 
-  return <span ref={ref} className={getClasses()} onClick={handleClick(span)} dangerouslySetInnerHTML={{ __html: span.content }}></span>
-})
-
-const spanTextColor = selectedVariants('mode', {
-  default: {
-    unselected: { light: '#222', dark: '#eee' },
-    selected: { light: '#222', dark: '#ffde98' }
-  },
-  blue: {
-    unselected: { light: '#222', dark: '#eee' },
-    selected: { light: '#222', dark: '#ffde98' }
-  }
+  return <span ref={ref}
+      className={getClasses('aics-content-span', className, span.classNames)}
+      onClick={handleClick(span)}
+      dangerouslySetInnerHTML={{ __html: span.content }}></span>
 })
 
 const spanBackgroundColor = selectedVariants('mode', {
@@ -68,15 +46,30 @@ const selectedChildSpanColor = theme('mode', {
   dark: '#ffde98'
 })
 
+const backgroundImage = (props: any): string | undefined => {
+  return props.span.icon !== undefined ? themedIcon(props.span.icon, textColor)(props) : 'none'
+}
+
+const headerFontWeight = (props: any): string => {
+  return fontWeight(props) + 100
+}
+
 export const ContentSpan = styled(ContentSpanComponent)`
-  color: ${spanTextColor};
+  color: ${textColor};
   background-color: ${spanBackgroundColor};
+
+  padding: ${(props: any) => props.span.icon !== undefined ? '0 0 0 24px' : '0'};
+  background-image: ${backgroundImage};
+  background-repeat: no-repeat;
 
   .selected & {
     color: ${selectedChildSpanColor} !important;
   }
 
   a {
-    color: ${spanTextColor};
+    color: ${textColor};
+  }
+  &.aics-content-section-header {
+    font-weight: ${headerFontWeight};
   }
 `

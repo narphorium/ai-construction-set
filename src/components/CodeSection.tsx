@@ -7,7 +7,7 @@ import theme from 'styled-theming'
 import { type Code } from '../data/Code'
 import { codeColorTheme, codeTheme } from '../themes/code'
 import { getColor } from '../themes/colors'
-import { type SelectableProps } from './Base'
+import { getClasses, type SelectableProps } from './Base'
 
 export interface CodeSectionProps extends SelectableProps {
   code: Code
@@ -19,21 +19,6 @@ export interface CodeSectionProps extends SelectableProps {
 
 const CodeSectionComponent = forwardRef(function CodeSection (
   { className, code, extensions, selected, onSelected, onClick, onChange, variant, editable, key }: CodeSectionProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const getClasses = (): string => {
-    let classes = ['aics-code-section']
-    if (className !== undefined) {
-      if (typeof className === 'string') {
-        classes.push(className)
-      } else if (Array.isArray(className)) {
-        classes = classes.concat(className)
-      }
-    }
-    if (selected === true) {
-      classes.push('selected')
-    }
-    return classes.join(' ')
-  }
-
   const getTheme = (): Extension => {
     if (code.variant !== undefined) {
       return codeColorTheme(code.variant)
@@ -58,7 +43,7 @@ const CodeSectionComponent = forwardRef(function CodeSection (
   }
   config.push(python())
 
-  return (<div ref={ref} className={getClasses()} onClick={handleClick}>
+  return (<div ref={ref} className={getClasses('aics-code-section', className, code.classNames)} onClick={handleClick}>
       <CodeMirror
         value={codeContent}
         basicSetup={false}
