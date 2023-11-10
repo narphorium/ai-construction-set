@@ -1,5 +1,5 @@
 import React from 'react'
-import { Code, Content, List, ListItem, NamedContent, Section, Selectable, Span, Stream, type Base } from '../data'
+import { Code, Content, List, ListItem, NamedContent, Section, Selectable, Span, Stream, Table, type Base } from '../data'
 import { BlockList } from './BlockList'
 import { BlockStream } from './BlockStream'
 import { CodeSection } from './CodeSection'
@@ -8,6 +8,7 @@ import { ContentSection } from './ContentSection'
 import { ContentSpan } from './ContentSpan'
 import { BlockListItem, NamedBlock } from './NamedBlock'
 import { SentinalView } from './SentinalView'
+import { TableSection } from './TableSection'
 import { withCascadingVariants } from './withCascadingVariants'
 import { withCollapsible } from './withCollapsible'
 import { withSelectable } from './withSelectable'
@@ -37,6 +38,7 @@ export class DefaultBlockFactory implements BlockFactory {
     this.registerBuilder(Span, this.buildSpan as BlockBuilder)
     this.registerBuilder(Selectable, this.buildSelectable as BlockBuilder)
     this.registerBuilder(Stream, this.buildStream as BlockBuilder)
+    this.registerBuilder(Table, this.buildTable as BlockBuilder)
   }
 
   registerBuilder (targetClass: any, builder: BlockBuilder): void {
@@ -154,5 +156,13 @@ export class DefaultBlockFactory implements BlockFactory {
     return <BlockStreamWithRef
             stream={stream}
             key={stream.uuid} />
+  }
+
+  buildTable (table: Table): JSX.Element {
+    const TableWithVariant = withCascadingVariants(TableSection, { block: table })
+    const TableWithRef = withSelectable(TableWithVariant, { selected: false })
+    return <TableWithRef
+            table={table}
+            key={table.uuid} />
   }
 };

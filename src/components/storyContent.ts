@@ -1,6 +1,5 @@
 import * as uuid from 'uuid'
-import { Code, Content, List, ListItem, NamedContent, Section, Span, Stream } from '../data'
-import { Frame } from '../data/Frame'
+import { Code, Content, List, ListItem, NamedContent, Section, Span, Stream, Table, TableRow } from '../data'
 
 export const getGUID = (): string => {
   return uuid.v4()
@@ -35,14 +34,22 @@ export const namedSectionsContent = (): Content => {
   const content = new Content(getGUID())
 
   const section1 = new Section(getGUID())
-  section1.name = 'Test Section'
+
+  const header1 = new Span(section1.uuid, 'Test Section: ')
+  header1.classNames.add('aics-content-section-header')
+  section1.spans.push(header1)
+
   const span1 = new Span(getGUID(), 'Test Span')
   span1.selected = true
   section1.spans.push(span1)
   content.children.push(section1)
 
   const section2 = new Section(getGUID())
-  section2.name = 'Test Section'
+
+  const header2 = new Span(section1.uuid, 'Test Section: ')
+  header2.classNames.add('aics-content-section-header')
+  section2.spans.push(header2)
+
   section2.selected = true
   const span2 = new Span(getGUID(), 'Test Span')
   section2.spans.push(span2)
@@ -62,6 +69,12 @@ export const simpleList = (): List => {
   list.items.push(plainListItem('First Item'))
   list.items.push(plainListItem('Second Item'))
   list.items.push(plainListItem('Third Item'))
+  return list
+}
+
+export const singleItemList = (): List => {
+  const list = new List(getGUID())
+  list.items.push(plainListItem('Collapsible Item'))
   return list
 }
 
@@ -100,6 +113,7 @@ export const plainStream = (): Stream => {
   const stream = new Stream(getGUID())
   stream.blocks.push(plainContent())
   stream.blocks.push(plainNamedContent('Named Content'))
+  stream.blocks.push(singleItemList())
   stream.blocks.push(simpleList())
   return stream
 }
@@ -116,51 +130,6 @@ export const paginatedStream = (): Stream => {
   }
 
   return stream
-}
-
-export const textValue = (name: string, value: string): Section => {
-  const section = new Section(getGUID())
-  section.name = name
-  const span = new Span(getGUID(), value)
-  section.spans.push(span)
-  return section
-}
-
-export const numericValue = (name: string, value: string): Section => {
-  const section = new Section(getGUID())
-  section.name = name
-  const span = new Span(getGUID(), value)
-  section.spans.push(span)
-  return section
-}
-
-export const dateValue = (name: string, value: string): Section => {
-  const section = new Section(getGUID())
-  section.name = name
-  const span = new Span(getGUID(), value)
-  section.spans.push(span)
-  return section
-}
-
-export const simpleFrame = (): Frame => {
-  const frame = new Frame(getGUID())
-  frame.slots.push(textValue('Text Property', 'Hello World'))
-  frame.slots.push(numericValue('Numeric Property', '123.0'))
-  frame.slots.push(dateValue('Date Property', '2020-01-01'))
-  return frame
-}
-
-export const nestedFrame = (): Frame => {
-  const frame = new Frame(getGUID())
-  frame.slots.push(textValue('Text Property', 'Hello World'))
-  frame.slots.push(numericValue('Numeric Property', '123.0'))
-
-  // const nestedFrame = new Section(getGUID())
-  // nestedFrame.name = 'Nested Property'
-  // nestedFrame.children.push(simpleFrame())
-  // frame.slots.push(nestedFrame)
-
-  return frame
 }
 
 export const simplePythonCode = (): Code => {
@@ -187,4 +156,42 @@ export const simplePythonCode = (): Code => {
       return expenses`)
   section.spans.push(span)
   return section
+}
+
+const tableHeader = (name: string, datatype?: string): Section => {
+  const cell = new Section(getGUID())
+  const span = new Span(getGUID(), name)
+  span.datatype = datatype
+  span.classNames.add('aics-table-header')
+  cell.spans.push(span)
+  return cell
+}
+
+const tableCell = (value: string, datatype?: string): Section => {
+  const cell = new Section(getGUID())
+  const span = new Span(getGUID(), value)
+  span.datatype = datatype
+  cell.spans.push(span)
+  return cell
+}
+
+export const simpleTable = (): Table => {
+  const table = new Table(getGUID())
+
+  const row1 = new TableRow(getGUID())
+  table.rows.push(row1)
+  row1.values.push(tableHeader('Text Property', 'text'))
+  row1.values.push(tableCell('Hello World', 'text'))
+
+  const row2 = new TableRow(getGUID())
+  table.rows.push(row2)
+  row2.values.push(tableHeader('Numeric Property', 'number'))
+  row2.values.push(tableCell('123.0', 'number'))
+
+  const row3 = new TableRow(getGUID())
+  table.rows.push(row3)
+  row3.values.push(tableHeader('Date Property', 'date'))
+  row3.values.push(tableCell('2020-01-01', 'date'))
+
+  return table
 }
