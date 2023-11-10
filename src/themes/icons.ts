@@ -36,9 +36,16 @@ function convertToRGB (colorCode: string): string {
   throw new Error('Not a valid hex color')
 }
 
-export const themedIcon = (icon: string, color: string | ((props: any) => string)) => {
+type ThemeArgument = string | ((props: any) => string)
+
+export const themedIcon = (icon: ThemeArgument, color: ThemeArgument) => {
   return (props: any): string => {
-    let svg = getIcon(icon)
+    let svg: string | undefined
+    if (typeof icon === 'function') {
+      svg = icon(props)
+    } else {
+      svg = getIcon(icon)
+    }
     if (svg !== undefined) {
       let colorCode: string | undefined
       if (typeof color === 'function') {
