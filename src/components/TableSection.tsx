@@ -107,21 +107,20 @@ width: 100%;
   }
 }
 
-.aics-table-header.aics-content-span-text {
-  background-image: ${themedIcon('text', borderColor)};
+.aics-table-header {
   background-repeat: no-repeat;
   white-space: nowrap;
+}
+
+.aics-table-header.aics-content-span-text {
+  background-image: ${themedIcon('text', borderColor)};
 }
 
 .aics-table-header.aics-content-span-number {
   background-image: ${themedIcon('number', borderColor)};
-  background-repeat: no-repeat;
-  white-space: nowrap;
 }
 
 .aics-table-header.aics-content-span-date {
   background-image: ${themedIcon('date', borderColor)};
-  background-repeat: no-repeat;
-  white-space: nowrap;
 }
 `

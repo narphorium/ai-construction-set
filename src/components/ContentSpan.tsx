@@ -24,8 +24,16 @@ const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span,
     }
   }
 
+  const getSpanClasses = (span: Span): string => {
+    return getClasses(
+      'aics-content-span',
+      className,
+      span.classNames,
+      () => span.datatype !== undefined ? [`aics-content-span-${span.datatype}`] : [])
+  }
+
   return <span ref={ref}
-      className={getClasses('aics-content-span', className, span.classNames)}
+      className={getSpanClasses(span)}
       onClick={handleClick(span)}
       dangerouslySetInnerHTML={{ __html: span.content }}></span>
 })
