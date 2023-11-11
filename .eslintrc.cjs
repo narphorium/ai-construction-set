@@ -8,7 +8,7 @@ module.exports = {
         "plugin:react/recommended",
         "plugin:react-hooks/recommended"
     ],
-    "ignorePatterns": [".eslintrc.cjs", "rollup.config.js", "vite.config.js", "**.stories.tsx"],
+    "ignorePatterns": [".eslintrc.cjs", "rollup.config.js", "vite.config.js", "**.stories.tsx", "**.mdx"],
     "overrides": [
         {
             "env": {
