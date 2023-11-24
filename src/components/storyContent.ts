@@ -132,6 +132,43 @@ export const paginatedStream = (): Stream => {
   return stream
 }
 
+export const nestedStream = (): Stream => {
+  const outerStream = new Stream(getGUID())
+  outerStream.name = 'Outer Stream'
+
+  for (let i = 1; i <= 3; i++) {
+    const b1 = plainContent()
+    b1.iteration = i
+    outerStream.blocks.push(b1)
+
+    const innerStream = new Stream(getGUID())
+    innerStream.name = `Inner Stream ${i}`
+    innerStream.iteration = i
+    outerStream.blocks.push(innerStream)
+
+    for (let j = 1; j <= 3; j++) {
+      const bi1 = plainContent()
+      bi1.iteration = j
+      innerStream.blocks.push(bi1)
+
+      const content = new Content(getGUID())
+      content.iteration = j
+      content.children.push(plainSection(`Outer stream ${i}<br/>Inner stream ${j}`))
+      innerStream.blocks.push(content)
+
+      const bi2 = plainContent()
+      bi2.iteration = j
+      innerStream.blocks.push(bi2)
+    }
+
+    const b2 = plainContent()
+    b2.iteration = i
+    outerStream.blocks.push(b2)
+  }
+
+  return outerStream
+}
+
 export const simplePythonCode = (): Code => {
   const section = new Code(getGUID())
   section.language = 'python'

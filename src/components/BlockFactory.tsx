@@ -11,6 +11,7 @@ import { SentinalView } from './SentinalView'
 import { TableSection } from './TableSection'
 import { withCascadingVariants } from './withCascadingVariants'
 import { withCollapsible } from './withCollapsible'
+import { withPageable } from './withPageable'
 import { withSelectable } from './withSelectable'
 
 export type BlockBuilder = (block: Base) => JSX.Element
@@ -153,7 +154,8 @@ export class DefaultBlockFactory implements BlockFactory {
   buildStream (stream: Stream): JSX.Element {
     const BlockStreamWithVariant = withCascadingVariants(BlockStream, { block: stream })
     const BlockStreamWithRef = withSelectable(BlockStreamWithVariant, { selected: false })
-    return <BlockStreamWithRef
+    const PageableBlockStream = withPageable(BlockStreamWithRef, { stream, page: 1 })
+    return <PageableBlockStream
             stream={stream}
             key={stream.uuid} />
   }

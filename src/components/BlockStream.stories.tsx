@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { BlockFactoryContext } from '../hooks';
 import { BlockStream, BlockStreamProps } from './BlockStream';
-import { paginatedStream, plainStream } from './storyContent';
+import { nestedStream, paginatedStream, plainStream } from './storyContent';
 
 export default {
   component: BlockStream,
@@ -9,11 +10,11 @@ export default {
 };
 
 const Template = (args: BlockStreamProps) => {
-  const [page, setPage] = React.useState(1);
+  const { factory } = useContext(BlockFactoryContext)
 
   return (
     <>
-      <BlockStream stream={args.stream} page={page} setPage={setPage} variant={args.variant} key={args.key} />
+      { factory?.build(args.stream) }
     </>
   );
 };
@@ -26,5 +27,10 @@ Default.args = {
 export const Paginated = Template.bind({});
 Paginated.args = {
   stream: paginatedStream(),
+};
+
+export const Nested = Template.bind({});
+Nested.args = {
+  stream: nestedStream(),
 };
 
