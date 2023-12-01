@@ -1,5 +1,6 @@
 import React from 'react'
-import { Code, Content, List, ListItem, NamedContent, Section, Selectable, Span, Stream, Table, type Base } from '../data'
+import { Code, Collapsible, Content, List, ListItem, Section, Selectable, Span, Stream, Table, type Base } from '../data'
+import { NestedPaginationProvider } from '../hooks'
 import { BlockList } from './BlockList'
 import { BlockStream } from './BlockStream'
 import { CodeSection } from './CodeSection'
@@ -31,7 +32,7 @@ export class DefaultBlockFactory implements BlockFactory {
 
   constructor () {
     this.registerBuilder(ListItem, this.buildListItem as BlockBuilder)
-    this.registerBuilder(NamedContent, this.buildNamedContent as BlockBuilder)
+    this.registerBuilder(Collapsible, this.buildNamedContent as BlockBuilder)
     this.registerBuilder(Content, this.buildContent as BlockBuilder)
     this.registerBuilder(Section, this.buildSection as BlockBuilder)
     this.registerBuilder(Code, this.buildCodeSection as BlockBuilder)
@@ -53,6 +54,16 @@ export class DefaultBlockFactory implements BlockFactory {
 
   setParent (block: Base, parent: Base): void {
     this.parentByBlock.set(block, parent)
+  }
+
+  getStreamLevel (stream: Stream): number {
+    let level = 1
+    let parent = this.getParent(stream)
+    while (parent !== undefined && parent instanceof Stream) {
+      level++
+      parent = this.getParent(parent)
+    }
+    return level
   }
 
   build (block: Base, parent?: Base): JSX.Element {
@@ -83,10 +94,10 @@ export class DefaultBlockFactory implements BlockFactory {
     return Array.from(classNames)
   };
 
-  buildNamedContent (block: NamedContent): JSX.Element {
+  buildNamedContent (block: Collapsible): JSX.Element {
     const NamedBlockWithVariant = withCascadingVariants(NamedBlock, { block })
-    const NamedBlockWithCollapsible = withCollapsible(NamedBlockWithVariant, { collapsed: block.collapsed })
-    const NamedBlockWithRef = withSelectable(NamedBlockWithCollapsible, { selected: block.selected })
+    const NamedBlockWithCollapsible = withCollapsible(NamedBlockWithVariant, { block })
+    const NamedBlockWithRef = withSelectable(NamedBlockWithCollapsible, { block })
     return <NamedBlockWithRef
             content={block}
             key={block.uuid}/>
@@ -94,8 +105,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildListItem (block: ListItem): JSX.Element {
     const ListItemWithVariant = withCascadingVariants(BlockListItem, { block })
-    const ListItemWithCollapsible = withCollapsible(ListItemWithVariant, { collapsed: block.collapsed })
-    const BlockListItemWithRef = withSelectable(ListItemWithCollapsible, { selected: block.selected })
+    const ListItemWithCollapsible = withCollapsible(ListItemWithVariant, { block })
+    const BlockListItemWithRef = withSelectable(ListItemWithCollapsible, { block })
     return <BlockListItemWithRef
             content={block}
             key={block.uuid}/>
@@ -103,7 +114,7 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildContent (block: Content): JSX.Element {
     const ContentBlockWithVariant = withCascadingVariants(ContentBlock, { block })
-    const ContentBlockWithRef = withSelectable(ContentBlockWithVariant, { selected: block.selected })
+    const ContentBlockWithRef = withSelectable(ContentBlockWithVariant, { block })
     return <ContentBlockWithRef
             content={block}
             key={block.uuid} />
@@ -111,7 +122,7 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildSection (block: Section): JSX.Element {
     const ContentSectionWithVariant = withCascadingVariants(ContentSection, { block })
-    const ContentSectionWithRef = withSelectable(ContentSectionWithVariant, { selected: block.selected })
+    const ContentSectionWithRef = withSelectable(ContentSectionWithVariant, { block })
     return <ContentSectionWithRef
             section={block}
             key={block.uuid} />
@@ -119,7 +130,7 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildCodeSection (block: Code): JSX.Element {
     const CodeSectionWithVariant = withCascadingVariants(CodeSection, { block })
-    const CodeSectionWithRef = withSelectable(CodeSectionWithVariant, { selected: block.selected })
+    const CodeSectionWithRef = withSelectable(CodeSectionWithVariant, { block })
     return <CodeSectionWithRef
             code={block}
             editable={false}
@@ -128,43 +139,55 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildList (block: List): JSX.Element {
     const BlockListWithVariant = withCascadingVariants(BlockList, { block })
-    const BlockListWithRef = withSelectable(BlockListWithVariant, { selected: false })
-    return <BlockListWithRef
+    return <BlockListWithVariant
             list={block}
             selected={false}
             key={block.uuid} />
   }
 
   buildSpan (block: Span): JSX.Element {
-    const ContentSpanWithVariant = withCascadingVariants(ContentSpan, { block })
-    const ContentSpanWithRef = withSelectable(ContentSpanWithVariant, { selected: block.selected })
-    return <ContentSpanWithRef
+    const ContentSpanWithRef = withSelectable(ContentSpan, { block })
+    const ContentSpanWithVariant = withCascadingVariants(ContentSpanWithRef, { block })
+    return <ContentSpanWithVariant
             span={block}
             key={block.uuid} />
   }
 
   buildSelectable (block: Selectable): JSX.Element {
     const SentinalWithVariant = withCascadingVariants(SentinalView, { block })
-    const SentinalWithRef = withSelectable(SentinalWithVariant, { selected: block.selected })
+    const SentinalWithRef = withSelectable(SentinalWithVariant, { block })
     return <SentinalWithRef
             sentinal={block}
             key={block.uuid} />
   }
 
   buildStream (stream: Stream): JSX.Element {
-    const BlockStreamWithVariant = withCascadingVariants(BlockStream, { block: stream })
-    const BlockStreamWithRef = withSelectable(BlockStreamWithVariant, { selected: false })
-    const PageableBlockStream = withPageable(BlockStreamWithRef, { stream, page: 1 })
-    return <PageableBlockStream
+    const PageableBlockStream = withPageable(BlockStream, { stream })
+    const BlockStreamWithVariant = withCascadingVariants(PageableBlockStream, { block: stream })
+    const level = this.getStreamLevel(stream)
+    // Every top-level component has a nested pagination provider
+    if (level === 1) {
+      return <NestedPaginationProvider
+                pages={[1]}
+                numPages={[1]}
+                key={stream.uuid}>
+        <BlockStreamWithVariant
+            level={level}
             stream={stream}
             key={stream.uuid} />
+      </NestedPaginationProvider>
+    } else {
+      return <BlockStreamWithVariant
+              level={level}
+              stream={stream}
+              key={stream.uuid} />
+    }
   }
 
-  buildTable (table: Table): JSX.Element {
-    const TableWithVariant = withCascadingVariants(TableSection, { block: table })
-    const TableWithRef = withSelectable(TableWithVariant, { selected: false })
-    return <TableWithRef
-            table={table}
-            key={table.uuid} />
+  buildTable (block: Table): JSX.Element {
+    const TableWithVariant = withCascadingVariants(TableSection, { block })
+    return <TableWithVariant
+            table={block}
+            key={block.uuid} />
   }
 };

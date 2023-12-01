@@ -2,6 +2,7 @@ import React, { forwardRef, useCallback, useContext, type ForwardedRef } from 'r
 import styled from 'styled-components'
 import theme from 'styled-theming'
 import { Stream, type Base, type Selectable } from '../data'
+import { SelectedVisitor } from '../data/Visitor'
 import { BlockFactoryContext } from '../hooks'
 import { getColor } from '../themes/colors'
 import { defaultFont, textColor } from '../themes/theme'
@@ -12,8 +13,9 @@ export interface BlockStreamProps extends PaginatedProps {
   stream: Stream
 }
 
-export const BlockStreamComponent = forwardRef(function BlockStream ({ className, stream, page = 1, setPage, variant, key }: BlockStreamProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const BlockStreamComponent = forwardRef(function BlockStream ({ className, stream, level, page, setPage, variant, key }: BlockStreamProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
+  const selectedVisitor = new SelectedVisitor()
 
   let numPages = 1
   stream.blocks.forEach((block) => {
@@ -23,6 +25,19 @@ export const BlockStreamComponent = forwardRef(function BlockStream ({ className
       numPages = block.iteration
     }
   })
+
+  const isFollowingSiblingSelected = (block: Base): boolean => {
+    const index = stream.blocks.indexOf(block)
+    if (index < 0) {
+      return false
+    }
+    for (let i = index + 1; i < stream.blocks.length; i++) {
+      if (selectedVisitor.run(stream.blocks[i]).length > 0) {
+        return true
+      }
+    }
+    return false
+  }
 
   const getClasses = (): string => {
     let classes = ['aics-block-stream']
@@ -36,6 +51,9 @@ export const BlockStreamComponent = forwardRef(function BlockStream ({ className
     if (numPages > 1) {
       classes.push('aics-block-stream-paginated')
     }
+    if (selectedVisitor.run(stream).length > 0) {
+      classes.push('selected')
+    }
     return classes.join(' ')
   }
 
@@ -46,6 +64,11 @@ export const BlockStreamComponent = forwardRef(function BlockStream ({ className
     }
     if (!(node instanceof Stream)) {
       classes.push('aics-block-stream-leaf-node')
+    }
+    if (selectedVisitor.run(node).length > 0) {
+      classes.push('selected')
+    } else if (isFollowingSiblingSelected(node)) {
+      classes.push('before-selected')
     }
     return classes.join(' ')
   }
@@ -61,22 +84,22 @@ export const BlockStreamComponent = forwardRef(function BlockStream ({ className
   }, [stream, page])
 
   if (numPages > 1) {
-    return <div ref={ref} className={getClasses()}>
+    return <div ref={ref} className={getClasses()} key={stream.uuid}>
         <div className='aics-block-stream-control'><span></span></div>
         <div className='aics-block-stream-title'>
           <label className='aics-block-stream-page-label'>{ stream.name }</label>
-          <Pagination page={page} numPages={numPages} setPage={setPage} key={stream.uuid} />
+          <Pagination level={level} page={page} numPages={numPages} setPage={setPage} key={stream.uuid} />
         </div>
         { filterBlocks().map((block) => {
           return <div className={getNodeClasses(block as Selectable)} key={block.uuid}>
-            { factory?.build(block) }
+            { factory?.build(block, stream) }
             </div>
         }) }
     </div>
   } else {
-    return <div ref={ref} className={getClasses()}>
+    return <div ref={ref} className={getClasses()} key={stream.uuid}>
       { filterBlocks().map((block) => {
-        return factory?.build(block)
+        return factory?.build(block, stream)
       }) }
     </div>
   }
@@ -88,7 +111,7 @@ export const treeColor = theme('mode', {
 })
 
 export const selectedTreeColor = theme('mode', {
-  light: getColor('yellow-100'),
+  light: getColor('yellow-200'),
   dark: getColor('yellow-400')
 })
 
@@ -102,6 +125,11 @@ padding-left: 0;
 .aics-block-stream-content {
   position: relative;
   margin-left: 24px;
+}
+
+& .aics-block-stream-title {
+  position: relative;
+  padding-left: 16px;
 }
 
 & .aics-block-stream-title > label {
@@ -121,11 +149,11 @@ padding-left: 0;
 & .aics-block-stream-node {
   display: block;
   position: relative;
-  padding-left: 22px;
+  padding-left: 12px;
 }
 
 & .aics-block-stream-leaf-node {
-  padding-left: 36px;
+  padding-left: 26px;
 }
 
 & .aics-block-stream-node > .aics-block-stream {
@@ -149,7 +177,7 @@ padding-left: 0;
   z-index: -1;
   top: -12px;
   left: -2px;
-  width: 26px;
+  width: 16px;
   height: 25px;
   border: solid ${treeColor};
   border-width: 0 0 2px 2px;
@@ -168,7 +196,7 @@ padding-left: 0;
   display: block;
   position: absolute;
   top: 10px;
-  left: 19px;
+  left: 9px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -182,10 +210,8 @@ padding-left: 0;
     left: -3px;
 }
 
-& .aics-block-stream-node::after {
-  left: 19px;
-}
-
+&.selected
+  > .aics-block-stream-title::before,
 &
   > .selected
   > .aics-block-stream-title::before {
@@ -196,20 +222,18 @@ padding-left: 0;
   border-color: ${selectedTreeColor};
 }
 
-.aics-block-stream-title {
-  position: relative;
-  padding-left: 16px;
-}
-
 &
   > .selected
+  > .aics-block-stream-control
+  > span,
+&.selected
   > .aics-block-stream-control
   > span,
 & > .selected::after {
   background: ${selectedTreeColor};
 }
 
-.aics-block-stream-node & > .selected::before {
+& > .selected::before {
   border-color: ${selectedTreeColor};
   z-index: 1;
 }

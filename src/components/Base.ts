@@ -16,6 +16,7 @@ export interface CollapsibleProps extends BaseProps {
 }
 
 export interface PaginatedProps extends BaseProps {
+  level: number
   page?: number
   setPage?: (page: number) => void
 }

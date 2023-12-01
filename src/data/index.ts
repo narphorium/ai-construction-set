@@ -1,10 +1,12 @@
 export * from './Base'
 export * from './Code'
+export * from './Collapsible'
 export * from './Content'
 export * from './List'
-export * from './NamedContent'
 export * from './Section'
 export * from './Selectable'
 export * from './Span'
 export * from './Stream'
 export * from './Table'
+export * from './Visitor'
+

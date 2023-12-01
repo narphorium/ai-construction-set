@@ -1,36 +1,65 @@
-import React, { useEffect, useRef, useState, type ComponentType } from 'react'
-import { type Stream } from '../data/Stream'
-import { getSelectedChildren } from '../data/traversal'
+import React, { useContext, useEffect, useRef, type ComponentType } from 'react'
+import { SelectedVisitor, type Stream } from '../data'
+import { NestedPaginationContext, NestedPaginationDispatchContext, type NestedPaginationState } from '../hooks'
 import { getClasses, type PaginatedProps } from './Base'
+
+function getPage (state: NestedPaginationState | null, level: number): number {
+  return state !== null ? state.pages[level - 1] : 1
+}
 
 export const withPageable = <TProps extends PaginatedProps>(
   Component: ComponentType<TProps>,
   params: {
-    page: number
     stream: Stream
   }
 ) => {
   return function WithPageable (props: TProps): JSX.Element {
-    const [page, setPage] = useState<number>(1)
+    const pages = useContext(NestedPaginationContext)
+    const pagesDispatch = useContext(NestedPaginationDispatchContext)
+
     const ref = useRef<HTMLDivElement>(null)
 
-    // Automatically turn to the selected page
     useEffect(() => {
-      if (params.page !== null) {
-        if (getSelectedChildren(params.stream, params.page).length > 0) {
+      let numPages = 1
+      params.stream.blocks.forEach((block) => {
+        if (block.iteration === undefined) {
+          block.iteration = 1
+        } else if (block.iteration > numPages) {
+          numPages = block.iteration
+        }
+      })
+
+      if (pagesDispatch !== null && (pages === null || pages.numPages[props.level - 1] !== numPages)) {
+        pagesDispatch({ type: 'register', level: props.level, numPages })
+      }
+    }, [props.level, pagesDispatch])
+
+    const setPage = (p: number): void => {
+      params.stream.page = p
+      if (pagesDispatch !== null && getPage(pages, props.level) !== p) {
+        pagesDispatch({ type: 'goto', page: p, level: props.level })
+      }
+    }
+
+    // Automatically turn to the selected page
+    const selectedVisitor = new SelectedVisitor()
+    useEffect(() => {
+      const page = getPage(pages, props.level)
+      if (page !== null) {
+        if (selectedVisitor.run(params.stream, page).length > 0) {
           params.stream.blocks.forEach((block) => {
-            if (block.iteration !== undefined && getSelectedChildren(block, params.page).length > 0) {
+            if (block.iteration !== undefined && selectedVisitor.run(block, page).length > 0) {
               setPage(block.iteration)
             }
           })
         }
       }
-    }, [params.page])
+    }, [pages])
 
     return <Component ref={ref}
-        page={page}
-        setPage={setPage}
-        classNames={getClasses(props.className)}
-        {...props} />
+            page={getPage(pages, props.level)}
+            setPage={setPage}
+            classNames={getClasses(props.className)}
+            {...props} />
   }
 }

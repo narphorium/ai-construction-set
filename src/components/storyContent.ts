@@ -1,5 +1,5 @@
 import * as uuid from 'uuid'
-import { Code, Content, List, ListItem, NamedContent, Section, Span, Stream, Table, TableRow } from '../data'
+import { Code, Collapsible, Content, List, ListItem, Section, Span, Stream, Table, TableRow } from '../data'
 
 export const getGUID = (): string => {
   return uuid.v4()
@@ -18,14 +18,14 @@ export const plainContent = (): Content => {
   return content
 }
 
-export const plainNamedContent = (name: string): NamedContent => {
-  const content = new NamedContent(getGUID(), name)
+export const plainNamedContent = (name: string): Collapsible => {
+  const content = new Collapsible(getGUID(), name)
   content.children.push(plainSection())
   return content
 }
 
-export const nestedNamedContent = (name: string): NamedContent => {
-  const content = new NamedContent(getGUID(), name)
+export const nestedNamedContent = (name: string): Collapsible => {
+  const content = new Collapsible(getGUID(), name)
   content.children.push(plainNamedContent('Inner Content'))
   return content
 }
@@ -155,6 +155,10 @@ export const nestedStream = (): Stream => {
       content.iteration = j
       content.children.push(plainSection(`Outer stream ${i}<br/>Inner stream ${j}`))
       innerStream.blocks.push(content)
+
+      if (i === 1 && j === 1) {
+        content.selected = true
+      }
 
       const bi2 = plainContent()
       bi2.iteration = j
