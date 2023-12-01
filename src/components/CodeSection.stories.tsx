@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Content } from '../data';
+import { BlockFactoryContext } from '../hooks';
 import { CodeSection, CodeSectionProps } from './CodeSection';
-import { ContentBlock } from './ContentBlock';
 import { getGUID, simplePythonCode } from './storyContent';
 
 export default {
@@ -11,6 +11,8 @@ export default {
 };
 
 const Template = (args: CodeSectionProps) => {
+  const { factory } = useContext(BlockFactoryContext)
+  
   if (args.variant !== undefined) {
     args.code.variant = args.variant;
   }
@@ -18,7 +20,7 @@ const Template = (args: CodeSectionProps) => {
   content.children.push(args.code);
   return (
     <>
-      <ContentBlock content={content} variant={args.variant} key={content.uuid} />
+      { factory?.build(args.code) }
     </>
   );
 };

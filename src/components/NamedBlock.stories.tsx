@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { BlockFactoryContext } from '../hooks';
 import { NamedBlock, NamedBlockProps } from './NamedBlock';
 import { nestedNamedContent, plainNamedContent } from './storyContent';
 
@@ -9,11 +10,7 @@ export default {
 };
 
 const Template = (args: NamedBlockProps) => {
-  const [collapsed, setCollapsed] = React.useState(false); // FIXME: Use args.collapsed
-
-  const toggleCollapsed = React.useCallback((c: boolean) => {
-    setCollapsed(!c)
-  }, [collapsed])
+  const { factory } = useContext(BlockFactoryContext)
 
   if (args.variant !== undefined) {
     args.content.variant = args.variant;
@@ -21,7 +18,7 @@ const Template = (args: NamedBlockProps) => {
 
   return (
     <>
-      <NamedBlock content={args.content} collapsed={collapsed} onToggle={toggleCollapsed} variant={args.variant} key={args.key} />
+      { factory?.build(args.content) }
     </>
   );
 };

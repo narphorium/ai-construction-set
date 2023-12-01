@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Content } from '../data';
-import { ContentBlock } from './ContentBlock';
+import { BlockFactoryContext } from '../hooks';
 import { TableSection, TableSectionProps } from './TableSection';
 import { getGUID, simpleTable } from './storyContent';
 
@@ -11,6 +11,8 @@ export default {
 };
 
 const Template = (args: TableSectionProps) => {
+  const { factory } = useContext(BlockFactoryContext)
+  
   if (args.variant !== undefined) {
     args.table.variant = args.variant;
   }
@@ -18,7 +20,7 @@ const Template = (args: TableSectionProps) => {
   content.children.push(args.table);
   return (
     <>
-      <ContentBlock content={content} variant={args.variant} key={content.uuid} />
+      { factory?.build(args.table) }
     </>
   );
 };

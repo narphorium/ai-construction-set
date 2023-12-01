@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { BlockFactoryContext } from '../hooks';
 import { BlockList, BlockListProps } from './BlockList';
-import { nestedList, selectedList, simpleList } from './storyContent';
+import { nestedList, selectedList, simpleList, singleItemList } from './storyContent';
 
 export default {
   component: BlockList,
@@ -9,13 +10,15 @@ export default {
 };
 
 const Template = (args: BlockListProps) => {
+  const { factory } = useContext(BlockFactoryContext)
+  
   if (args.variant !== undefined) {
     args.list.variant = args.variant;
   }
 
   return (
     <>
-      <BlockList list={args.list} variant={args.variant} key={args.key} />
+      { factory?.build(args.list) }
     </>
   );
 };
@@ -24,6 +27,11 @@ const Template = (args: BlockListProps) => {
 export const Default = Template.bind({});
 Default.args = {
   list: simpleList(),
+};
+
+export const Single = Template.bind({});
+Single.args = {
+  list: singleItemList(),
 };
 
 export const Selected = Template.bind({});
