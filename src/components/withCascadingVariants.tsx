@@ -1,4 +1,4 @@
-import React, { useContext, type ComponentType } from 'react'
+import React, { forwardRef, useContext, type ComponentType, type ForwardedRef } from 'react'
 import { type Base } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { type BaseProps } from './Base'
@@ -6,8 +6,8 @@ import { type BaseProps } from './Base'
 export const withCascadingVariants = <TProps extends BaseProps>(
   Component: ComponentType<TProps>,
   params: { block: Base }
-) => {
-  return function WithCascadingVariants (props: TProps): JSX.Element {
+): React.ForwardRefExoticComponent<React.PropsWithoutRef<TProps> & React.RefAttributes<HTMLDivElement>> => {
+  return forwardRef(function WithCascadingVariants (props: TProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
     const { factory } = useContext(BlockFactoryContext)
 
     let currentBlock: Base | undefined = params.block
@@ -33,6 +33,6 @@ export const withCascadingVariants = <TProps extends BaseProps>(
       return classes
     }
 
-    return <Component variant={variant} classNames={getClasses()} {...props} />
-  }
+    return <Component ref={ref} variant={variant} classNames={getClasses()} {...props} />
+  })
 }
