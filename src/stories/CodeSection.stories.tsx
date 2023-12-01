@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
+import { CodeSection, CodeSectionProps } from '../components/CodeSection';
 import { Content } from '../data';
 import { BlockFactoryContext } from '../hooks';
-import { CodeSection, CodeSectionProps } from './CodeSection';
 import { getGUID, simplePythonCode } from './storyContent';
 
 export default {

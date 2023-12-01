@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
+import { BlockStream, BlockStreamProps } from '../components/BlockStream';
 import { BlockFactoryContext } from '../hooks';
-import { BlockStream, BlockStreamProps } from './BlockStream';
 import { nestedStream, paginatedStream, plainStream } from './storyContent';
 
 export default {

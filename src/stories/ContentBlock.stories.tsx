@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
+import { ContentBlock, ContentBlockProps } from '../components/ContentBlock';
 import { BlockFactoryContext } from '../hooks';
-import { ContentBlock, ContentBlockProps } from './ContentBlock';
 import { namedSectionsContent, plainContent } from './storyContent';
 
 export default {

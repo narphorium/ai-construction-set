@@ -1,51 +1,46 @@
 import React, { useContext } from 'react';
+import { NamedBlock, NamedBlockProps } from '../components/NamedBlock';
 import { BlockFactoryContext } from '../hooks';
-import { BlockList, BlockListProps } from './BlockList';
-import { nestedList, selectedList, simpleList, singleItemList } from './storyContent';
+import { nestedNamedContent, plainNamedContent } from './storyContent';
 
 export default {
-  component: BlockList,
-  title: 'BlockList',
+  component: NamedBlock,
+  title: 'NamedBlock',
   tags: ['autodocs'],
 };
 
-const Template = (args: BlockListProps) => {
+const Template = (args: NamedBlockProps) => {
   const { factory } = useContext(BlockFactoryContext)
-  
+
   if (args.variant !== undefined) {
-    args.list.variant = args.variant;
+    args.content.variant = args.variant;
   }
 
   return (
     <>
-      { factory?.build(args.list) }
+      { factory?.build(args.content) }
     </>
   );
 };
 
-
 export const Default = Template.bind({});
 Default.args = {
-  list: simpleList(),
-};
-
-export const Single = Template.bind({});
-Single.args = {
-  list: singleItemList(),
+  content: plainNamedContent('Default'),
 };
 
 export const Selected = Template.bind({});
 Selected.args = {
-  list: selectedList(),
+  content: plainNamedContent('Selected'),
+  selected: true,
 };
 
 export const Nested = Template.bind({});
 Nested.args = {
-  list: nestedList()
+  content: nestedNamedContent('Nested'),
 };
 
 export const Blue = Template.bind({});
 Blue.args = {
-  list: nestedList(),
+  content: nestedNamedContent('Nested'),
   variant: 'blue',
 };
