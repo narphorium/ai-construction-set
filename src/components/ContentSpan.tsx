@@ -41,7 +41,7 @@ const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span,
 const spanBackgroundColor = selectedVariants('mode', {
   default: {
     unselected: { light: 'transparent', dark: 'transparent' },
-    selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' }
+    selected: { light: 'yellow-600', dark: 'rgb(73 69 61)' }
   },
   blue: {
     unselected: { light: 'transparent', dark: 'transparent' },
@@ -77,7 +77,7 @@ export const ContentSpan = styled(ContentSpanComponent)`
   a {
     color: ${textColor};
   }
-  &.aics-content-section-header {
+  &.aics-paragraph-header {
     font-weight: ${headerFontWeight};
   }
 `
