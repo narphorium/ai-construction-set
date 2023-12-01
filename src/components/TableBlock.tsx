@@ -1,17 +1,17 @@
 import React, { forwardRef, useContext, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
-import { type Section, type Table, type TableRow } from '../data'
+import { type Paragraph, type Table, type TableRow } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { themedIcon } from '../themes/icons'
 import { borderColor, selectedVariants } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
-export interface TableSectionProps extends SelectableProps {
+export interface TableBlockProps extends SelectableProps {
   table: Table
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export const TableSectionComponent = forwardRef(function FrameBlock ({ className, table, selected, onSelected, onClick, variant, key }: TableSectionProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const TableBlockComponent = forwardRef(function TableBlock ({ className, table, selected, onSelected, onClick, variant, key }: TableBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
   const handleClick = (e: MouseEvent<HTMLDivElement>): void => {
@@ -23,7 +23,7 @@ export const TableSectionComponent = forwardRef(function FrameBlock ({ className
   return <div ref={ref} className={getClasses('aics-table', className, table.classNames)} onClick={handleClick}>
     { table.rows.map((row: TableRow) => {
       return <div className="aics-table-row" key={row.uuid}>
-        { row.values.map((cell: Section) => {
+        { row.values.map((cell: Paragraph) => {
           return <div className={getClasses('aics-table-cell', cell.classNames)} key={cell.uuid}>
             { factory?.build(cell, row)}
             </div>
@@ -35,7 +35,7 @@ export const TableSectionComponent = forwardRef(function FrameBlock ({ className
 
 const hoverColor = selectedVariants('mode', {
   default: {
-    unselected: { light: '#f8f8f8', dark: '#2a2a2a' },
+    unselected: { light: 'gray-980', dark: '#2a2a2a' },
     selected: { light: '#f8f8f8', dark: '#2a2a2a' }
   },
   blue: {
@@ -44,7 +44,7 @@ const hoverColor = selectedVariants('mode', {
   }
 })
 
-export const TableSection = styled(TableSectionComponent)`
+export const TableBlock = styled(TableBlockComponent)`
 display: grid;
 grid-template-columns: min-content 1fr;
 gap: 0;
@@ -71,7 +71,7 @@ width: 100%;
 }
 
 .aics-table-row:last-child {
-  .aics-table-header {
+  .aics-table-cell:first-child {
     border-bottom-left-radius: 4px;
     padding-bottom: 6px;
   }
@@ -86,7 +86,7 @@ width: 100%;
   grid-row: auto;
 
   text-align: left;
-  padding: 2px 16px 0 32px;
+  padding: 2px 16px 0 24px;
   color: ${borderColor};
   font-size: 9.5pt;
   font-weight: 500;
@@ -101,7 +101,7 @@ width: 100%;
 
   font-size: 11pt;
 
-  .aics-content-section {
+  .aics-paragraph {
     padding: 2px 0;
     margin: 4px;
   }

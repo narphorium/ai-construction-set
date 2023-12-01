@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
-import { TableSection, TableSectionProps } from '../components/TableSection';
+import { TableBlock, TableBlockProps } from '../components/TableBlock';
 import { Content } from '../data';
 import { BlockFactoryContext } from '../hooks';
 import { getGUID, simpleTable } from './storyContent';
 
 export default {
-  component: TableSection,
-  title: 'TableSection',
+  component: TableBlock,
+  title: 'Blocks/TableBlock',
   tags: ['autodocs'],
 };
 
-const Template = (args: TableSectionProps) => {
+const Template = (args: TableBlockProps) => {
   const { factory } = useContext(BlockFactoryContext)
 
   const content = new Content(getGUID());

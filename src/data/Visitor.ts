@@ -2,25 +2,26 @@ import { type Base } from './Base'
 import { type Collapsible } from './Collapsible'
 import { Content } from './Content'
 import { List } from './List'
-import { Section } from './Section'
+import { Paragraph } from './Paragraph'
 import { Selectable } from './Selectable'
 import { type Span } from './Span'
+import { Table, TableRow } from './Table'
 import { Tree } from './Tree'
 
 export interface Visitor {
   visit: (block: Base) => void
   visitContent: (block: Content) => void
   visitList: (block: List) => void
-  visitNamedContent: (block: Collapsible) => void
-  visitSection: (block: Section) => void
+  visitCollapsible: (block: Collapsible) => void
+  visitParagraph: (block: Paragraph) => void
   visitSelectable: (block: Selectable) => void
   visitSpan: (block: Span) => void
   visitTree: (block: Tree) => void
   leave: (block: Base) => void
   leaveContent: (block: Content) => void
   leaveList: (block: List) => void
-  leaveNamedContent: (block: Collapsible) => void
-  leaveSection: (block: Section) => void
+  leaveCollapsible: (block: Collapsible) => void
+  leaveParagraph: (block: Paragraph) => void
   leaveSelectable: (block: Selectable) => void
   leaveSpan: (block: Span) => void
   leaveTree: (block: Tree) => void
@@ -34,13 +35,17 @@ export class BaseVisitor implements Visitor {
 
   visitList (block: List): void {}
 
-  visitNamedContent (block: Collapsible): void {}
+  visitCollapsible (block: Collapsible): void {}
 
-  visitSection (block: Section): void {}
+  visitParagraph (block: Paragraph): void {}
 
   visitSelectable (block: Selectable): void {}
 
   visitSpan (block: Span): void {}
+
+  visitTable (block: Table): void {}
+
+  visitTableRow (block: TableRow): void {}
 
   visitTree (block: Tree): void {}
 
@@ -50,13 +55,17 @@ export class BaseVisitor implements Visitor {
 
   leaveList (block: List): void {}
 
-  leaveNamedContent (block: Collapsible): void {}
+  leaveCollapsible (block: Collapsible): void {}
 
-  leaveSection (block: Section): void {}
+  leaveParagraph (block: Paragraph): void {}
 
   leaveSelectable (block: Selectable): void {}
 
   leaveSpan (block: Span): void {}
+
+  leaveTable (block: Table): void {}
+
+  leaveTableRow (block: TableRow): void {}
 
   leaveTree (block: Tree): void {}
 
@@ -66,10 +75,14 @@ export class BaseVisitor implements Visitor {
       this._traverseList(block)
     } else if (block instanceof Content) {
       this._traverseContent(block)
-    } else if (block instanceof Section) {
-      this._traverseSection(block)
+    } else if (block instanceof Paragraph) {
+      this._traverseParagraph(block)
     } else if (block instanceof Selectable) {
       this._traverseSelectable(block)
+    } else if (block instanceof Table) {
+      this._traverseTable(block)
+    } else if (block instanceof TableRow) {
+      this._traverseTableRow(block)
     } else if (block instanceof Tree) {
       this._traverseTree(block)
     }
@@ -92,20 +105,20 @@ export class BaseVisitor implements Visitor {
     this.leaveList(block)
   }
 
-  _traverseNamedContent (block: Collapsible): void {
-    this.visitNamedContent(block)
+  _traverseCollapsible (block: Collapsible): void {
+    this.visitCollapsible(block)
     block.children.forEach((child: Base) => {
       this.traverse(child)
     })
-    this.leaveNamedContent(block)
+    this.leaveCollapsible(block)
   }
 
-  _traverseSection (block: Section): void {
-    this.visitSection(block)
+  _traverseParagraph (block: Paragraph): void {
+    this.visitParagraph(block)
     block.spans.forEach((span: Span) => {
       this.traverse(span)
     })
-    this.leaveSection(block)
+    this.leaveParagraph(block)
   }
 
   _traverseSelectable (block: Selectable): void {
@@ -116,6 +129,22 @@ export class BaseVisitor implements Visitor {
   _traverseSpan (block: Span): void {
     this.visitSpan(block)
     this.leaveSpan(block)
+  }
+
+  _traverseTable (block: Table): void {
+    this.visitTable(block)
+    block.rows.forEach((row: Base) => {
+      this.traverse(row)
+    })
+    this.leaveTable(block)
+  }
+
+  _traverseTableRow (block: TableRow): void {
+    this.visitTableRow(block)
+    block.values.forEach((cell: Base) => {
+      this.traverse(cell)
+    })
+    this.leaveTableRow(block)
   }
 
   _traverseTree (block: Tree): void {
@@ -167,7 +196,7 @@ export class SelectedVisitor extends VisibleVisitor {
     this.visitSelectable(block)
   }
 
-  visitSection (block: Section): void {
+  visitParagraph (block: Paragraph): void {
     this.visitSelectable(block)
   }
 

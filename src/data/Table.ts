@@ -1,8 +1,8 @@
-import { type Section } from './Section'
+import { type Paragraph } from './Paragraph'
 import { Selectable } from './Selectable'
 
 export class TableRow extends Selectable {
-  values: Section[] = []
+  values: Paragraph[] = []
   isHeader?: boolean
 }
 

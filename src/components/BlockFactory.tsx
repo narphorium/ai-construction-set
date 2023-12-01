@@ -8,7 +8,7 @@ import { ContentSpan } from './ContentSpan'
 import { ListLayout } from './ListLayout'
 import { ParagraphBlock } from './ParagraphBlock'
 import { SentinalView } from './SentinalView'
-import { TableSection } from './TableSection'
+import { TableBlock } from './TableBlock'
 import { TreeLayout } from './TreeLayout'
 import { withCascadingVariants } from './withCascadingVariants'
 import { withCollapsible } from './withCollapsible'
@@ -185,7 +185,7 @@ export class DefaultBlockFactory implements BlockFactory {
   }
 
   buildTable (block: Table): JSX.Element {
-    const TableWithVariant = withCascadingVariants(TableSection, { block })
+    const TableWithVariant = withCascadingVariants(TableBlock, { block })
     return <TableWithVariant
             table={block}
             key={block.uuid} />
