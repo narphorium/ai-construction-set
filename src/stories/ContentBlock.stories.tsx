@@ -5,7 +5,7 @@ import { namedSectionsContent, plainContent } from './storyContent';
 
 export default {
   component: ContentBlock,
-  title: 'ContentBlock',
+  title: 'Blocks/ContentBlock',
   tags: ['autodocs'],
 };
 
