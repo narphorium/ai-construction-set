@@ -5,11 +5,11 @@ import { BlockFactoryContext } from '../hooks'
 import { borderColor } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
-export interface BlockListProps extends SelectableProps {
+export interface ListLayoutProps extends SelectableProps {
   list: List
 }
 
-export const BlockListComponent = forwardRef(function BlockList ({ className, list, selected, onSelected, variant, key }: BlockListProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ListLayoutComponent = forwardRef(function ListLayout ({ className, list, selected, onSelected, variant, key }: ListLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
   useEffect(() => {
@@ -18,12 +18,12 @@ export const BlockListComponent = forwardRef(function BlockList ({ className, li
     }
   }, [selected, onSelected])
 
-  return <div ref={ref} className={getClasses('aics-block-list', className, list.classNames)}>
+  return <div ref={ref} className={getClasses('aics-list', className, list.classNames)}>
         { factory?.buildAll(list.items, list) }
     </div>
 })
 
-export const BlockList = styled(BlockListComponent)`
+export const ListLayout = styled(ListLayoutComponent)`
     border-width: 1px;
     border-style: solid;
     border-radius: 4px;

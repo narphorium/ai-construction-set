@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
-import { BlockList, BlockListProps } from '../components/BlockList';
+import { ListLayout, ListLayoutProps } from '../components/ListLayout';
 import { BlockFactoryContext } from '../hooks';
 import { nestedList, selectedList, simpleList, singleItemList } from './storyContent';
 
 export default {
-  component: BlockList,
-  title: 'BlockList',
+  component: ListLayout,
+  title: 'Layouts/ListLayout',
   tags: ['autodocs'],
 };
 
-const Template = (args: BlockListProps) => {
+const Template = (args: ListLayoutProps) => {
   const { factory } = useContext(BlockFactoryContext)
   
   if (args.variant !== undefined) {

@@ -1,13 +1,13 @@
 import React from 'react'
 import { Code, Collapsible, Content, List, ListItem, Section, Selectable, Span, Stream, Table, type Base } from '../data'
 import { NestedPaginationProvider } from '../hooks'
-import { BlockList } from './BlockList'
 import { BlockStream } from './BlockStream'
 import { CodeSection } from './CodeSection'
-import { BlockListItem, CollapsibleBlock } from './CollapsibleBlock'
+import { CollapsibleBlock, ListLayoutItem } from './CollapsibleBlock'
 import { ContentBlock } from './ContentBlock'
 import { ContentSection } from './ContentSection'
 import { ContentSpan } from './ContentSpan'
+import { ListLayout } from './ListLayout'
 import { SentinalView } from './SentinalView'
 import { TableSection } from './TableSection'
 import { withCascadingVariants } from './withCascadingVariants'
@@ -104,7 +104,7 @@ export class DefaultBlockFactory implements BlockFactory {
   }
 
   buildListItem (block: ListItem): JSX.Element {
-    const ListItemWithVariant = withCascadingVariants(BlockListItem, { block })
+    const ListItemWithVariant = withCascadingVariants(ListLayoutItem, { block })
     const ListItemWithCollapsible = withCollapsible(ListItemWithVariant, { block })
     const BlockListItemWithRef = withSelectable(ListItemWithCollapsible, { block })
     return <BlockListItemWithRef
@@ -138,7 +138,7 @@ export class DefaultBlockFactory implements BlockFactory {
   }
 
   buildList (block: List): JSX.Element {
-    const BlockListWithVariant = withCascadingVariants(BlockList, { block })
+    const BlockListWithVariant = withCascadingVariants(ListLayout, { block })
     return <BlockListWithVariant
             list={block}
             selected={false}

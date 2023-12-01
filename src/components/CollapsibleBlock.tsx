@@ -158,7 +158,7 @@ position: relative;
   }
 `
 
-export const BlockListItem = styled(CollapsibleBlock)`
+export const ListLayoutItem = styled(CollapsibleBlock)`
   padding: 4px 0;
   margin: 0;
   color: ${textColor};
@@ -167,20 +167,14 @@ export const BlockListItem = styled(CollapsibleBlock)`
   border-bottom: 1px solid ${borderColor};
   border-radius: 0;
 
-  & .aics-content-section,
-  & .aics-block-list,
-  & .aics-collapsible-block {
-      margin: 8px 0;
-  }
-
   & .aics-content-section:first-child,
-  & .aics-block-list:first-child,
+  & .aics-list:first-child,
   & .aics-collapsible-block:first-child {
       margin-top: 0;
   }
 
   & .aics-content-section:last-child,
-  & .aics-block-list:first-child,
+  & .aics-list:first-child,
   & .aics-collapsible-block:first-child {
       margin-bottom: 0;
   }
