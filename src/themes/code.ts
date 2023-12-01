@@ -7,11 +7,11 @@ import { getColor } from './colors'
 const unknown = '#cccccc'
 const invalid = '#ffffff'
 
-const yellow = getColor('yellow-700') ?? unknown
-const orange = getColor('orange-600') ?? unknown
-const blue = getColor('blue-800') ?? unknown
-const green = getColor('green-500') ?? unknown
-const purple = getColor('purple-700') ?? unknown
+const yellow = getColor('yellow-500') ?? unknown
+const orange = getColor('orange-400') ?? unknown
+const blue = getColor('blue-600') ?? unknown
+const green = getColor('green-300') ?? unknown
+const purple = getColor('purple-500') ?? unknown
 const darkBackground = getColor('gray-300') ?? unknown
 const highlightBackground = '#2c313a'
 const background = getColor('slate-200') ?? unknown
@@ -159,9 +159,9 @@ export const darkHighlightStyle = HighlightStyle.define([
 export const codeTheme: Extension = [darkTheme, syntaxHighlighting(darkHighlightStyle)]
 
 export const codeColorTheme = (color: string): Extension => {
-  const background = getColor(`faded-${color}-900`) ?? unknown
+  const background = getColor(`${color}-900`) ?? unknown
   const darkShade = getColor(`${color}-300`) ?? unknown
-  const lightShade = getColor(`faded-${color}-600`) ?? unknown
+  const lightShade = getColor(`${color}-600`) ?? unknown
 
   const colorTheme = EditorView.theme({
     '&': {

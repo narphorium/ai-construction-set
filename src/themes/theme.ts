@@ -38,7 +38,7 @@ export const textColor = selectedVariants('mode', {
 export const backgroundColor = selectedVariants('mode', {
   default: {
     unselected: { light: 'white', dark: '#292b2f' },
-    selected: { light: 'yellow-800', dark: 'yellow-200' }
+    selected: { light: 'yellow-700', dark: 'yellow-200' }
   },
   blue: {
     unselected: { light: 'blue-900', dark: '#292b2f' },
@@ -49,10 +49,10 @@ export const backgroundColor = selectedVariants('mode', {
 export const borderColor = selectedVariants('mode', {
   default: {
     unselected: { light: 'gray-800', dark: 'gray-200' },
-    selected: { light: 'yellow-600', dark: 'yellow-400' }
+    selected: { light: 'dark-yellow-900', dark: 'yellow-400' }
   },
   blue: {
-    unselected: { light: 'faded-blue-800', dark: 'gray-200' },
+    unselected: { light: 'dark-blue-900', dark: 'gray-200' },
     selected: { light: 'yellow-600', dark: 'yellow-400' }
   }
 })
