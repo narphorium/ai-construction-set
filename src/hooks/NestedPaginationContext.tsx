@@ -3,6 +3,27 @@ import React, { createContext, useEffect, useReducer, type Dispatch, type ReactE
 export class NestedPaginationState {
   public pages: number[] = []
   public numPages: number[] = []
+
+  static copy (state: NestedPaginationState): NestedPaginationState {
+    const newState = new NestedPaginationState()
+    newState.pages = state.pages.slice()
+    newState.numPages = state.numPages.slice()
+    return newState
+  }
+
+  public getPage (level: number): number {
+    if (level > this.pages.length) {
+      return 1
+    }
+    return this.pages[level - 1]
+  }
+
+  public getNumPages (level: number): number {
+    if (level > this.numPages.length) {
+      return 1
+    }
+    return this.numPages[level - 1]
+  }
 };
 
 export type NestedPaginationAction =
@@ -12,17 +33,6 @@ export type NestedPaginationAction =
 | { type: 'previous', level: number }
 | { type: 'next', level: number }
 | { type: 'goto', page: number, level: number }
-
-function getPage (state: NestedPaginationState, action: NestedPaginationAction): number {
-  if (action.level > state.pages.length) {
-    return 1
-  }
-  return state.pages[action.level - 1]
-}
-
-function getNumPages (state: NestedPaginationState, action: NestedPaginationAction): number {
-  return state.numPages[action.level - 1]
-}
 
 function setPage (state: NestedPaginationState, action: NestedPaginationAction, page: number): number[] {
   // Expand the array if necessary
@@ -43,40 +53,31 @@ function setNumPages (state: NestedPaginationState, action: NestedPaginationActi
 }
 
 export const NestedPaginationReducer = (state: NestedPaginationState, action: NestedPaginationAction): NestedPaginationState => {
+  const newState = NestedPaginationState.copy(state)
   switch (action.type) {
     case 'register':
-      return {
-        pages: setPage(state, action, 1),
-        numPages: setNumPages(state, action, action.numPages)
-      }
+      newState.pages = setPage(state, action, 1)
+      newState.numPages = setNumPages(state, action, action.numPages)
+      break
     case 'start':
-      return {
-        ...state,
-        pages: setPage(state, action, 1)
-      }
+      newState.pages = setPage(state, action, 1)
+      break
     case 'end':
-      return {
-        ...state,
-        pages: setPage(state, action, Math.max(1, getNumPages(state, action)))
-      }
+      newState.pages = setPage(state, action, Math.max(1, state.getNumPages(action.level)))
+      break
     case 'previous':
-      return {
-        ...state,
-        pages: setPage(state, action, Math.max(1, getPage(state, action) - 1))
-      }
+      newState.pages = setPage(state, action, Math.max(1, state.getPage(action.level) - 1))
+      break
     case 'next':
-      return {
-        ...state,
-        pages: setPage(state, action, Math.min(getNumPages(state, action), getPage(state, action) + 1))
-      }
+      newState.pages = setPage(state, action, Math.min(state.getNumPages(action.level), state.getPage(action.level) + 1))
+      break
     case 'goto':
-      return {
-        ...state,
-        pages: setPage(state, action, Math.min(getNumPages(state, action), Math.max(1, action.page)))
-      }
+      newState.pages = setPage(state, action, Math.min(state.getNumPages(action.level), Math.max(1, action.page)))
+      break
     default:
       throw new Error('Invalid action')
   }
+  return newState
 }
 
 export const NestedPaginationContext = createContext<NestedPaginationState | null>(null)
@@ -90,10 +91,10 @@ interface NestedPaginationProviderProps {
 }
 
 export const NestedPaginationProvider = ({ pages, numPages, onChange, children }: NestedPaginationProviderProps): ReactElement<any, any> => {
-  const [state, dispatch] = useReducer(NestedPaginationReducer, {
-    pages,
-    numPages
-  })
+  const initialState = new NestedPaginationState()
+  initialState.pages = pages
+  initialState.numPages = numPages
+  const [state, dispatch] = useReducer(NestedPaginationReducer, initialState)
 
   useEffect(() => {
     if (onChange !== undefined) {

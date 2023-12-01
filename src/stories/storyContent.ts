@@ -1,5 +1,5 @@
 import * as uuid from 'uuid'
-import { Code, Collapsible, Content, List, ListItem, Section, Span, Stream, Table, TableRow } from '../data'
+import { Code, Content, List, ListItem, Section, Span, Table, TableRow, Tree } from '../data'
 
 export const getGUID = (): string => {
   return uuid.v4()
@@ -15,18 +15,6 @@ export const plainSection = (content = 'Test Span'): Section => {
 export const plainContent = (): Content => {
   const content = new Content(getGUID())
   content.children.push(plainSection())
-  return content
-}
-
-export const plainNamedContent = (name: string): Collapsible => {
-  const content = new Collapsible(getGUID(), name)
-  content.children.push(plainSection())
-  return content
-}
-
-export const nestedNamedContent = (name: string): Collapsible => {
-  const content = new Collapsible(getGUID(), name)
-  content.children.push(plainNamedContent('Inner Content'))
   return content
 }
 
@@ -109,52 +97,51 @@ export const nestedList = (): List => {
   return list
 }
 
-export const plainStream = (): Stream => {
-  const stream = new Stream(getGUID())
-  stream.blocks.push(plainContent())
-  stream.blocks.push(plainNamedContent('Named Content'))
-  stream.blocks.push(singleItemList())
-  stream.blocks.push(simpleList())
-  return stream
+export const plainTree = (): Tree => {
+  const tree = new Tree(getGUID())
+  tree.blocks.push(plainContent())
+  tree.blocks.push(singleItemList())
+  tree.blocks.push(simpleList())
+  return tree
 }
 
-export const paginatedStream = (): Stream => {
-  const stream = new Stream(getGUID())
-  stream.name = 'Paginated Stream'
+export const paginatedTree = (): Tree => {
+  const tree = new Tree(getGUID())
+  tree.name = 'Paginated Tree'
 
   for (let i = 1; i <= 3; i++) {
     const content = new Content(getGUID())
     content.iteration = i
     content.children.push(plainSection('Test Span ' + i))
-    stream.blocks.push(content)
+    tree.blocks.push(content)
   }
 
-  return stream
+  return tree
 }
 
-export const nestedStream = (): Stream => {
-  const outerStream = new Stream(getGUID())
-  outerStream.name = 'Outer Stream'
+export const nestedTree = (): Tree => {
+  const outerNode = new Tree(getGUID())
+  outerNode.name = 'Root Node'
 
   for (let i = 1; i <= 3; i++) {
     const b1 = plainContent()
     b1.iteration = i
-    outerStream.blocks.push(b1)
+    outerNode.blocks.push(b1)
 
-    const innerStream = new Stream(getGUID())
-    innerStream.name = `Inner Stream ${i}`
-    innerStream.iteration = i
-    outerStream.blocks.push(innerStream)
+    const innerNode = new Tree(getGUID())
+    innerNode.name = `Inner Node ${i}`
+    innerNode.iteration = i
+    outerNode.blocks.push(innerNode)
 
     for (let j = 1; j <= 3; j++) {
       const bi1 = plainContent()
       bi1.iteration = j
-      innerStream.blocks.push(bi1)
+      innerNode.blocks.push(bi1)
 
       const content = new Content(getGUID())
       content.iteration = j
-      content.children.push(plainSection(`Outer stream ${i}<br/>Inner stream ${j}`))
-      innerStream.blocks.push(content)
+      content.children.push(plainSection(`Root node ${i}<br/>Inner node ${j}`))
+      innerNode.blocks.push(content)
 
       if (i === 1 && j === 1) {
         content.selected = true
@@ -162,15 +149,15 @@ export const nestedStream = (): Stream => {
 
       const bi2 = plainContent()
       bi2.iteration = j
-      innerStream.blocks.push(bi2)
+      innerNode.blocks.push(bi2)
     }
 
     const b2 = plainContent()
     b2.iteration = i
-    outerStream.blocks.push(b2)
+    outerNode.blocks.push(b2)
   }
 
-  return outerStream
+  return outerNode
 }
 
 export const simplePythonCode = (): Code => {

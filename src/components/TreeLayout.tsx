@@ -1,69 +1,43 @@
 import React, { forwardRef, useCallback, useContext, type ForwardedRef } from 'react'
 import styled from 'styled-components'
 import theme from 'styled-theming'
-import { Stream, type Base, type Selectable } from '../data'
+import { Tree, type Base, type Selectable } from '../data'
 import { SelectedVisitor } from '../data/Visitor'
-import { BlockFactoryContext } from '../hooks'
+import { BlockFactoryContext, NestedPaginationContext } from '../hooks'
 import { getColor } from '../themes/colors'
 import { defaultFont, textColor } from '../themes/theme'
-import { type PaginatedProps } from './Base'
+import { getClasses, type PaginatedProps } from './Base'
 import { Pagination } from './Pagination'
 
-export interface BlockStreamProps extends PaginatedProps {
-  stream: Stream
+export interface TreeLayoutProps extends PaginatedProps {
+  tree: Tree
 }
 
-export const BlockStreamComponent = forwardRef(function BlockStream ({ className, stream, level, page, setPage, variant, key }: BlockStreamProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, tree, level, page, setPage, variant, key }: TreeLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
+  const pages = useContext(NestedPaginationContext)
   const selectedVisitor = new SelectedVisitor()
 
-  let numPages = 1
-  stream.blocks.forEach((block) => {
-    if (block.iteration === undefined) {
-      block.iteration = 1
-    } else if (block.iteration > numPages) {
-      numPages = block.iteration
-    }
-  })
-
   const isFollowingSiblingSelected = (block: Base): boolean => {
-    const index = stream.blocks.indexOf(block)
+    const index = tree.blocks.indexOf(block)
     if (index < 0) {
       return false
     }
-    for (let i = index + 1; i < stream.blocks.length; i++) {
-      if (selectedVisitor.run(stream.blocks[i]).length > 0) {
+    for (let i = index + 1; i < tree.blocks.length; i++) {
+      if (selectedVisitor.run(tree.blocks[i]).length > 0) {
         return true
       }
     }
     return false
   }
 
-  const getClasses = (): string => {
-    let classes = ['aics-block-stream']
-    if (className !== undefined) {
-      if (typeof className === 'string') {
-        classes.push(className)
-      } else if (Array.isArray(className)) {
-        classes = classes.concat(className)
-      }
-    }
-    if (numPages > 1) {
-      classes.push('aics-block-stream-paginated')
-    }
-    if (selectedVisitor.run(stream).length > 0) {
-      classes.push('selected')
-    }
-    return classes.join(' ')
-  }
-
   const getNodeClasses = (node: Selectable): string => {
-    const classes = ['aics-block-stream-node']
+    const classes = ['aics-tree-node']
     if (node.selected) {
       classes.push('selected')
     }
-    if (!(node instanceof Stream)) {
-      classes.push('aics-block-stream-leaf-node')
+    if (!(node instanceof Tree)) {
+      classes.push('aics-tree-leaf-node')
     }
     if (selectedVisitor.run(node).length > 0) {
       classes.push('selected')
@@ -75,31 +49,31 @@ export const BlockStreamComponent = forwardRef(function BlockStream ({ className
 
   const filterBlocks = useCallback(() => {
     const filteredBlocks: Base[] = []
-    stream.blocks.forEach((block) => {
+    tree.blocks.forEach((block) => {
       if (block.iteration === undefined || block.iteration === page) {
         filteredBlocks.push(block)
       }
     })
     return filteredBlocks
-  }, [stream, page])
+  }, [tree, page])
 
-  if (numPages > 1) {
-    return <div ref={ref} className={getClasses()} key={stream.uuid}>
-        <div className='aics-block-stream-control'><span></span></div>
-        <div className='aics-block-stream-title'>
-          <label className='aics-block-stream-page-label'>{ stream.name }</label>
-          <Pagination level={level} page={page} numPages={numPages} setPage={setPage} key={stream.uuid} />
+  if (pages !== null && pages.getNumPages(level) > 1) {
+    return <div ref={ref} className={getClasses('aics-tree', tree.classNames, className, () => selectedVisitor.run(tree).length > 0 ? ['selected'] : [])}>
+        <div className='aics-tree-control'><span></span></div>
+        <div className='aics-tree-title'>
+          <label className='aics-tree-page-label'>{ tree.name }</label>
+          <Pagination level={level} page={page} numPages={pages.getNumPages(level)} setPage={setPage} key={tree.uuid} />
         </div>
         { filterBlocks().map((block) => {
           return <div className={getNodeClasses(block as Selectable)} key={block.uuid}>
-            { factory?.build(block, stream) }
+            { factory?.build(block, tree) }
             </div>
         }) }
     </div>
   } else {
-    return <div ref={ref} className={getClasses()} key={stream.uuid}>
+    return <div ref={ref} className={getClasses()} key={tree.uuid}>
       { filterBlocks().map((block) => {
-        return factory?.build(block, stream)
+        return factory?.build(block, tree)
       }) }
     </div>
   }
@@ -115,24 +89,24 @@ export const selectedTreeColor = theme('mode', {
   dark: getColor('yellow-400')
 })
 
-export const BlockStream = styled(BlockStreamComponent)`
+export const TreeLayout = styled(TreeLayoutComponent)`
 position: relative;
 margin-top: 12px;
 margin-bottom: 12px;
 margin-left: 0;
 padding-left: 0;
 
-.aics-block-stream-content {
+.aics-tree-content {
   position: relative;
   margin-left: 24px;
 }
 
-& .aics-block-stream-title {
+& .aics-tree-title {
   position: relative;
   padding-left: 16px;
 }
 
-& .aics-block-stream-title > label {
+& .aics-tree-title > label {
   font-family: ${defaultFont};
   font-size: 12pt;
   font-weight: 500;
@@ -146,31 +120,31 @@ padding-left: 0;
   vertical-align: top;
 }
 
-& .aics-block-stream-node {
+& .aics-tree-node {
   display: block;
   position: relative;
   padding-left: 12px;
 }
 
-& .aics-block-stream-leaf-node {
+& .aics-tree-leaf-node {
   padding-left: 26px;
 }
 
-& .aics-block-stream-node > .aics-block-stream {
+& .aics-tree-node > .aics-tree {
   padding-left: 0px;
 }
 
-& .aics-block-stream-node {
+& .aics-tree-node {
   position: relative;
   border-left: 2px solid ${treeColor};
   line-height: 24px;
 }
 
-& .aics-block-stream-node:last-child {
+& .aics-tree-node:last-child {
   border-color: transparent;
 }
 
-.aics-block-stream-node::before {
+.aics-tree-node::before {
   content: "";
   display: block;
   position: absolute;
@@ -184,14 +158,14 @@ padding-left: 0;
   border-bottom-left-radius: 6px;
 }
 
-& .aics-block-stream-title:focus {
+& .aics-tree-title:focus {
   outline: none;
 }
 
 &
-  > .aics-block-stream-control
+  > .aics-tree-control
   > span,
-& .aics-block-stream-node::after {
+& .aics-tree-node::after {
   content: "";
   display: block;
   position: absolute;
@@ -205,16 +179,16 @@ padding-left: 0;
 }
 
 &
-  > .aics-block-stream-control
+  > .aics-tree-control
   > span {
     left: -3px;
 }
 
 &.selected
-  > .aics-block-stream-title::before,
+  > .aics-tree-title::before,
 &
   > .selected
-  > .aics-block-stream-title::before {
+  > .aics-tree-title::before {
   background-color: ${selectedTreeColor};
 }
 
@@ -224,10 +198,10 @@ padding-left: 0;
 
 &
   > .selected
-  > .aics-block-stream-control
+  > .aics-tree-control
   > span,
 &.selected
-  > .aics-block-stream-control
+  > .aics-tree-control
   > span,
 & > .selected::after {
   background: ${selectedTreeColor};
@@ -238,7 +212,7 @@ padding-left: 0;
   z-index: 1;
 }
 
-& .aics-block-stream-title::before {
+& .aics-tree-title::before {
   z-index: 1;
   content: " ";
   position: absolute;

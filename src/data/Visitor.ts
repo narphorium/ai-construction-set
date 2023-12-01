@@ -5,7 +5,7 @@ import { List } from './List'
 import { Section } from './Section'
 import { Selectable } from './Selectable'
 import { type Span } from './Span'
-import { Stream } from './Stream'
+import { Tree } from './Tree'
 
 export interface Visitor {
   visit: (block: Base) => void
@@ -15,7 +15,7 @@ export interface Visitor {
   visitSection: (block: Section) => void
   visitSelectable: (block: Selectable) => void
   visitSpan: (block: Span) => void
-  visitStream: (block: Stream) => void
+  visitTree: (block: Tree) => void
   leave: (block: Base) => void
   leaveContent: (block: Content) => void
   leaveList: (block: List) => void
@@ -23,7 +23,7 @@ export interface Visitor {
   leaveSection: (block: Section) => void
   leaveSelectable: (block: Selectable) => void
   leaveSpan: (block: Span) => void
-  leaveStream: (block: Stream) => void
+  leaveTree: (block: Tree) => void
   traverse: (block: Base) => void
 }
 
@@ -42,7 +42,7 @@ export class BaseVisitor implements Visitor {
 
   visitSpan (block: Span): void {}
 
-  visitStream (block: Stream): void {}
+  visitTree (block: Tree): void {}
 
   leave (block: Base): void {}
 
@@ -58,7 +58,7 @@ export class BaseVisitor implements Visitor {
 
   leaveSpan (block: Span): void {}
 
-  leaveStream (block: Stream): void {}
+  leaveTree (block: Tree): void {}
 
   traverse (block: Base): void {
     this.visit(block)
@@ -70,8 +70,8 @@ export class BaseVisitor implements Visitor {
       this._traverseSection(block)
     } else if (block instanceof Selectable) {
       this._traverseSelectable(block)
-    } else if (block instanceof Stream) {
-      this._traverseStream(block)
+    } else if (block instanceof Tree) {
+      this._traverseTree(block)
     }
     this.leave(block)
   }
@@ -118,12 +118,12 @@ export class BaseVisitor implements Visitor {
     this.leaveSpan(block)
   }
 
-  _traverseStream (block: Stream): void {
-    this.visitStream(block)
+  _traverseTree (block: Tree): void {
+    this.visitTree(block)
     block.blocks.forEach((item: Base) => {
       this.traverse(item)
     })
-    this.leaveStream(block)
+    this.leaveTree(block)
   }
 }
 
@@ -137,12 +137,12 @@ export class VisibleVisitor extends BaseVisitor {
     this.visible[this.visible.length - 1] = isBlockVisible
   }
 
-  visitStream (block: Stream): void {
+  visitTree (block: Tree): void {
     this.currentIteration.push(block.page ?? 1)
     this.visible.push(true)
   }
 
-  leaveStream (block: Stream): void {
+  leaveTree (block: Tree): void {
     this.currentIteration.pop()
     this.visible.pop()
   }

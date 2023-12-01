@@ -1,36 +1,36 @@
 import React, { useContext } from 'react';
-import { BlockStream, BlockStreamProps } from '../components/BlockStream';
+import { TreeLayout, TreeLayoutProps } from '../components/TreeLayout';
 import { BlockFactoryContext } from '../hooks';
-import { nestedStream, paginatedStream, plainStream } from './storyContent';
+import { nestedTree, paginatedTree, plainTree } from './storyContent';
 
 export default {
-  component: BlockStream,
-  title: 'BlockStream',
+  component: TreeLayout,
+  title: 'Layouts/TreeLayout',
   tags: ['autodocs'],
 };
 
-const Template = (args: BlockStreamProps) => {
+const Template = (args: TreeLayoutProps) => {
   const { factory } = useContext(BlockFactoryContext)
 
   return (
     <>
-      { factory?.build(args.stream) }
+      { factory?.build(args.tree) }
     </>
   );
 };
 
 export const Default = Template.bind({});
 Default.args = {
-  stream: plainStream(),
+  tree: plainTree(),
 };
 
 export const Paginated = Template.bind({});
 Paginated.args = {
-  stream: paginatedStream(),
+  tree: paginatedTree(),
 };
 
 export const Nested = Template.bind({});
 Nested.args = {
-  stream: nestedStream(),
+  tree: nestedTree(),
 };
 

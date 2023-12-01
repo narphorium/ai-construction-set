@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, type ComponentType } from 'react'
-import { SelectedVisitor, type Stream } from '../data'
+import { SelectedVisitor, type Tree } from '../data'
 import { NestedPaginationContext, NestedPaginationDispatchContext, type NestedPaginationState } from '../hooks'
 import { getClasses, type PaginatedProps } from './Base'
 
@@ -7,10 +7,14 @@ function getPage (state: NestedPaginationState | null, level: number): number {
   return state !== null ? state.pages[level - 1] : 1
 }
 
+function getNumPages (state: NestedPaginationState | null, level: number): number {
+  return state !== null ? state.numPages[level - 1] : 1
+}
+
 export const withPageable = <TProps extends PaginatedProps>(
   Component: ComponentType<TProps>,
   params: {
-    stream: Stream
+    tree: Tree
   }
 ) => {
   return function WithPageable (props: TProps): JSX.Element {
@@ -21,7 +25,7 @@ export const withPageable = <TProps extends PaginatedProps>(
 
     useEffect(() => {
       let numPages = 1
-      params.stream.blocks.forEach((block) => {
+      params.tree.blocks.forEach((block) => {
         if (block.iteration === undefined) {
           block.iteration = 1
         } else if (block.iteration > numPages) {
@@ -35,7 +39,7 @@ export const withPageable = <TProps extends PaginatedProps>(
     }, [props.level, pagesDispatch])
 
     const setPage = (p: number): void => {
-      params.stream.page = p
+      params.tree.page = p
       if (pagesDispatch !== null && getPage(pages, props.level) !== p) {
         pagesDispatch({ type: 'goto', page: p, level: props.level })
       }
@@ -46,8 +50,8 @@ export const withPageable = <TProps extends PaginatedProps>(
     useEffect(() => {
       const page = getPage(pages, props.level)
       if (page !== null) {
-        if (selectedVisitor.run(params.stream, page).length > 0) {
-          params.stream.blocks.forEach((block) => {
+        if (selectedVisitor.run(params.tree, page).length > 0) {
+          params.tree.blocks.forEach((block) => {
             if (block.iteration !== undefined && selectedVisitor.run(block, page).length > 0) {
               setPage(block.iteration)
             }
@@ -59,7 +63,7 @@ export const withPageable = <TProps extends PaginatedProps>(
     return <Component ref={ref}
             page={getPage(pages, props.level)}
             setPage={setPage}
-            classNames={getClasses(props.className)}
+            classNames={getClasses(props.className, () => getNumPages(pages, props.level) > 1 ? ['aics-paginated'] : [])}
             {...props} />
   }
 }

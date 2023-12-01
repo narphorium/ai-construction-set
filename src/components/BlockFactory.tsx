@@ -1,7 +1,6 @@
 import React from 'react'
-import { Code, Collapsible, Content, List, ListItem, Section, Selectable, Span, Stream, Table, type Base } from '../data'
+import { Code, Collapsible, Content, List, ListItem, Section, Selectable, Span, Table, Tree, type Base } from '../data'
 import { NestedPaginationProvider } from '../hooks'
-import { BlockStream } from './BlockStream'
 import { CodeSection } from './CodeSection'
 import { CollapsibleBlock, ListLayoutItem } from './CollapsibleBlock'
 import { ContentBlock } from './ContentBlock'
@@ -10,6 +9,7 @@ import { ContentSpan } from './ContentSpan'
 import { ListLayout } from './ListLayout'
 import { SentinalView } from './SentinalView'
 import { TableSection } from './TableSection'
+import { TreeLayout } from './TreeLayout'
 import { withCascadingVariants } from './withCascadingVariants'
 import { withCollapsible } from './withCollapsible'
 import { withPageable } from './withPageable'
@@ -39,7 +39,7 @@ export class DefaultBlockFactory implements BlockFactory {
     this.registerBuilder(List, this.buildList as BlockBuilder)
     this.registerBuilder(Span, this.buildSpan as BlockBuilder)
     this.registerBuilder(Selectable, this.buildSelectable as BlockBuilder)
-    this.registerBuilder(Stream, this.buildStream as BlockBuilder)
+    this.registerBuilder(Tree, this.buildTree as BlockBuilder)
     this.registerBuilder(Table, this.buildTable as BlockBuilder)
   }
 
@@ -56,10 +56,10 @@ export class DefaultBlockFactory implements BlockFactory {
     this.parentByBlock.set(block, parent)
   }
 
-  getStreamLevel (stream: Stream): number {
+  getTreeLevel (tree: Tree): number {
     let level = 1
-    let parent = this.getParent(stream)
-    while (parent !== undefined && parent instanceof Stream) {
+    let parent = this.getParent(tree)
+    while (parent !== undefined && parent instanceof Tree) {
       level++
       parent = this.getParent(parent)
     }
@@ -161,26 +161,26 @@ export class DefaultBlockFactory implements BlockFactory {
             key={block.uuid} />
   }
 
-  buildStream (stream: Stream): JSX.Element {
-    const PageableBlockStream = withPageable(BlockStream, { stream })
-    const BlockStreamWithVariant = withCascadingVariants(PageableBlockStream, { block: stream })
-    const level = this.getStreamLevel(stream)
+  buildTree (tree: Tree): JSX.Element {
+    const PageableTreeLayout = withPageable(TreeLayout, { tree })
+    const TreeLayoutWithVariant = withCascadingVariants(PageableTreeLayout, { block: tree })
+    const level = this.getTreeLevel(tree)
     // Every top-level component has a nested pagination provider
     if (level === 1) {
       return <NestedPaginationProvider
                 pages={[1]}
                 numPages={[1]}
-                key={stream.uuid}>
-        <BlockStreamWithVariant
+                key={tree.uuid}>
+        <TreeLayoutWithVariant
             level={level}
-            stream={stream}
-            key={stream.uuid} />
+            tree={tree}
+            key={tree.uuid} />
       </NestedPaginationProvider>
     } else {
-      return <BlockStreamWithVariant
+      return <TreeLayoutWithVariant
               level={level}
-              stream={stream}
-              key={stream.uuid} />
+              tree={tree}
+              key={tree.uuid} />
     }
   }
 

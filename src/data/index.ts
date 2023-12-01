@@ -6,7 +6,7 @@ export * from './List'
 export * from './Section'
 export * from './Selectable'
 export * from './Span'
-export * from './Stream'
 export * from './Table'
+export * from './Tree'
 export * from './Visitor'
 
