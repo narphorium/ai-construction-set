@@ -1,12 +1,12 @@
 import React from 'react'
-import { Code, Collapsible, Content, List, ListItem, Section, Selectable, Span, Table, Tree, type Base } from '../data'
+import { Code, Collapsible, Content, List, ListItem, Paragraph, Selectable, Span, Table, Tree, type Base } from '../data'
 import { NestedPaginationProvider } from '../hooks'
 import { CodeBlock } from './CodeBlock'
 import { CollapsibleBlock, ListLayoutItem } from './CollapsibleBlock'
 import { ContentBlock } from './ContentBlock'
-import { ContentSection } from './ContentSection'
 import { ContentSpan } from './ContentSpan'
 import { ListLayout } from './ListLayout'
+import { ParagraphBlock } from './ParagraphBlock'
 import { SentinalView } from './SentinalView'
 import { TableSection } from './TableSection'
 import { TreeLayout } from './TreeLayout'
@@ -34,7 +34,7 @@ export class DefaultBlockFactory implements BlockFactory {
     this.registerBuilder(ListItem, this.buildListItem as BlockBuilder)
     this.registerBuilder(Collapsible, this.buildCollapsible as BlockBuilder)
     this.registerBuilder(Content, this.buildContent as BlockBuilder)
-    this.registerBuilder(Section, this.buildSection as BlockBuilder)
+    this.registerBuilder(Paragraph, this.buildSection as BlockBuilder)
     this.registerBuilder(Code, this.buildCode as BlockBuilder)
     this.registerBuilder(List, this.buildList as BlockBuilder)
     this.registerBuilder(Span, this.buildSpan as BlockBuilder)
@@ -120,11 +120,11 @@ export class DefaultBlockFactory implements BlockFactory {
             key={block.uuid} />
   }
 
-  buildSection (block: Section): JSX.Element {
-    const ContentSectionWithVariant = withCascadingVariants(ContentSection, { block })
+  buildSection (block: Paragraph): JSX.Element {
+    const ContentSectionWithVariant = withCascadingVariants(ParagraphBlock, { block })
     const ContentSectionWithRef = withSelectable(ContentSectionWithVariant, { block })
     return <ContentSectionWithRef
-            section={block}
+            paragraph={block}
             key={block.uuid} />
   }
 

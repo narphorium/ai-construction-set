@@ -1,30 +1,30 @@
 import * as uuid from 'uuid'
-import { Code, Content, List, ListItem, Section, Span, Table, TableRow, Tree } from '../data'
+import { Code, Content, List, ListItem, Paragraph, Span, Table, TableRow, Tree } from '../data'
 
 export const getGUID = (): string => {
   return uuid.v4()
 }
 
-export const plainSection = (content = 'Test Span'): Section => {
-  const section = new Section(getGUID())
+export const plainParagraph = (content = 'Test Span'): Paragraph => {
+  const paragraph = new Paragraph(getGUID())
   const span = new Span(getGUID(), content)
-  section.spans.push(span)
-  return section
+  paragraph.spans.push(span)
+  return paragraph
 }
 
 export const plainContent = (): Content => {
   const content = new Content(getGUID())
-  content.children.push(plainSection())
+  content.children.push(plainParagraph())
   return content
 }
 
 export const namedSectionsContent = (): Content => {
   const content = new Content(getGUID())
 
-  const section1 = new Section(getGUID())
+  const section1 = new Paragraph(getGUID())
 
   const header1 = new Span(section1.uuid, 'Test Section: ')
-  header1.classNames.add('aics-content-section-header')
+  header1.classNames.add('aics-paragraph-header')
   section1.spans.push(header1)
 
   const span1 = new Span(getGUID(), 'Test Span')
@@ -32,10 +32,10 @@ export const namedSectionsContent = (): Content => {
   section1.spans.push(span1)
   content.children.push(section1)
 
-  const section2 = new Section(getGUID())
+  const section2 = new Paragraph(getGUID())
 
   const header2 = new Span(section1.uuid, 'Test Section: ')
-  header2.classNames.add('aics-content-section-header')
+  header2.classNames.add('aics-paragraph-header')
   section2.spans.push(header2)
 
   section2.selected = true
@@ -48,7 +48,7 @@ export const namedSectionsContent = (): Content => {
 
 export const plainListItem = (name: string): ListItem => {
   const item = new ListItem(getGUID(), name)
-  item.children.push(plainSection())
+  item.children.push(plainParagraph())
   return item
 }
 
@@ -74,7 +74,7 @@ export const selectedList = (): List => {
   const item2 = new ListItem(getGUID(), 'Second Item')
   item2.selected = true
   item2.collapsed = false
-  item2.children.push(plainSection())
+  item2.children.push(plainParagraph())
   list.items.push(item2)
 
   list.items.push(plainListItem('Third Item'))
@@ -112,7 +112,7 @@ export const paginatedTree = (): Tree => {
   for (let i = 1; i <= 3; i++) {
     const content = new Content(getGUID())
     content.iteration = i
-    content.children.push(plainSection('Test Span ' + i))
+    content.children.push(plainParagraph('Test Span ' + i))
     tree.blocks.push(content)
   }
 
@@ -140,7 +140,7 @@ export const nestedTree = (): Tree => {
 
       const content = new Content(getGUID())
       content.iteration = j
-      content.children.push(plainSection(`Root node ${i}<br/>Inner node ${j}`))
+      content.children.push(plainParagraph(`Root node ${i}<br/>Inner node ${j}`))
       innerNode.blocks.push(content)
 
       if (i === 1 && j === 1) {
@@ -186,8 +186,8 @@ export const simplePythonCode = (): Code => {
   return section
 }
 
-const tableHeader = (name: string, datatype?: string): Section => {
-  const cell = new Section(getGUID())
+const tableHeader = (name: string, datatype?: string): Paragraph => {
+  const cell = new Paragraph(getGUID())
   const span = new Span(getGUID(), name)
   span.datatype = datatype
   span.classNames.add('aics-table-header')
@@ -195,8 +195,8 @@ const tableHeader = (name: string, datatype?: string): Section => {
   return cell
 }
 
-const tableCell = (value: string, datatype?: string): Section => {
-  const cell = new Section(getGUID())
+const tableCell = (value: string, datatype?: string): Paragraph => {
+  const cell = new Paragraph(getGUID())
   const span = new Span(getGUID(), value)
   span.datatype = datatype
   cell.spans.push(span)

@@ -1,5 +1,5 @@
-import { Section } from './Section'
+import { Paragraph } from './Paragraph'
 
-export class Code extends Section {
+export class Code extends Paragraph {
   public language: string | null = null
 }

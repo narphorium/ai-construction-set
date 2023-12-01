@@ -1,6 +1,6 @@
 import { Selectable } from './Selectable'
 import { type Span } from './Span'
 
-export class Section extends Selectable {
+export class Paragraph extends Selectable {
   public spans: Span[] = []
 }

@@ -167,13 +167,13 @@ export const ListLayoutItem = styled(CollapsibleBlock)`
   border-bottom: 1px solid ${borderColor};
   border-radius: 0;
 
-  & .aics-content-section:first-child,
+  & .aics-paragraph:first-child,
   & .aics-list:first-child,
   & .aics-collapsible-block:first-child {
       margin-top: 0;
   }
 
-  & .aics-content-section:last-child,
+  & .aics-paragraph:last-child,
   & .aics-list:first-child,
   & .aics-collapsible-block:first-child {
       margin-bottom: 0;

@@ -1,17 +1,17 @@
 import React, { forwardRef, useCallback, useContext, useEffect, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
 import theme from 'styled-theming'
-import { type Section } from '../data'
+import { type Paragraph } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { defaultFont, fontWeight, selectedVariants, textColor } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
-export interface ContentSectionProps extends SelectableProps {
-  section: Section
+export interface ParagraphBlockProps extends SelectableProps {
+  paragraph: Paragraph
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-const ContentSectionComponent = forwardRef(function ContentSection ({ className, section, selected, onSelected, onClick, variant, key }: ContentSectionProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className, paragraph, selected, onSelected, onClick, variant, key }: ParagraphBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
   useEffect(() => {
@@ -26,9 +26,9 @@ const ContentSectionComponent = forwardRef(function ContentSection ({ className,
     }
   }, [onClick])
 
-  return <div ref={ref} className={ getClasses('aics-content-section', className, section.classNames) } onClick={handleClick}>
+  return <div ref={ref} className={ getClasses('aics-paragraph', className, paragraph.classNames) } onClick={handleClick}>
     <span>
-      { factory?.buildAll(section.spans, section) }
+      { factory?.buildAll(paragraph.spans, paragraph) }
     </span>
   </div>
 })
@@ -36,7 +36,7 @@ const ContentSectionComponent = forwardRef(function ContentSection ({ className,
 const backgroundColor = selectedVariants('mode', {
   default: {
     unselected: { light: 'transparent', dark: 'transparent' },
-    selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' }
+    selected: { light: 'yellow-600', dark: 'rgb(73 69 61)' }
   },
   blue: {
     unselected: { light: 'transparent', dark: 'transparent' },
@@ -49,7 +49,7 @@ const selectedLabelColor = theme('mode', {
   dark: '#ffde98'
 })
 
-export const ContentSection = styled(ContentSectionComponent)`
+export const ParagraphBlock = styled(ParagraphBlockComponent)`
 font-family: ${defaultFont};
   font-size: 11pt;
   margin: 12px 16px;
