@@ -1,6 +1,6 @@
 export * from '../themes/theme'
 export * from './BlockFactory'
-export * from './CodeSection'
+export * from './CodeBlock'
 export * from './CollapsibleBlock'
 export * from './ContentBlock'
 export * from './ContentSection'
@@ -13,4 +13,3 @@ export * from './TreeLayout'
 export * from './withCollapsible'
 export * from './withPageable'
 export * from './withSelectable'
-

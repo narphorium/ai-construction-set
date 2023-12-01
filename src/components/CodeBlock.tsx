@@ -9,7 +9,7 @@ import { codeColorTheme, codeTheme } from '../themes/code'
 import { getColor } from '../themes/colors'
 import { getClasses, type SelectableProps } from './Base'
 
-export interface CodeSectionProps extends SelectableProps {
+export interface CodeBlockProps extends SelectableProps {
   code: Code
   extensions?: any[]
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
@@ -17,8 +17,8 @@ export interface CodeSectionProps extends SelectableProps {
   editable: boolean
 }
 
-const CodeSectionComponent = forwardRef(function CodeSection (
-  { className, code, extensions, selected, onSelected, onClick, onChange, variant, editable, key }: CodeSectionProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+const CodeBlockComponent = forwardRef(function CodeBlock (
+  { className, code, extensions, selected, onSelected, onClick, onChange, variant, editable, key }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const getTheme = (): Extension => {
     if (code.variant !== undefined) {
       return codeColorTheme(code.variant)
@@ -43,7 +43,7 @@ const CodeSectionComponent = forwardRef(function CodeSection (
   }
   config.push(python())
 
-  return (<div ref={ref} className={getClasses('aics-code-section', className, code.classNames)} onClick={handleClick}>
+  return (<div ref={ref} className={getClasses('aics-code-block', className, code.classNames)} onClick={handleClick}>
       <CodeMirror
         value={codeContent}
         basicSetup={false}
@@ -65,7 +65,7 @@ const backgroundColor = theme('mode', {
   dark: getColor('slate-100')
 })
 
-export const CodeSection = styled(CodeSectionComponent)`
+export const CodeBlock = styled(CodeBlockComponent)`
   background-color: ${backgroundColor};
   font-size: 9.5pt;
   padding: 0;

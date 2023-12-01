@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
-import { CodeSection, CodeSectionProps } from '../components/CodeSection';
+import { CodeBlock, CodeBlockProps } from '../components/CodeBlock';
 import { Content } from '../data';
 import { BlockFactoryContext } from '../hooks';
 import { getGUID, simplePythonCode } from './storyContent';
 
 export default {
-  component: CodeSection,
-  title: 'CodeSection',
+  component: CodeBlock,
+  title: 'Blocks/CodeBlock',
   tags: ['autodocs'],
 };
 
-const Template = (args: CodeSectionProps) => {
+const Template = (args: CodeBlockProps) => {
   const { factory } = useContext(BlockFactoryContext)
   
   if (args.variant !== undefined) {

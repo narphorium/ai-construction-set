@@ -1,7 +1,7 @@
 import React from 'react'
 import { Code, Collapsible, Content, List, ListItem, Section, Selectable, Span, Table, Tree, type Base } from '../data'
 import { NestedPaginationProvider } from '../hooks'
-import { CodeSection } from './CodeSection'
+import { CodeBlock } from './CodeBlock'
 import { CollapsibleBlock, ListLayoutItem } from './CollapsibleBlock'
 import { ContentBlock } from './ContentBlock'
 import { ContentSection } from './ContentSection'
@@ -35,7 +35,7 @@ export class DefaultBlockFactory implements BlockFactory {
     this.registerBuilder(Collapsible, this.buildCollapsible as BlockBuilder)
     this.registerBuilder(Content, this.buildContent as BlockBuilder)
     this.registerBuilder(Section, this.buildSection as BlockBuilder)
-    this.registerBuilder(Code, this.buildCodeSection as BlockBuilder)
+    this.registerBuilder(Code, this.buildCode as BlockBuilder)
     this.registerBuilder(List, this.buildList as BlockBuilder)
     this.registerBuilder(Span, this.buildSpan as BlockBuilder)
     this.registerBuilder(Selectable, this.buildSelectable as BlockBuilder)
@@ -128,8 +128,8 @@ export class DefaultBlockFactory implements BlockFactory {
             key={block.uuid} />
   }
 
-  buildCodeSection (block: Code): JSX.Element {
-    const CodeSectionWithVariant = withCascadingVariants(CodeSection, { block })
+  buildCode (block: Code): JSX.Element {
+    const CodeSectionWithVariant = withCascadingVariants(CodeBlock, { block })
     const CodeSectionWithRef = withSelectable(CodeSectionWithVariant, { block })
     return <CodeSectionWithRef
             code={block}
