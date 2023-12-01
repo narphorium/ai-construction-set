@@ -1,16 +1,17 @@
-import React, { useCallback, useEffect, useRef } from 'react'
-import { useResizeDetector } from 'react-resize-detector'
+import React, { useCallback, useContext, useEffect, useRef, type ForwardedRef } from 'react'
 import { styled } from 'styled-components'
+import { type Collapsible } from '../data'
+import { BlockFactoryContext } from '../hooks'
 import { themedIcon } from '../themes/icons'
-import { defaultFont, textColor } from '../themes/theme'
-import { type CollapsibleProps } from './Base'
+import { backgroundColor, borderColor, defaultFont, textColor } from '../themes/theme'
+import { getClasses, type CollapsibleProps, type SelectableProps } from './Base'
 
-export interface CollapsibleBlockProps extends CollapsibleProps {
-  children: string | JSX.Element | JSX.Element[] | undefined
-  title: string
+export interface CollapsibleBlockProps extends SelectableProps, CollapsibleProps {
+  content: Collapsible
 }
 
-export const CollapsibleBlockComponent = function CollapsibleBlock ({ className, children, title, collapsed, onToggle, onTransitionEnd, variant }: CollapsibleBlockProps): JSX.Element {
+export const CollapsibleBlockComponent = function CollapsibleBlock ({ className, content, collapsed, selected, onToggle, onSelected, onTransitionEnd, variant, key }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+  const { factory } = useContext(BlockFactoryContext)
   const inner = useRef<HTMLDivElement>(null)
 
   const updateInner = useCallback(() => {
@@ -24,12 +25,13 @@ export const CollapsibleBlockComponent = function CollapsibleBlock ({ className,
     }
   }, [inner, collapsed])
 
-  useResizeDetector({
-    targetRef: inner,
-    onResize: () => {
-      updateInner()
-    }
-  })
+  // FIXME: This was causing a loop of updates
+  // useResizeDetector({
+  //   targetRef: inner,
+  //   onResize: () => {
+  //     updateInner()
+  //   }
+  // })
 
   useEffect(() => {
     updateInner()
@@ -39,35 +41,27 @@ export const CollapsibleBlockComponent = function CollapsibleBlock ({ className,
     updateInner()
   }, [collapsed, updateInner])
 
-  const getClasses = (): string => {
-    let classes = ['collapsible-block']
-    if (className !== undefined) {
-      if (typeof className === 'string') {
-        classes.push(className)
-      } else if (Array.isArray(className)) {
-        classes = classes.concat(className)
-      }
+  useEffect(() => {
+    if (onSelected !== undefined) {
+      onSelected(selected as boolean)
     }
-    if (collapsed === true) {
-      classes.push('collapsed')
+  }, [selected, onSelected])
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    if (onToggle !== undefined && collapsed !== undefined) {
+      onToggle(collapsed)
+      e.stopPropagation()
     }
-    return classes.join(' ')
   }
 
-  return (<div className={getClasses()}>
+  return (<div className={getClasses('aics-collapsible-block', className, content.classNames, () => collapsed === true ? ['collapsed'] : [])}>
       <div className="aics-collapsible-block-header">
-        <div className="aics-collapsible-block-control" onClick={(e) => {
-          onToggle?.(collapsed as boolean)
-          e.stopPropagation()
-        }}><span></span></div>
-        <div className="aics-collapsible-block-title" onClick={(e) => {
-          onToggle?.(collapsed as boolean)
-          e.stopPropagation()
-        }}>{title}</div>
+        <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
+        <div className="aics-collapsible-block-title" onClick={handleClick}>{ content.name }</div>
       </div>
       <div className='aics-collapsible-block-content'>
         <div className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={onTransitionEnd}>
-        { children }
+        { factory?.buildAll(content.children, content) }
         </div>
       </div>
     </div>
@@ -158,8 +152,47 @@ position: relative;
     font-size: 10pt;
     transition: margin-top ease 0.2s;
 
-    > .aics-named-block {
+    > .aics-collapsible-block {
       margin-top: 4px;
     }
+  }
+`
+
+export const BlockListItem = styled(CollapsibleBlock)`
+  padding: 4px 0;
+  margin: 0;
+  color: ${textColor};
+  background-color: ${backgroundColor};
+  border-width: 0 0 1px 0;
+  border-bottom: 1px solid ${borderColor};
+  border-radius: 0;
+
+  & .aics-content-section,
+  & .aics-block-list,
+  & .aics-collapsible-block {
+      margin: 8px 0;
+  }
+
+  & .aics-content-section:first-child,
+  & .aics-block-list:first-child,
+  & .aics-collapsible-block:first-child {
+      margin-top: 0;
+  }
+
+  & .aics-content-section:last-child,
+  & .aics-block-list:first-child,
+  & .aics-collapsible-block:first-child {
+      margin-bottom: 0;
+  }
+
+  &:first-child {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+  }
+
+  &:last-child {
+      border-bottom: none;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px;
   }
 `

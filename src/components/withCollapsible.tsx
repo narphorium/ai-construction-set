@@ -1,13 +1,15 @@
 import React, { useState, type ComponentType } from 'react'
+import { type Collapsible } from '../data'
 import { getClasses, type CollapsibleProps } from './Base'
 
 export const withCollapsible = <TProps extends CollapsibleProps>(
   Component: ComponentType<TProps>,
-  params: { collapsed: boolean }
+  params: { block: Collapsible }
 ) => {
   return function WithCollapsible (props: TProps): JSX.Element {
-    const [collapsed, setCollapsed] = useState<boolean>(params.collapsed)
+    const [collapsed, setCollapsed] = useState<boolean>(params.block.collapsed)
     const toggleCollapsed = (c: boolean): void => {
+      params.block.collapsed = c
       setCollapsed(!c)
     }
     return <Component

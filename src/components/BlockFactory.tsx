@@ -4,10 +4,10 @@ import { NestedPaginationProvider } from '../hooks'
 import { BlockList } from './BlockList'
 import { BlockStream } from './BlockStream'
 import { CodeSection } from './CodeSection'
+import { BlockListItem, CollapsibleBlock } from './CollapsibleBlock'
 import { ContentBlock } from './ContentBlock'
 import { ContentSection } from './ContentSection'
 import { ContentSpan } from './ContentSpan'
-import { BlockListItem, NamedBlock } from './NamedBlock'
 import { SentinalView } from './SentinalView'
 import { TableSection } from './TableSection'
 import { withCascadingVariants } from './withCascadingVariants'
@@ -32,7 +32,7 @@ export class DefaultBlockFactory implements BlockFactory {
 
   constructor () {
     this.registerBuilder(ListItem, this.buildListItem as BlockBuilder)
-    this.registerBuilder(Collapsible, this.buildNamedContent as BlockBuilder)
+    this.registerBuilder(Collapsible, this.buildCollapsible as BlockBuilder)
     this.registerBuilder(Content, this.buildContent as BlockBuilder)
     this.registerBuilder(Section, this.buildSection as BlockBuilder)
     this.registerBuilder(Code, this.buildCodeSection as BlockBuilder)
@@ -94,11 +94,11 @@ export class DefaultBlockFactory implements BlockFactory {
     return Array.from(classNames)
   };
 
-  buildNamedContent (block: Collapsible): JSX.Element {
-    const NamedBlockWithVariant = withCascadingVariants(NamedBlock, { block })
-    const NamedBlockWithCollapsible = withCollapsible(NamedBlockWithVariant, { block })
-    const NamedBlockWithRef = withSelectable(NamedBlockWithCollapsible, { block })
-    return <NamedBlockWithRef
+  buildCollapsible (block: Collapsible): JSX.Element {
+    const CollapsibleBlockWithVariant = withCascadingVariants(CollapsibleBlock, { block })
+    const CollapsibleBlockWithCollapsible = withCollapsible(CollapsibleBlockWithVariant, { block })
+    const CollapsibleBlockWithRef = withSelectable(CollapsibleBlockWithCollapsible, { block })
+    return <CollapsibleBlockWithRef
             content={block}
             key={block.uuid}/>
   }
