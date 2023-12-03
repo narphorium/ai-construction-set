@@ -151,21 +151,23 @@ padding-left: 0;
   z-index: -1;
   top: -12px;
   left: -2px;
-  width: 16px;
+  width: 10px;
   height: 25px;
   border: solid ${treeColor};
   border-width: 0 0 2px 2px;
   border-bottom-left-radius: 6px;
 }
 
+.aics-tree-node:nth-child(3)::before {
+  top: -10px;
+  height: 23px;
+}
+
 & .aics-tree-title:focus {
   outline: none;
 }
 
-&
-  > .aics-tree-control
-  > span,
-& .aics-tree-node::after {
+& .aics-tree-leaf-node::after {
   content: "";
   display: block;
   position: absolute;
@@ -178,10 +180,19 @@ padding-left: 0;
   z-index: 2;
 }
 
-&
-  > .aics-tree-control
-  > span {
-    left: -3px;
+& > .aics-tree-control > span {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  z-index: 2;
+
+  border: 2px solid ${treeColor};
+  left: -4px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  background: transparent;
 }
 
 &.selected
@@ -196,13 +207,12 @@ padding-left: 0;
   border-color: ${selectedTreeColor};
 }
 
-&
-  > .selected
-  > .aics-tree-control
-  > span,
 &.selected
   > .aics-tree-control
-  > span,
+  > span {
+    border-color: ${selectedTreeColor};
+}
+
 & > .selected::after {
   background: ${selectedTreeColor};
 }
@@ -216,7 +226,7 @@ padding-left: 0;
   z-index: 1;
   content: " ";
   position: absolute;
-  top: 16px;
+  top: 18px;
   left: 0;
   background-color: ${treeColor};
   background-clip: content-box;
