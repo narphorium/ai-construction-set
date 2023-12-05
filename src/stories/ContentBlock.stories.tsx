@@ -41,3 +41,22 @@ export const Sections = Template.bind({});
 Sections.args = {
   content: namedSectionsContent()
 };
+
+export const Blue = Template.bind({});
+Blue.args = {
+  content: plainContent(),
+  variant: 'blue',
+};
+
+export const BlueSelected = Template.bind({});
+BlueSelected.args = {
+  content: plainContent(),
+  variant: 'blue',
+  selected: true,
+};
+
+export const BlueSections = Template.bind({});
+BlueSections.args = {
+  content: namedSectionsContent(),
+  variant: 'blue',
+};

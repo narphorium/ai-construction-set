@@ -32,19 +32,11 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
   }
 
   const getNodeClasses = (node: Selectable): string => {
-    const classes = ['aics-tree-node']
-    if (node.selected) {
-      classes.push('selected')
-    }
-    if (!(node instanceof Tree)) {
-      classes.push('aics-tree-leaf-node')
-    }
-    if (selectedVisitor.run(node).length > 0) {
-      classes.push('selected')
-    } else if (isFollowingSiblingSelected(node)) {
-      classes.push('before-selected')
-    }
-    return classes.join(' ')
+    return getClasses('aics-tree-node', node.classNames, className,
+      () => selectedVisitor.run(node).length > 0 ? ['selected'] : [],
+      () => !(node instanceof Tree) ? ['aics-tree-leaf-node'] : [],
+      () => isFollowingSiblingSelected(node) ? ['before-selected'] : []
+    )
   }
 
   const filterBlocks = useCallback(() => {
@@ -81,7 +73,7 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
 
 export const treeColor = theme('mode', {
   light: getColor('gray-800'),
-  dark: getColor('gray-200')
+  dark: getColor('slate-400')
 })
 
 export const selectedTreeColor = theme('mode', {
@@ -110,6 +102,7 @@ padding-left: 0;
   font-family: ${defaultFont};
   font-size: 12pt;
   font-weight: 500;
+  line-height: 24px;
   vertical-align: middle;
   color: ${textColor};
   margin-right: 8px;
@@ -124,6 +117,7 @@ padding-left: 0;
   display: block;
   position: relative;
   padding-left: 12px;
+  margin: 0;
 }
 
 & .aics-tree-leaf-node {
@@ -137,7 +131,6 @@ padding-left: 0;
 & .aics-tree-node {
   position: relative;
   border-left: 2px solid ${treeColor};
-  line-height: 24px;
 }
 
 & .aics-tree-node:last-child {
@@ -231,7 +224,7 @@ padding-left: 0;
   background-color: ${treeColor};
   background-clip: content-box;
   width: 2px;
-  height: 100%;
+  height: 18px;
 }
 
 `

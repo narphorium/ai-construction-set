@@ -33,6 +33,12 @@ Default.args = {
   table: simpleTable(),
 };
 
+export const Selected = Template.bind({});
+Selected.args = {
+  table: simpleTable(),
+  selected: true,
+};
+
 export const Blue = Template.bind({});
 Blue.args = {
   table: simpleTable(),

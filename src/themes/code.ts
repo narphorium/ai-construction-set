@@ -29,6 +29,11 @@ export const darkTheme = EditorView.theme({
     caretColor: cursor
   },
 
+  '.cm-scroller': {
+    'font-family': 'Roboto Mono, monospace',
+    'font-weight': 300
+  },
+
   '.cm-cursor, .cm-dropCursor': { borderLeftColor: cursor },
   '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': { backgroundColor: selection },
 
@@ -160,8 +165,8 @@ export const codeTheme: Extension = [darkTheme, syntaxHighlighting(darkHighlight
 
 export const codeColorTheme = (color: string): Extension => {
   const background = getColor(`${color}-900`) ?? unknown
-  const darkShade = getColor(`${color}-300`) ?? unknown
-  const lightShade = getColor(`${color}-600`) ?? unknown
+  const darkShade = getColor(`${color}-100`) ?? unknown
+  const lightShade = getColor(`dark-${color}-900`) ?? unknown
 
   const colorTheme = EditorView.theme({
     '&': {
@@ -171,6 +176,11 @@ export const codeColorTheme = (color: string): Extension => {
 
     '.cm-content': {
       caretColor: cursor
+    },
+
+    '.cm-scroller': {
+      'font-family': 'Roboto Mono, monospace',
+      'font-weight': 300
     },
 
     '.cm-cursor, .cm-dropCursor': { borderLeftColor: cursor },

@@ -1,9 +1,8 @@
 import React, { forwardRef, useEffect, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
-import theme from 'styled-theming'
 import { type Selectable, type Span } from '../data'
 import { themedIcon } from '../themes/icons'
-import { fontWeight, selectedVariants, textColor } from '../themes/theme'
+import { fontWeight, spanBackgroundColor, spanTextColor, textColor } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface ContentSpanProps extends SelectableProps {
@@ -38,44 +37,24 @@ const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span,
       dangerouslySetInnerHTML={{ __html: span.content }}></span>
 })
 
-const spanBackgroundColor = selectedVariants('mode', {
-  default: {
-    unselected: { light: 'transparent', dark: 'transparent' },
-    selected: { light: 'yellow-600', dark: 'rgb(73 69 61)' }
-  },
-  blue: {
-    unselected: { light: 'transparent', dark: 'transparent' },
-    selected: { light: 'rgb(253 235 184)', dark: 'rgb(73 69 61)' }
-  }
-})
-
-const selectedChildSpanColor = theme('mode', {
-  light: '#222',
-  dark: '#ffde98'
-})
-
 const backgroundImage = (props: any): string | undefined => {
   return props.span.icon !== undefined ? themedIcon(props.span.icon, textColor)(props) : 'none'
 }
 
 const headerFontWeight = (props: any): string => {
-  return fontWeight(props) + 100
+  return fontWeight(props) + 200
 }
 
 export const ContentSpan = styled(ContentSpanComponent)`
-  color: ${textColor};
+  color: ${spanTextColor};
   background-color: ${spanBackgroundColor};
 
   padding: ${(props: any) => props.span.icon !== undefined ? '0 0 0 24px' : '0'};
   background-image: ${backgroundImage};
   background-repeat: no-repeat;
 
-  .selected & {
-    color: ${selectedChildSpanColor} !important;
-  }
-
   a {
-    color: ${textColor};
+    color: ${spanTextColor};
   }
   &.aics-paragraph-header {
     font-weight: ${headerFontWeight};

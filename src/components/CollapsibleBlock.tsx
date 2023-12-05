@@ -163,8 +163,12 @@ export const ListLayoutItem = styled(CollapsibleBlock)`
   margin: 0;
   color: ${textColor};
   background-color: ${backgroundColor};
-  border-width: 0 0 1px 0;
-  border-bottom: 1px solid ${borderColor};
+  border-style: solid;
+  border-color: ${borderColor};
+  border-top-width: 0;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-right-width: 1px;
   border-radius: 0;
 
   & .aics-paragraph:first-child,
@@ -182,10 +186,10 @@ export const ListLayoutItem = styled(CollapsibleBlock)`
   &:first-child {
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
+      border-top-width: 1px;
   }
 
   &:last-child {
-      border-bottom: none;
       border-bottom-right-radius: 4px;
       border-bottom-left-radius: 4px;
   }

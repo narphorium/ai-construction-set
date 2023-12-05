@@ -2,7 +2,6 @@ import React, { forwardRef, useContext, useEffect, type ForwardedRef } from 'rea
 import { styled } from 'styled-components'
 import { type List } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { borderColor } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface ListLayoutProps extends SelectableProps {
@@ -24,9 +23,5 @@ export const ListLayoutComponent = forwardRef(function ListLayout ({ className, 
 })
 
 export const ListLayout = styled(ListLayoutComponent)`
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 4px;
-    margin: 4px 0;
-    border-color: ${borderColor};
+margin: 4px 0;
 `
