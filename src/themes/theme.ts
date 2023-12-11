@@ -54,3 +54,24 @@ export const themedVariant = (name: string) => {
     return value
   }
 }
+
+type ThemeObject = Record<string, any>
+
+function mergeThemeObject (source: ThemeObject, target: ThemeObject): ThemeObject {
+  const result: ThemeObject = { ...source }
+  for (const key in target) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (target.hasOwnProperty(key)) {
+      if (typeof target[key] === 'object' && target[key] !== null && !Array.isArray(target[key])) {
+        result[key] = mergeThemeObject(result[key] ?? {}, target[key])
+      } else {
+        result[key] = target[key]
+      }
+    }
+  }
+  return result
+}
+
+export const extendTheme = (base: DefaultTheme, extension: DefaultTheme): DefaultTheme => {
+  return mergeThemeObject(base, extension)
+}
