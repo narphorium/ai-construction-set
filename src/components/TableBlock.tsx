@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { type Paragraph, type Table, type TableRow } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { themedIcon } from '../themes/icons'
-import { fadedTextColor, hoverColor } from '../themes/theme'
+import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface TableBlockProps extends SelectableProps {
@@ -44,7 +44,7 @@ width: 100%;
 }
 
 .aics-table-row:hover > div {
-  background-color: ${hoverColor};
+  background-color: ${themedVariant('hoverColor')};
 }
 
 .aics-table-row:first-child {
@@ -76,7 +76,7 @@ width: 100%;
 
   text-align: left;
   padding: 2px 16px 0 24px;
-  color: ${fadedTextColor};
+  color: ${themedVariant('fadedTextColor')};
   font-size: 9.5pt;
   font-weight: 500;
   width: 1%;
@@ -102,14 +102,14 @@ width: 100%;
 }
 
 .aics-table-header.aics-content-span-text {
-  background-image: ${themedIcon('text', fadedTextColor)};
+  background-image: ${themedIcon('text', themedVariant('fadedTextColor'))};
 }
 
 .aics-table-header.aics-content-span-number {
-  background-image: ${themedIcon('number', fadedTextColor)};
+  background-image: ${themedIcon('number', themedVariant('fadedTextColor'))};
 }
 
 .aics-table-header.aics-content-span-date {
-  background-image: ${themedIcon('date', fadedTextColor)};
+  background-image: ${themedIcon('date', themedVariant('fadedTextColor'))};
 }
 `

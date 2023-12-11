@@ -1,7 +1,7 @@
 import React, { type Dispatch, type SetStateAction } from 'react'
 import { styled } from 'styled-components'
 import { themedIcon } from '../themes/icons'
-import { buttonBgColor, buttonHoverBgColor, buttonPulseBgColor, defaultFont, fadedTextColor, textColor } from '../themes/theme'
+import { themedVariant } from '../themes/theme'
 import { getClasses, type PaginatedProps } from './Base'
 
 export interface PaginationProps extends PaginatedProps {
@@ -77,16 +77,16 @@ text-align: left;
     vertical-align: top;
     line-height: 22px;
     margin: 0 8px;
-    font-family: ${defaultFont};
+    font-family: ${themedVariant('fontFamily')};
     font-size: 10pt;
-    color: ${textColor};
+    color: ${themedVariant('textColor')};
 }
   
 button {
     border: 0;
-    background-color: ${buttonBgColor};
+    background-color: ${themedVariant('buttonBgColor')};
     border-radius: 4px;
-    color: ${fadedTextColor};
+    color: ${themedVariant('fadedTextColor')};
     margin: 0 1px;
     width: 22px;
     height: 22px;
@@ -104,7 +104,7 @@ button.aics-button-group-end {
 }
   
 button:hover {
-    background-color: ${buttonHoverBgColor};
+    background-color: ${themedVariant('buttonHoverBgColor')};
 }
   
 button:focus {
@@ -122,18 +122,18 @@ button.pulse1 {
 @keyframes pulse1 {
     0% {}
     50% {
-      background-color: ${buttonPulseBgColor};
+      background-color: ${themedVariant('buttonPulseBgColor')};
     }
     100% {}
 }
 
 .aics-pagination-previous {
-  background-image: ${themedIcon('small-chevron-left', textColor)};
+  background-image: ${themedIcon('small-chevron-left', themedVariant('textColor'))};
   background-position: 0 1px;
 }
 
 .aics-pagination-next {
-  background-image: ${themedIcon('small-chevron-right', textColor)};
+  background-image: ${themedIcon('small-chevron-right', themedVariant('textColor'))};
   background-position: 2px 1px;
 }
 `

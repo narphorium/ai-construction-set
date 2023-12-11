@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useContext, useEffect, type ForwardedRe
 import { styled } from 'styled-components'
 import { type Paragraph } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { defaultFont, spanBackgroundColor, spanTextColor } from '../themes/theme'
+import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface ParagraphBlockProps extends SelectableProps {
@@ -33,13 +33,13 @@ const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className,
 })
 
 export const ParagraphBlock = styled(ParagraphBlockComponent)`
-font-family: ${defaultFont};
+font-family: ${themedVariant('fontFamily')};
   font-size: 11pt;
   margin: 12px 16px;
 
 
   &.selected > span {
-    color: ${spanTextColor};
-    background-color: ${spanBackgroundColor};
+    color: ${themedVariant('spanTextColor')};
+    background-color: ${themedVariant('spanBackgroundColor')};
   }
 `

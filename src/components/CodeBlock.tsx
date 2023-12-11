@@ -2,11 +2,10 @@ import { python } from '@codemirror/lang-python'
 import { type ViewUpdate } from '@codemirror/view'
 import CodeMirror, { type Extension } from '@uiw/react-codemirror'
 import React, { forwardRef, type ForwardedRef, type MouseEvent } from 'react'
-import { styled } from 'styled-components'
-import theme from 'styled-theming'
+import { styled, useTheme } from 'styled-components'
 import { type Code } from '../data/Code'
 import { codeColorTheme, codeTheme } from '../themes/code'
-import { getColor } from '../themes/colors'
+import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface CodeBlockProps extends SelectableProps {
@@ -19,11 +18,12 @@ export interface CodeBlockProps extends SelectableProps {
 
 const CodeBlockComponent = forwardRef(function CodeBlock (
   { className, code, extensions, selected, onSelected, onClick, onChange, variant, editable, key }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const getTheme = (): Extension => {
+  const theme = useTheme()
+  const getTheme = (): Extension[] => {
     if (code.variant !== undefined) {
-      return codeColorTheme(code.variant)
+      return codeColorTheme(theme, code.variant)
     }
-    return codeTheme
+    return codeTheme(theme)
   }
 
   const handleClick = (e: MouseEvent<HTMLDivElement>): void => {
@@ -60,13 +60,8 @@ const CodeBlockComponent = forwardRef(function CodeBlock (
   )
 })
 
-const backgroundColor = theme('mode', {
-  light: getColor('slate-200'),
-  dark: getColor('slate-100')
-})
-
 export const CodeBlock = styled(CodeBlockComponent)`
-  background-color: ${backgroundColor};
+  background-color: ${themedVariant('codeBackgroundColor')};
   font-size: 9.5pt;
   padding: 0;
   border-radius: 4px;

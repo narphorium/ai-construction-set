@@ -1,4 +1,4 @@
-import { getColor } from './colors'
+import { getColor } from './theme'
 
 export const smallChevronRight = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0 0 0)" d="M522-480 333-669l51-51 240 240-240 240-51-51 189-189Z"/></svg>'
 
@@ -60,7 +60,8 @@ export const themedIcon = (icon: ThemeArgument, color: ThemeArgument) => {
       if (typeof color === 'function') {
         colorCode = color(props)
       } else {
-        colorCode = getColor(color)
+        console.log('icon props', props)
+        colorCode = getColor(props.theme.colors, color)
       }
 
       if (colorCode !== undefined && colorCode.startsWith('#')) {

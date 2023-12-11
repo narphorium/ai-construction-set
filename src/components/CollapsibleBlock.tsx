@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { type Collapsible } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { themedIcon } from '../themes/icons'
-import { backgroundColor, borderColor, defaultFont, textColor } from '../themes/theme'
+import { themedVariant } from '../themes/theme'
 import { getClasses, type CollapsibleProps, type SelectableProps } from './Base'
 
 export interface CollapsibleBlockProps extends SelectableProps, CollapsibleProps {
@@ -102,7 +102,7 @@ position: relative;
     left: 4px;
     background-color: transparent;
     border: none;
-    color: ${textColor};
+    color: ${themedVariant('textColor')};
     padding: 0;
     margin: 0;
     font-size: 11pt;
@@ -123,7 +123,7 @@ position: relative;
       display: inline-block;
       width: 20px;
       height: 20px;
-      background-image: ${themedIcon('chevron-right', textColor)};
+      background-image: ${themedIcon('chevron-right', themedVariant('textColor'))};
       background-repeat: no-repeat;
     }
   }
@@ -132,7 +132,7 @@ position: relative;
     display: inline-block;
     margin: 2px 0;
     padding-left: 22px;
-    font-family: ${defaultFont};
+    font-family: ${themedVariant('fontFamily')};
     font-size: 11pt;
     user-select: none;
     position: relative;
@@ -161,10 +161,10 @@ position: relative;
 export const ListLayoutItem = styled(CollapsibleBlock)`
   padding: 4px 0;
   margin: 0;
-  color: ${textColor};
-  background-color: ${backgroundColor};
+  color: ${themedVariant('textColor')};
+  background-color: ${themedVariant('contentBackgroundColor')};
   border-style: solid;
-  border-color: ${borderColor};
+  border-color: ${themedVariant('borderColor')};
   border-top-width: 0;
   border-bottom-width: 1px;
   border-left-width: 1px;

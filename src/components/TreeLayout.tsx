@@ -1,11 +1,9 @@
 import React, { forwardRef, useCallback, useContext, type ForwardedRef } from 'react'
 import styled from 'styled-components'
-import theme from 'styled-theming'
 import { Tree, type Base, type Selectable } from '../data'
 import { SelectedVisitor } from '../data/Visitor'
 import { BlockFactoryContext, NestedPaginationContext } from '../hooks'
-import { getColor } from '../themes/colors'
-import { defaultFont, textColor } from '../themes/theme'
+import { themedVariant } from '../themes/theme'
 import { getClasses, type PaginatedProps } from './Base'
 import { Pagination } from './Pagination'
 
@@ -71,16 +69,6 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
   }
 })
 
-export const treeColor = theme('mode', {
-  light: getColor('gray-800'),
-  dark: getColor('slate-400')
-})
-
-export const selectedTreeColor = theme('mode', {
-  light: getColor('yellow-200'),
-  dark: getColor('yellow-400')
-})
-
 export const TreeLayout = styled(TreeLayoutComponent)`
 position: relative;
 margin-top: 12px;
@@ -99,12 +87,12 @@ padding-left: 0;
 }
 
 & .aics-tree-title > label {
-  font-family: ${defaultFont};
+  font-family: ${themedVariant('fontFamily')};
   font-size: 12pt;
   font-weight: 500;
   line-height: 24px;
   vertical-align: middle;
-  color: ${textColor};
+  color: ${themedVariant('textColor')};
   margin-right: 8px;
 }
 
@@ -130,7 +118,7 @@ padding-left: 0;
 
 & .aics-tree-node {
   position: relative;
-  border-left: 2px solid ${treeColor};
+  border-left: 2px solid ${themedVariant('treeColor')};
 }
 
 & .aics-tree-node:last-child {
@@ -146,7 +134,7 @@ padding-left: 0;
   left: -2px;
   width: 10px;
   height: 25px;
-  border: solid ${treeColor};
+  border: solid ${themedVariant('treeColor')};
   border-width: 0 0 2px 2px;
   border-bottom-left-radius: 6px;
 }
@@ -169,7 +157,7 @@ padding-left: 0;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: ${treeColor};
+  background: ${themedVariant('treeColor')};
   z-index: 2;
 }
 
@@ -180,7 +168,7 @@ padding-left: 0;
   border-radius: 50%;
   z-index: 2;
 
-  border: 2px solid ${treeColor};
+  border: 2px solid ${themedVariant('treeColor')};
   left: -4px;
   top: 9px;
   width: 6px;
@@ -193,25 +181,25 @@ padding-left: 0;
 &
   > .selected
   > .aics-tree-title::before {
-  background-color: ${selectedTreeColor};
+  background-color: ${themedVariant('selectedTreeColor')};
 }
 
 & .before-selected {
-  border-color: ${selectedTreeColor};
+  border-color: ${themedVariant('selectedTreeColor')};
 }
 
 &.selected
   > .aics-tree-control
   > span {
-    border-color: ${selectedTreeColor};
+    border-color: ${themedVariant('selectedTreeColor')};
 }
 
 & > .selected::after {
-  background: ${selectedTreeColor};
+  background: ${themedVariant('selectedTreeColor')};
 }
 
 & > .selected::before {
-  border-color: ${selectedTreeColor};
+  border-color: ${themedVariant('selectedTreeColor')};
   z-index: 1;
 }
 
@@ -221,7 +209,7 @@ padding-left: 0;
   position: absolute;
   top: 18px;
   left: 0;
-  background-color: ${treeColor};
+  background-color: ${themedVariant('treeColor')};
   background-clip: content-box;
   width: 2px;
   height: 18px;

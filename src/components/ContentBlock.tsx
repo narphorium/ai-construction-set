@@ -2,7 +2,7 @@ import React, { forwardRef, useContext, useEffect, type ForwardedRef, type Mouse
 import { styled } from 'styled-components'
 import { type Content } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { backgroundColor, borderColor, defaultFont, fontWeight, textColor } from '../themes/theme'
+import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface ContentBlockProps extends SelectableProps {
@@ -31,13 +31,13 @@ export const ContentBlockComponent = forwardRef(function ContentBlock ({ classNa
 })
 
 export const ContentBlock = styled(ContentBlockComponent)`
-font-family: ${defaultFont};
-font-weight: ${fontWeight};
+font-family: ${themedVariant('fontFamily')};
+font-weight: ${themedVariant('fontWeight')};
 border-width: 1px;
 border-style: solid;
 border-radius: 4px;
 margin: 4px 0;
-color: ${textColor};
-background-color: ${backgroundColor};
-border-color: ${borderColor};
+color: ${themedVariant('textColor')};
+background-color: ${themedVariant('contentBackgroundColor')};
+border-color: ${themedVariant('borderColor')};
 `
