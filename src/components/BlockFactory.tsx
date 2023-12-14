@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { type ComponentType, type ForwardRefExoticComponent, type PropsWithoutRef, type RefAttributes } from 'react'
 import { Code, Collapsible, Content, List, ListItem, Paragraph, Selectable, Span, Table, Tree, type Base } from '../data'
 import { NestedPaginationProvider } from '../hooks'
+import { type BaseProps, type CollapsibleProps, type PaginatedProps, type SelectableProps } from './Base'
 import { CodeBlock } from './CodeBlock'
 import { CollapsibleBlock, ListLayoutItem } from './CollapsibleBlock'
 import { ContentBlock } from './ContentBlock'
@@ -94,43 +95,76 @@ export class DefaultBlockFactory implements BlockFactory {
     return Array.from(classNames)
   };
 
+  withCascadingVariants <TProps extends BaseProps>(
+    Component: ComponentType<TProps>,
+    params: { block: Base }
+  ): ForwardRefExoticComponent<PropsWithoutRef<TProps> & RefAttributes<HTMLDivElement>> {
+    return withCascadingVariants(Component, params)
+  }
+
+  withSelectable <TProps extends SelectableProps>(
+    Component: ComponentType<TProps>,
+    params: { block: Selectable }
+  ): ((props: TProps) => JSX.Element) {
+    return withSelectable(Component, params)
+  }
+
+  withCollapsible <TProps extends CollapsibleProps>(
+    Component: ComponentType<TProps>,
+    params: { block: Collapsible }
+  ): ((props: TProps) => JSX.Element) {
+    return withCollapsible(Component, params)
+  }
+
+  withPageable <TProps extends PaginatedProps>(
+    Component: ComponentType<TProps>,
+    params: {
+      tree: Tree
+    }
+  ) {
+    return function WithPageable (props: TProps): JSX.Element {
+      Component = withPageable(Component, params)
+      return <Component {...props} />
+    }
+  }
+
   buildCollapsible (block: Collapsible): JSX.Element {
-    const CollapsibleBlockWithVariant = withCascadingVariants(CollapsibleBlock, { block })
-    const CollapsibleBlockWithCollapsible = withCollapsible(CollapsibleBlockWithVariant, { block })
-    const CollapsibleBlockWithRef = withSelectable(CollapsibleBlockWithCollapsible, { block })
+    const CollapsibleBlockWithVariant = this.withCascadingVariants(CollapsibleBlock, { block })
+    const CollapsibleBlockWithCollapsible = this.withCollapsible(CollapsibleBlockWithVariant, { block })
+    const CollapsibleBlockWithRef = this.withSelectable(CollapsibleBlockWithCollapsible, { block })
     return <CollapsibleBlockWithRef
             content={block}
             key={block.uuid}/>
   }
 
   buildListItem (block: ListItem): JSX.Element {
-    const ListItemWithVariant = withCascadingVariants(ListLayoutItem, { block })
-    const ListItemWithCollapsible = withCollapsible(ListItemWithVariant, { block })
-    const BlockListItemWithRef = withSelectable(ListItemWithCollapsible, { block })
+    const ListItemWithVariant = this.withCascadingVariants(ListLayoutItem, { block })
+    const ListItemWithCollapsible = this.withCollapsible(ListItemWithVariant, { block })
+    const BlockListItemWithRef = this.withSelectable(ListItemWithCollapsible, { block })
     return <BlockListItemWithRef
             content={block}
             key={block.uuid}/>
   }
 
   buildContent (block: Content): JSX.Element {
-    const ContentBlockWithVariant = withCascadingVariants(ContentBlock, { block })
-    const ContentBlockWithRef = withSelectable(ContentBlockWithVariant, { block })
+    const ContentBlockWithVariant = this.withCascadingVariants(ContentBlock, { block })
+    const ContentBlockWithRef = this.withSelectable(ContentBlockWithVariant, { block })
     return <ContentBlockWithRef
             content={block}
             key={block.uuid} />
   }
 
   buildSection (block: Paragraph): JSX.Element {
-    const ContentSectionWithVariant = withCascadingVariants(ParagraphBlock, { block })
-    const ContentSectionWithRef = withSelectable(ContentSectionWithVariant, { block })
+    const ContentSectionWithVariant = this.withCascadingVariants(ParagraphBlock, { block })
+    const ContentSectionWithRef = this.withSelectable(ContentSectionWithVariant, { block })
     return <ContentSectionWithRef
             paragraph={block}
             key={block.uuid} />
   }
 
   buildCode (block: Code): JSX.Element {
-    const CodeSectionWithVariant = withCascadingVariants(CodeBlock, { block })
-    const CodeSectionWithRef = withSelectable(CodeSectionWithVariant, { block })
+    const CodeSectionWithVariant = this.withCascadingVariants(CodeBlock, { block })
+    const CodeSectionWithRef = this.withSelectable(CodeSectionWithVariant, { block })
     return <CodeSectionWithRef
             code={block}
             editable={false}
@@ -138,7 +172,7 @@ export class DefaultBlockFactory implements BlockFactory {
   }
 
   buildList (block: List): JSX.Element {
-    const BlockListWithVariant = withCascadingVariants(ListLayout, { block })
+    const BlockListWithVariant = this.withCascadingVariants(ListLayout, { block })
     return <BlockListWithVariant
             list={block}
             selected={false}
@@ -146,24 +180,24 @@ export class DefaultBlockFactory implements BlockFactory {
   }
 
   buildSpan (block: Span): JSX.Element {
-    const ContentSpanWithRef = withSelectable(ContentSpan, { block })
-    const ContentSpanWithVariant = withCascadingVariants(ContentSpanWithRef, { block })
+    const ContentSpanWithRef = this.withSelectable(ContentSpan, { block })
+    const ContentSpanWithVariant = this.withCascadingVariants(ContentSpanWithRef, { block })
     return <ContentSpanWithVariant
             span={block}
             key={block.uuid} />
   }
 
   buildSelectable (block: Selectable): JSX.Element {
-    const SentinalWithVariant = withCascadingVariants(SentinalView, { block })
-    const SentinalWithRef = withSelectable(SentinalWithVariant, { block })
+    const SentinalWithVariant = this.withCascadingVariants(SentinalView, { block })
+    const SentinalWithRef = this.withSelectable(SentinalWithVariant, { block })
     return <SentinalWithRef
             sentinal={block}
             key={block.uuid} />
   }
 
   buildTree (tree: Tree): JSX.Element {
-    const PageableTreeLayout = withPageable(TreeLayout, { tree })
-    const TreeLayoutWithVariant = withCascadingVariants(PageableTreeLayout, { block: tree })
+    const PageableTreeLayout = this.withPageable(TreeLayout, { tree })
+    const TreeLayoutWithVariant = this.withCascadingVariants(PageableTreeLayout, { block: tree })
     const level = this.getTreeLevel(tree)
     // Every top-level component has a nested pagination provider
     if (level === 1) {
@@ -185,7 +219,7 @@ export class DefaultBlockFactory implements BlockFactory {
   }
 
   buildTable (block: Table): JSX.Element {
-    const TableWithVariant = withCascadingVariants(TableBlock, { block })
+    const TableWithVariant = this.withCascadingVariants(TableBlock, { block })
     return <TableWithVariant
             table={block}
             key={block.uuid} />
