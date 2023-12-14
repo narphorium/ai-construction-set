@@ -18,7 +18,10 @@ export const darkTheme = extendTheme(lightTheme, {
       980: '#eaeff9'
     }
   },
-  fontWeight: 300,
+  fontWeight: {
+    default: 300,
+    blue: 300
+  },
   backgroundColor: '#34363b',
   contentBackgroundColor: {
     default: {

@@ -128,12 +128,12 @@ button.pulse1 {
 }
 
 .aics-pagination-previous {
-  background-image: ${themedIcon('small-chevron-left', themedVariant('textColor'))};
+  background-image: ${themedIcon('chevron-left', 20, themedVariant('textColor'))};
   background-position: 0 1px;
 }
 
 .aics-pagination-next {
-  background-image: ${themedIcon('small-chevron-right', themedVariant('textColor'))};
+  background-image: ${themedIcon('chevron-right', 20, themedVariant('textColor'))};
   background-position: 2px 1px;
 }
 `

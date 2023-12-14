@@ -38,25 +38,20 @@ const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span,
 })
 
 const backgroundImage = (props: any): string | undefined => {
-  return props.span.icon !== undefined ? themedIcon(props.span.icon, themedVariant('textColor'))(props) : 'none'
-}
-
-const headerFontWeight = (props: any): string => {
-  return themedVariant('fontWeight')(props) + 200
+  const icon = themedVariant('spanIcon')(props)
+  return icon !== undefined ? themedIcon(icon, 12, themedVariant('textColor'))(props) : 'none'
 }
 
 export const ContentSpan = styled(ContentSpanComponent)`
   color: ${themedVariant('spanTextColor')};
   background-color: ${themedVariant('spanBackgroundColor')};
 
-  padding: ${(props: any) => props.span.icon !== undefined ? '0 0 0 24px' : '0'};
+  padding: ${(props: any) => themedVariant('spanIcon')(props) !== undefined ? '0 0 0 24px' : '0'};
   background-image: ${backgroundImage};
   background-repeat: no-repeat;
+  font-weight: ${themedVariant('spanFontWeight')};
 
   a {
     color: ${themedVariant('spanTextColor')};
-  }
-  &.aics-paragraph-header {
-    font-weight: ${headerFontWeight};
   }
 `

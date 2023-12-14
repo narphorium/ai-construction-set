@@ -123,7 +123,7 @@ position: relative;
       display: inline-block;
       width: 20px;
       height: 20px;
-      background-image: ${themedIcon('chevron-right', themedVariant('textColor'))};
+      background-image: ${themedIcon('chevron-right', 20, themedVariant('textColor'))};
       background-repeat: no-repeat;
     }
   }
