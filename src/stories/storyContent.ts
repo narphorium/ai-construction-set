@@ -60,6 +60,12 @@ export const simpleList = (): List => {
   return list
 }
 
+export const listInContent = (): Content => {
+  const content = new Content(getGUID())
+  content.children.push(simpleList())
+  return content
+}
+
 export const singleItemList = (): List => {
   const list = new List(getGUID())
   list.items.push(plainListItem('Collapsible Item'))

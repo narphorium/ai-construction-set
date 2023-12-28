@@ -1,13 +1,29 @@
-import React, { forwardRef, useContext, type ComponentType, type ForwardedRef } from 'react'
+import React, { forwardRef, useContext, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react'
 import { type Base } from '../data'
 import { BlockFactoryContext } from '../hooks'
 import { type BaseProps } from './Base'
 
-export const withCascadingVariants = <TProps extends BaseProps>(
-  Component: ComponentType<TProps>,
+export function withCascadingVariants<P extends BaseProps, C extends ComponentClass<P>> (
+  Component: C & ComponentType<P>,
   params: { block: Base }
-): React.ForwardRefExoticComponent<React.PropsWithoutRef<TProps> & React.RefAttributes<HTMLDivElement>> => {
-  return forwardRef(function WithCascadingVariants (props: TProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+): ForwardRefExoticComponent<Omit<ComponentPropsWithoutRef<C> & { ref?: Ref<InstanceType<C>> }, keyof BaseProps>>
+
+export function withCascadingVariants<P extends BaseProps & { ref?: Ref<any> }> (
+  Component: ForwardRefExoticComponent<P>,
+  params: { block: Base }
+): ForwardRefExoticComponent<Omit<P, keyof BaseProps>>
+
+export function withCascadingVariants<P extends BaseProps> (
+  Component: FunctionComponent<P>,
+  params: { block: Base }
+): ForwardRefExoticComponent<Omit<P, keyof BaseProps>>
+
+export function withCascadingVariants <P extends BaseProps> (
+  Component: ComponentType<P>,
+  params: { block: Base }
+): any {
+  const WithCascadingVariants = forwardRef(function (props, ref): JSX.Element {
+    const baseProps = props as P
     const { factory } = useContext(BlockFactoryContext)
 
     let currentBlock: Base | undefined = params.block
@@ -18,21 +34,27 @@ export const withCascadingVariants = <TProps extends BaseProps>(
       }
       currentBlock = factory?.getParent(currentBlock)
     }
-    const variant = props.variant ?? parentVariant ?? 'default'
+    const variant = baseProps.variant ?? parentVariant ?? 'default'
 
     const getClasses = (): string[] => {
       let classes: string[] = []
-      if (props.className !== undefined) {
-        if (typeof props.className === 'string') {
-          classes.push(props.className)
-        } else if (Array.isArray(props.className)) {
-          classes = classes.concat(props.className)
+      if (baseProps.className !== undefined) {
+        if (typeof baseProps.className === 'string') {
+          classes.push(baseProps.className)
+        } else if (Array.isArray(baseProps.className)) {
+          classes = classes.concat(baseProps.className)
         }
       }
       classes.push(`variant-${variant}`)
       return classes
     }
 
-    return <Component ref={ref} variant={variant} classNames={getClasses()} {...props} />
+    return <Component {...baseProps} ref={ref} variant={variant} classNames={getClasses()} />
   })
+
+  const componentName = Component.displayName ?? Component.name ?? 'Component'
+  WithCascadingVariants.displayName = `withCascadingVariants(${componentName})`
+  return WithCascadingVariants
 }
+
+export default withCascadingVariants
