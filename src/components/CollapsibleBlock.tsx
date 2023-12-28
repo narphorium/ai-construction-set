@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, type ForwardedRef } from 'react'
+import React, { forwardRef, useCallback, useContext, useEffect, useRef, type ForwardedRef } from 'react'
 import { styled } from 'styled-components'
 import { type Collapsible } from '../data'
 import { BlockFactoryContext } from '../hooks'
@@ -10,7 +10,7 @@ export interface CollapsibleBlockProps extends SelectableProps, CollapsibleProps
   content: Collapsible
 }
 
-export const CollapsibleBlockComponent = function CollapsibleBlock ({ className, content, collapsed, selected, onToggle, onSelected, onTransitionEnd, variant, key }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, content, collapsed, selected, onToggle, onSelected, onTransitionEnd, variant, key }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const inner = useRef<HTMLDivElement>(null)
 
@@ -54,7 +54,7 @@ export const CollapsibleBlockComponent = function CollapsibleBlock ({ className,
     }
   }
 
-  return (<div className={getClasses('aics-collapsible-block', className, content.classNames, () => collapsed === true ? ['collapsed'] : [])}>
+  return (<div ref={ref} className={getClasses('aics-collapsible-block', className, content.classNames, () => collapsed === true ? ['collapsed'] : [])}>
       <div className="aics-collapsible-block-header">
         <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
         <div className="aics-collapsible-block-title" onClick={handleClick}>{ content.name }</div>
@@ -66,7 +66,9 @@ export const CollapsibleBlockComponent = function CollapsibleBlock ({ className,
       </div>
     </div>
   )
-}
+})
+
+CollapsibleBlockComponent.displayName = 'CollapsibleBlock'
 
 export const CollapsibleBlock = styled(CollapsibleBlockComponent)`
 position: relative;
@@ -88,7 +90,7 @@ position: relative;
 
   & > .aics-collapsible-block-header {
     position: relative;
-    font-size: 11pt;
+    font-size: ${themedVariant('fontSize')};
 
     > .aics-collapsible-block-control ::before {
       transition: all 0.2s;
@@ -133,7 +135,7 @@ position: relative;
     margin: 2px 0;
     padding-left: 22px;
     font-family: ${themedVariant('fontFamily')};
-    font-size: 11pt;
+    font-size: ${themedVariant('fontSize')};
     user-select: none;
     position: relative;
 
@@ -145,11 +147,11 @@ position: relative;
   & .aics-collapsible-block-content {
     overflow: hidden;
     margin: 4px 16px;
-    font-size: 10pt;
+    font-size: ${themedVariant('fontSize')};
   }
 
   & .aics-collapsible-block-inner {
-    font-size: 10pt;
+    font-size: ${themedVariant('fontSize')};
     transition: margin-top ease 0.2s;
 
     > .aics-collapsible-block {

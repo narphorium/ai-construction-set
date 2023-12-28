@@ -15,3 +15,5 @@ export const SentinalView = forwardRef(function SentinalView ({ sentinal, select
 
   return <div ref={ref} className="aics-sentinal"></div>
 })
+
+SentinalView.displayName = 'SentinalView'

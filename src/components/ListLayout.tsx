@@ -22,6 +22,8 @@ export const ListLayoutComponent = forwardRef(function ListLayout ({ className, 
     </div>
 })
 
+ListLayoutComponent.displayName = 'ListLayout'
+
 export const ListLayout = styled(ListLayoutComponent)`
 margin: 4px 0;
 `

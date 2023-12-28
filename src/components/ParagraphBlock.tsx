@@ -32,14 +32,16 @@ const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className,
   </div>
 })
 
+ParagraphBlockComponent.displayName = 'ParagraphBlock'
+
 export const ParagraphBlock = styled(ParagraphBlockComponent)`
 font-family: ${themedVariant('fontFamily')};
-  font-size: 11pt;
-  margin: 12px 16px;
+font-size: ${themedVariant('fontSize')};
+margin: 12px 16px;
 
 
-  &.selected > span {
-    color: ${themedVariant('spanTextColor')};
-    background-color: ${themedVariant('spanBackgroundColor')};
-  }
+&.selected > span {
+  color: ${themedVariant('spanTextColor')};
+  background-color: ${themedVariant('spanBackgroundColor')};
+}
 `

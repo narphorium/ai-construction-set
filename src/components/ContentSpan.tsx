@@ -10,7 +10,7 @@ export interface ContentSpanProps extends SelectableProps {
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span, selected, onSelected, onClick, variant, key }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
+export const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span, selected, onSelected, onClick, variant, key }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
   useEffect(() => {
     if (onSelected !== undefined) {
       onSelected(selected as boolean)
@@ -36,6 +36,8 @@ const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span,
       onClick={handleClick(span)}
       dangerouslySetInnerHTML={{ __html: span.content }}></span>
 })
+
+ContentSpanComponent.displayName = 'ContentSpan'
 
 const backgroundImage = (props: any): string | undefined => {
   const icon = themedVariant('spanIcon')(props)

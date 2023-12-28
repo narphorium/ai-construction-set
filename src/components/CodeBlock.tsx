@@ -60,6 +60,8 @@ const CodeBlockComponent = forwardRef(function CodeBlock (
   )
 })
 
+CodeBlockComponent.displayName = 'CodeBlock'
+
 export const CodeBlock = styled(CodeBlockComponent)`
   background-color: ${themedVariant('codeBackgroundColor')};
   font-size: 9.5pt;

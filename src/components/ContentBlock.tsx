@@ -30,6 +30,8 @@ export const ContentBlockComponent = forwardRef(function ContentBlock ({ classNa
     </div>
 })
 
+ContentBlockComponent.displayName = 'ContentBlock'
+
 export const ContentBlock = styled(ContentBlockComponent)`
 font-family: ${themedVariant('fontFamily')};
 font-weight: ${themedVariant('fontWeight')};
@@ -40,4 +42,8 @@ margin: 4px 0;
 color: ${themedVariant('textColor')};
 background-color: ${themedVariant('contentBackgroundColor')};
 border-color: ${themedVariant('borderColor')};
+
+> .aics-list {
+  margin: 8px 12px;
+}
 `

@@ -69,6 +69,8 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
   }
 })
 
+TreeLayoutComponent.displayName = 'TreeLayout'
+
 export const TreeLayout = styled(TreeLayoutComponent)`
 position: relative;
 margin-top: 12px;

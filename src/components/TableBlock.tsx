@@ -33,6 +33,8 @@ export const TableBlockComponent = forwardRef(function TableBlock ({ className, 
   </div>
 })
 
+TableBlockComponent.displayName = 'TableBlock'
+
 export const TableBlock = styled(TableBlockComponent)`
 display: grid;
 grid-template-columns: min-content 1fr;
