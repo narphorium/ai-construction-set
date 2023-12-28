@@ -47,7 +47,6 @@ export const themedIcon = (icon: ThemeArgument, size: SizeArgument, color: Theme
       if (typeof color === 'function') {
         colorCode = color(props)
       } else {
-        console.log('icon props', props)
         colorCode = getColor(props.theme.colors, color)
       }
 
