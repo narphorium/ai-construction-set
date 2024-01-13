@@ -1,5 +1,4 @@
 export const lightTheme = {
-  mode: 'light',
   colors: {
     gray: {
       50: '#0c0c0c',
@@ -155,9 +154,6 @@ export const lightTheme = {
       20: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0 0 0)" d="M522-480 333-669l51-51 240 240-240 240-51-51 189-189Z"/></svg>',
       24: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0 0 0)" d="m535.847-480-189-189L384-706.153 610.153-480 384-253.847 346.847-291l189-189Z"/></svg>'
     },
-    tool: {
-      12: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0 0 0)" d="M731.076-165.155 520.23-376.001l47.229-47.229 210.846 210.845-47.229 47.23Zm-522.538 0-47.229-47.23L422.77-473.846 343-553.616l-34.923 34.923-45.461-45.846v65l-22.923 22.923L135.77-580.539l22.923-22.923h65l-30.23-30.845 116.305-116.306q13.923-13.923 32.154-21.769 18.23-7.846 39.538-7.846 21.307 0 39.538 7.846 18.23 7.846 32.153 21.769l-73.922 72.922 43.923 43.923-32.923 32.923 79.77 79.77 93.386-93.385q-7.693-14.154-11.27-28.116-3.577-13.961-3.577-30.269 0-50 35.231-85.231 35.23-35.23 85.23-35.23 11.692 0 22.769 2.231 11.077 2.23 21.769 6.461l-78.923 78.923 67.231 67.23 78.922-78.922q4.847 9.692 6.77 21.269 1.923 11.577 1.923 23.269 0 49.999-35.231 84.73-35.23 34.73-85.23 34.73-16.308 0-30.27-3.269-13.961-3.269-28.115-11.577L208.538-165.155Z"/></svg>'
-    },
     text: {
       12: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0, 0, 0)" d="M164.001-278.616v-51.999h391.998v51.999H164.001Zm0-175.385v-51.998h631.998v51.998H164.001Zm0-175.384v-51.999h631.998v51.999H164.001Z"/></svg>'
     },
@@ -169,11 +165,16 @@ export const lightTheme = {
     }
   },
   fontFamily: {
-    default: '"Inter", Helvetica, Arial, sans-serif',
-    blue: '"Inter", Helvetica, Arial, sans-serif'
+    default: '"Inter", Helvetica, Arial, sans-serif'
+  },
+  spanFontFamily: {
+    default: 'inherit'
   },
   fontSize: {
     default: '11pt'
+  },
+  spanFontSize: {
+    default: 'inherit'
   },
   fontWeight: {
     default: 400
@@ -183,20 +184,12 @@ export const lightTheme = {
     default: {
       unselected: 'white',
       selected: 'yellow-600'
-    },
-    blue: {
-      unselected: 'blue-900',
-      selected: 'blue-700'
     }
   },
   spanBackgroundColor: {
     default: {
       unselected: 'transparent',
       selected: 'yellow-500'
-    },
-    blue: {
-      unselected: 'transparent',
-      selected: 'blue-600'
     }
   },
   buttonBgColor: {
@@ -215,18 +208,10 @@ export const lightTheme = {
     default: {
       unselected: 'gray-100',
       selected: 'gray-100'
-    },
-    blue: {
-      unselected: 'gray-100',
-      selected: 'gray-100'
     }
   },
   spanTextColor: {
     default: {
-      unselected: 'inherit',
-      selected: 'gray-100'
-    },
-    blue: {
       unselected: 'inherit',
       selected: 'gray-100'
     }
@@ -235,10 +220,6 @@ export const lightTheme = {
     default: {
       unselected: 'gray-700',
       selected: 'dark-yellow-900'
-    },
-    blue: {
-      unselected: 'dark-blue-900',
-      selected: 'blue-500'
     }
   },
   buttonTextColor: {
@@ -248,20 +229,12 @@ export const lightTheme = {
     default: {
       unselected: 'gray-800',
       selected: 'dark-yellow-900'
-    },
-    blue: {
-      unselected: 'blue-600',
-      selected: 'blue-500'
     }
   },
   hoverColor: {
     default: {
       unselected: 'gray-980',
       selected: 'yellow-400'
-    },
-    blue: {
-      unselected: 'blue-800',
-      selected: 'blue-700'
     }
   },
   treeColor: {
@@ -274,5 +247,11 @@ export const lightTheme = {
   spanFontWeight: {
     default: 'inherit',
     header: 'bold'
+  },
+  spanPadding: {
+    default: '0'
+  },
+  spanBorderRadius: {
+    default: '0'
   }
 }

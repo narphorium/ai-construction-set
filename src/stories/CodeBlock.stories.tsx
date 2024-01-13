@@ -13,8 +13,8 @@ export default {
 const Template = (args: CodeBlockProps) => {
   const { factory } = useContext(BlockFactoryContext)
   
-  if (args.variant !== undefined) {
-    args.code.variant = args.variant;
+  if (args.theme !== undefined) {
+    args.code.theme = args.theme;
   }
   const content = new Content(getGUID());
   content.children.push(args.code);
@@ -33,6 +33,6 @@ Default.args = {
 export const Blue = Template.bind({});
 Blue.args = {
   code: simplePythonCode(),
-  variant: 'blue',
+  theme: 'blue',
 };
 

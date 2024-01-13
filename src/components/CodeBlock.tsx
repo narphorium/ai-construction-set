@@ -20,6 +20,7 @@ const CodeBlockComponent = forwardRef(function CodeBlock (
   { className, code, extensions, selected, onSelected, onClick, onChange, variant, editable, key }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const theme = useTheme()
   const getTheme = (): Extension[] => {
+    // FIXME: This needs to use the theme instead of the variant
     if (code.variant !== undefined) {
       return codeColorTheme(theme, code.variant)
     }

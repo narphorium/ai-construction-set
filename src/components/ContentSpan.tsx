@@ -41,17 +41,20 @@ ContentSpanComponent.displayName = 'ContentSpan'
 
 const backgroundImage = (props: any): string | undefined => {
   const icon = themedVariant('spanIcon')(props)
-  return icon !== undefined ? themedIcon(icon, 12, themedVariant('textColor'))(props) : 'none'
+  return icon !== undefined ? themedIcon(icon, 12, themedVariant('spanTextColor'))(props) : 'none'
 }
 
 export const ContentSpan = styled(ContentSpanComponent)`
   color: ${themedVariant('spanTextColor')};
   background-color: ${themedVariant('spanBackgroundColor')};
-
-  padding: ${(props: any) => themedVariant('spanIcon')(props) !== undefined ? '0 0 0 24px' : '0'};
+  border-radius: ${themedVariant('spanBorderRadius')};
+  padding: ${themedVariant('spanPadding')};
   background-image: ${backgroundImage};
   background-repeat: no-repeat;
+  background-position: 4px 1px;
+  font-family: ${themedVariant('spanFontFamily')};
   font-weight: ${themedVariant('spanFontWeight')};
+  font-size: ${themedVariant('spanFontSize')};
 
   a {
     color: ${themedVariant('spanTextColor')};

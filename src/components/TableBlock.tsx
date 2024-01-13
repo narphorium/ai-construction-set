@@ -104,14 +104,14 @@ width: 100%;
 }
 
 .aics-table-header.aics-content-span-text {
-  background-image: ${themedIcon('text', 20, themedVariant('fadedTextColor'))};
+  background-image: ${themedIcon('text', 12, themedVariant('fadedTextColor'))};
 }
 
 .aics-table-header.aics-content-span-number {
-  background-image: ${themedIcon('number', 20, themedVariant('fadedTextColor'))};
+  background-image: ${themedIcon('number', 12, themedVariant('fadedTextColor'))};
 }
 
 .aics-table-header.aics-content-span-date {
-  background-image: ${themedIcon('date', 20, themedVariant('fadedTextColor'))};
+  background-image: ${themedIcon('date', 12, themedVariant('fadedTextColor'))};
 }
 `

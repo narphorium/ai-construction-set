@@ -12,8 +12,8 @@ export default {
 const Template = (args: ListLayoutProps) => {
   const { factory } = useContext(BlockFactoryContext)
   
-  if (args.variant !== undefined) {
-    args.list.variant = args.variant;
+  if (args.theme !== undefined) {
+    args.list.theme = args.theme;
   }
 
   return (
@@ -47,5 +47,5 @@ Nested.args = {
 export const Blue = Template.bind({});
 Blue.args = {
   list: nestedList(),
-  variant: 'blue',
+  theme: 'blue',
 };

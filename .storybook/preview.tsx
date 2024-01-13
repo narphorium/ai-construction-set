@@ -5,8 +5,10 @@ import { withReactContext } from 'storybook-react-context';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { DefaultBlockFactory } from '../src/components/BlockFactory';
 import { BlockFactoryContext } from '../src/hooks';
-import { darkTheme } from "../src/themes/darkTheme";
-import { lightTheme } from "../src/themes/lightTheme";
+import { darkTheme as darkBlueTheme } from "../src/themes/blue/darkTheme";
+import { lightTheme as lightBlueTheme } from "../src/themes/blue/lightTheme";
+import { darkTheme } from "../src/themes/default/darkTheme";
+import { lightTheme } from "../src/themes/default/lightTheme";
 
 const GlobalStyles = createGlobalStyle`
 html,
@@ -31,6 +33,10 @@ const ExampleContainer = ({ children, context, ...props }) => {
   </ThemeProvider>;
 };
 
+const blockFactory = new DefaultBlockFactory();
+blockFactory.registerTheme('default', lightTheme, darkTheme)
+blockFactory.registerTheme('blue', lightBlueTheme, darkBlueTheme)
+
 /** @type { import('@storybook/react').Preview } */
 const preview = {
   parameters: {
@@ -49,7 +55,7 @@ const preview = {
   decorators: [
     withReactContext({
       Context: BlockFactoryContext,
-      initialState: { factory: new DefaultBlockFactory() },
+      initialState: { factory: blockFactory },
     }),
     ThemeProviderDecorator,
   ],

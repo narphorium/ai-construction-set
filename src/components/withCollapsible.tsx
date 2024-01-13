@@ -32,7 +32,7 @@ export function withCollapsible <P extends CollapsibleProps> (
       }
     }
     return <Component
-    {...collapsibleProps}
+        {...collapsibleProps}
         ref={ref}
         collapsed={collapsed}
         onToggle={toggleCollapsed}

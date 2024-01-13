@@ -12,8 +12,8 @@ export default {
 const Template = (args: ContentBlockProps) => {
   const { factory } = useContext(BlockFactoryContext)
 
-  if (args.variant !== undefined) {
-    args.content.variant = args.variant;
+  if (args.theme !== undefined) {
+    args.content.theme = args.theme;
   }
   if (args.selected !== undefined) {
     args.content.selected = args.selected;
@@ -50,18 +50,18 @@ List.args = {
 export const Blue = Template.bind({});
 Blue.args = {
   content: plainContent(),
-  variant: 'blue',
+  theme: 'blue',
 }
 
 export const BlueSelected = Template.bind({});
 BlueSelected.args = {
   content: plainContent(),
-  variant: 'blue',
+  theme: 'blue',
   selected: true,
 }
 
 export const BlueSections = Template.bind({});
 BlueSections.args = {
   content: namedSectionsContent(),
-  variant: 'blue',
+  theme: 'blue',
 }

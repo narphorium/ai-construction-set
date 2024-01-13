@@ -1,6 +1,7 @@
 export interface BaseProps {
   className?: string | string[]
   variant?: string
+  theme?: string
   key: any
 }
 

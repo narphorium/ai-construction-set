@@ -1,8 +1,7 @@
+import { extendTheme } from '../theme'
 import { lightTheme } from './lightTheme'
-import { extendTheme } from './theme'
 
 export const darkTheme = extendTheme(lightTheme, {
-  mode: 'dark',
   colors: {
     gray: {
       50: '#0b0b0c',
@@ -19,28 +18,19 @@ export const darkTheme = extendTheme(lightTheme, {
     }
   },
   fontWeight: {
-    default: 300,
-    blue: 300
+    default: 300
   },
   backgroundColor: '#34363b',
   contentBackgroundColor: {
     default: {
       unselected: 'gray-200',
       selected: 'dark-yellow-300'
-    },
-    blue: {
-      unselected: 'gray-200',
-      selected: 'dark-blue-300'
     }
   },
   spanBackgroundColor: {
     default: {
       unselected: 'transparent',
       selected: 'dark-yellow-300'
-    },
-    blue: {
-      unselected: 'transparent',
-      selected: 'dark-blue-300'
     }
   },
   buttonBgColor: {
@@ -59,30 +49,18 @@ export const darkTheme = extendTheme(lightTheme, {
     default: {
       unselected: 'gray-900',
       selected: 'yellow-500'
-    },
-    blue: {
-      unselected: 'blue-700',
-      selected: 'blue-500'
     }
   },
   spanTextColor: {
     default: {
       unselected: 'inherit',
       selected: 'yellow-500'
-    },
-    blue: {
-      unselected: 'inherit',
-      selected: 'blue-500'
     }
   },
   fadedTextColor: {
     default: {
       unselected: 'gray-500',
       selected: 'dark-yellow-500'
-    },
-    blue: {
-      unselected: 'dark-blue-600',
-      selected: 'dark-blue-400'
     }
   },
   buttonTextColor: {
@@ -92,18 +70,10 @@ export const darkTheme = extendTheme(lightTheme, {
     default: {
       unselected: 'gray-300',
       selected: 'dark-yellow-500'
-    },
-    blue: {
-      unselected: 'dark-blue-400',
-      selected: 'dark-blue-400'
     }
   },
   hoverColor: {
     default: {
-      unselected: '#2a2a2a',
-      selected: '#2a2a2a'
-    },
-    blue: {
       unselected: '#2a2a2a',
       selected: '#2a2a2a'
     }

@@ -75,3 +75,5 @@ function mergeThemeObject (source: ThemeObject, target: ThemeObject): ThemeObjec
 export const extendTheme = (base: DefaultTheme, extension: DefaultTheme): DefaultTheme => {
   return mergeThemeObject(base, extension)
 }
+
+// TODO: Create a more strongly typed Theme class

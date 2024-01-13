@@ -16,9 +16,8 @@ const Template = (args: TableBlockProps) => {
   const content = new Content(getGUID());
   content.children.push(args.table);
   
-  if (args.variant !== undefined) {
-    content.variant = args.variant;
-    args.table.variant = args.variant;
+  if (args.theme !== undefined) {
+    content.theme = args.theme;
   }
   
   return (
@@ -42,6 +41,6 @@ Selected.args = {
 export const Blue = Template.bind({});
 Blue.args = {
   table: simpleTable(),
-  variant: 'blue',
+  theme: 'blue',
 };
 

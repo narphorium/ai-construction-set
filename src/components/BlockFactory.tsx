@@ -11,11 +11,11 @@ import { ParagraphBlock } from './ParagraphBlock'
 import { SentinalView } from './SentinalView'
 import { TableBlock } from './TableBlock'
 import { TreeLayout } from './TreeLayout'
-import { withCascadingVariants } from './withCascadingVariants'
 import { withCollapsible } from './withCollapsible'
 import { withPageable } from './withPageable'
 import { withRef } from './withRef'
 import { withSelectable } from './withSelectable'
+import { withTheme } from './withTheme'
 
 export type BlockBuilder = (block: Base) => JSX.Element
 
@@ -23,6 +23,7 @@ export interface BlockFactory {
   build: (block: Base, parent?: Base) => JSX.Element
   buildAll: (blocks: Base[], parent?: Base) => JSX.Element[]
   registerBuilder: (target_class: string, builder: BlockBuilder) => void
+  registerTheme: (name: string, lightTheme: any, darkTheme: any) => void
   getParent: (block: Base) => Base | undefined
   setParent: (block: Base, parent: Base) => void
 }
@@ -31,6 +32,7 @@ export class DefaultBlockFactory implements BlockFactory {
   block_types: any[] = []
   builders: BlockBuilder[] = []
   parentByBlock: Map<Base, Base> = new Map<Base, Base>()
+  themes: Map<string, [any, any]> = new Map<string, [any, any]>()
 
   constructor () {
     this.registerBuilder(ListItem, this.buildListItem as BlockBuilder)
@@ -48,6 +50,10 @@ export class DefaultBlockFactory implements BlockFactory {
   registerBuilder (targetClass: any, builder: BlockBuilder): void {
     this.block_types.push(targetClass)
     this.builders.push(builder.bind(this))
+  }
+
+  registerTheme (name: string, lightTheme: any, darkTheme: any): void {
+    this.themes.set(name, [lightTheme, darkTheme])
   }
 
   getParent (block: Base): Base | undefined {
@@ -96,11 +102,18 @@ export class DefaultBlockFactory implements BlockFactory {
     return Array.from(classNames)
   };
 
-  withCascadingVariants <TProps extends BaseProps>(
+  withTheme <TProps extends BaseProps>(
     Component: ForwardRefExoticComponent<TProps>,
     params: { block: Base }
   ): any {
-    return withCascadingVariants(Component, params)
+    if (params.block.theme !== undefined) {
+      const theme = this.themes.get(params.block.theme)
+      if (theme === undefined) {
+        throw new Error(`Theme not found: ${params.block.theme}`)
+      }
+      return withTheme(Component, { lightTheme: theme[0], darkTheme: theme[1] })
+    }
+    return Component
   }
 
   withSelectable <TProps extends SelectableProps>(
@@ -128,8 +141,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildCollapsible (block: Collapsible): JSX.Element {
     const CollapsibleBlockWithRef = withRef(CollapsibleBlock)
-    const CollapsibleBlockWithVariant = this.withCascadingVariants(CollapsibleBlockWithRef, { block })
-    const CollapsibleBlockWithCollapsible = this.withCollapsible(CollapsibleBlockWithVariant, { block })
+    const CollapsibleBlockWithTheme = this.withTheme(CollapsibleBlockWithRef, { block })
+    const CollapsibleBlockWithCollapsible = this.withCollapsible(CollapsibleBlockWithTheme, { block })
     const CollapsibleBlockWithSelectable = this.withSelectable(CollapsibleBlockWithCollapsible, { block })
     return <CollapsibleBlockWithSelectable
             content={block}
@@ -138,8 +151,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildListItem (block: ListItem): JSX.Element {
     const ListItemWithRef = withRef(ListLayoutItem)
-    const ListItemWithVariant = this.withCascadingVariants(ListItemWithRef, { block })
-    const ListItemWithCollapsible = this.withCollapsible(ListItemWithVariant, { block })
+    const ListItemWithTheme = this.withTheme(ListItemWithRef, { block })
+    const ListItemWithCollapsible = this.withCollapsible(ListItemWithTheme, { block })
     const ListItemWithSelectable = this.withSelectable(ListItemWithCollapsible, { block })
     return <ListItemWithSelectable
             content={block}
@@ -148,8 +161,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildContent (block: Content): JSX.Element {
     const ContentBlockWithRef = withRef(ContentBlock)
-    const ContentBlockWithVariant = this.withCascadingVariants(ContentBlockWithRef, { block })
-    const ContentBlockWithSelectable = this.withSelectable(ContentBlockWithVariant, { block })
+    const ContentBlockWithTheme = this.withTheme(ContentBlockWithRef, { block })
+    const ContentBlockWithSelectable = this.withSelectable(ContentBlockWithTheme, { block })
     return <ContentBlockWithSelectable
             content={block}
             key={block.uuid} />
@@ -157,8 +170,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildSection (block: Paragraph): JSX.Element {
     const ContentSectionWithRef = withRef(ParagraphBlock)
-    const ContentSectionWithVariant = this.withCascadingVariants(ContentSectionWithRef, { block })
-    const ContentSectionWithSelectable = this.withSelectable(ContentSectionWithVariant, { block })
+    const ContentSectionWithTheme = this.withTheme(ContentSectionWithRef, { block })
+    const ContentSectionWithSelectable = this.withSelectable(ContentSectionWithTheme, { block })
     return <ContentSectionWithSelectable
             paragraph={block}
             key={block.uuid} />
@@ -166,8 +179,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildCode (block: Code): JSX.Element {
     const CodeSectionWithRef = withRef(CodeBlock)
-    const CodeSectionWithVariant = this.withCascadingVariants(CodeSectionWithRef, { block })
-    const CodeSectionWithSelectable = this.withSelectable(CodeSectionWithVariant, { block })
+    const CodeSectionWithTheme = this.withTheme(CodeSectionWithRef, { block })
+    const CodeSectionWithSelectable = this.withSelectable(CodeSectionWithTheme, { block })
     return <CodeSectionWithSelectable
             code={block}
             editable={false}
@@ -176,8 +189,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildList (block: List): JSX.Element {
     const ListLayoutWithRef = withRef(ListLayout)
-    const ListLayoutWithVariant = this.withCascadingVariants(ListLayoutWithRef, { block })
-    return <ListLayoutWithVariant
+    const ListLayoutWithTheme = this.withTheme(ListLayoutWithRef, { block })
+    return <ListLayoutWithTheme
             list={block}
             selected={false}
             key={block.uuid} />
@@ -185,8 +198,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildSpan (block: Span): JSX.Element {
     const ContentSpanWithRef = withRef(ContentSpan)
-    const ContentSpanWithVariant = this.withCascadingVariants(ContentSpanWithRef, { block })
-    const ContentSpanWithSelectable = this.withSelectable(ContentSpanWithVariant, { block })
+    const ContentSpanWithTheme = this.withTheme(ContentSpanWithRef, { block })
+    const ContentSpanWithSelectable = this.withSelectable(ContentSpanWithTheme, { block })
     return <ContentSpanWithSelectable
             span={block}
             key={block.uuid} />
@@ -194,8 +207,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildSelectable (block: Selectable): JSX.Element {
     const SentinalWithRef = withRef(SentinalView)
-    const SentinalWithVariant = this.withCascadingVariants(SentinalWithRef, { block })
-    const SentinalWithSelectable = this.withSelectable(SentinalWithVariant, { block })
+    const SentinalWithTheme = this.withTheme(SentinalWithRef, { block })
+    const SentinalWithSelectable = this.withSelectable(SentinalWithTheme, { block })
     return <SentinalWithSelectable
             sentinal={block}
             key={block.uuid} />
@@ -204,7 +217,7 @@ export class DefaultBlockFactory implements BlockFactory {
   buildTree (tree: Tree): JSX.Element {
     const TreeWithRef = withRef(TreeLayout)
     const PageableTreeLayout = this.withPageable(TreeWithRef, { tree })
-    const TreeLayoutWithVariant = this.withCascadingVariants(PageableTreeLayout, { block: tree })
+    const TreeLayoutWithTheme = this.withTheme(PageableTreeLayout, { block: tree })
     const level = this.getTreeLevel(tree)
     // Every top-level component has a nested pagination provider
     if (level === 1) {
@@ -212,13 +225,13 @@ export class DefaultBlockFactory implements BlockFactory {
                 pages={[1]}
                 numPages={[1]}
                 key={tree.uuid}>
-        <TreeLayoutWithVariant
+        <TreeLayoutWithTheme
             level={level}
             tree={tree}
             key={tree.uuid} />
       </NestedPaginationProvider>
     } else {
-      return <TreeLayoutWithVariant
+      return <TreeLayoutWithTheme
               level={level}
               tree={tree}
               key={tree.uuid} />
@@ -227,8 +240,8 @@ export class DefaultBlockFactory implements BlockFactory {
 
   buildTable (block: Table): JSX.Element {
     const TableWithRef = withRef(TableBlock)
-    const TableWithVariant = this.withCascadingVariants(TableWithRef, { block })
-    return <TableWithVariant
+    const TableWithTheme = this.withTheme(TableWithRef, { block })
+    return <TableWithTheme
             table={block}
             key={block.uuid} />
   }
