@@ -1,149 +1,130 @@
 export const lightTheme = {
   colors: {
     gray: {
-      50: '#0c0c0c',
-      100: '#191919',
-      200: '#333333',
-      300: '#4c4c4c',
-      400: '#666666',
-      500: '#7f7f7f',
-      600: '#999999',
-      700: '#b2b2b2',
-      800: '#cccccc',
-      900: '#e5e5e5',
-      980: '#f9f9f9'
+      1: '#fcfcfc',
+      2: '#f9f9f9',
+      3: '#f0f0f0',
+      4: '#e8e8e8',
+      5: '#e0e0e0',
+      6: '#d9d9d9',
+      7: '#cecece',
+      8: '#bbbbbb',
+      9: '#8d8d8d',
+      10: '#838383',
+      11: '#646464',
+      12: '#202020'
     },
     purple: {
-      100: '#5928cc',
-      200: '#7544e5',
-      300: '#9366ff',
-      400: '#a57fff',
-      500: '#b799ff',
-      600: '#c9b2ff',
-      700: '#dbccff',
-      800: '#ede5ff',
-      900: '#f6f2ff'
-    },
-    'dark-purple': {
-      100: '#151419',
-      200: '#282333',
-      300: '#3c354c',
-      400: '#493d66',
-      500: '#5b4c7f',
-      600: '#6e5b99',
-      700: '#806bb2',
-      800: '#927acc',
-      900: '#a589e5'
+      1: '#fdfcfe',
+      2: '#faf8ff',
+      3: '#f4f0fe',
+      4: '#ebe4ff',
+      5: '#e1d9ff',
+      6: '#d4cafe',
+      7: '#c2b5f5',
+      8: '#aa99ec',
+      9: '#6e56cf',
+      10: '#654dc4',
+      11: '#6550b9',
+      12: '#2f265f'
     },
     blue: {
-      100: '#287acc',
-      200: '#4495e5',
-      300: '#66b2ff',
-      400: '#7fbfff',
-      500: '#99ccff',
-      600: '#b2d8ff',
-      700: '#cce5ff',
-      800: '#e5f2ff',
-      900: '#f2f8ff'
-    },
-    'dark-blue': {
-      100: '#141619',
-      200: '#232b33',
-      300: '#35414c',
-      400: '#3d5166',
-      500: '#4c667f',
-      600: '#5b7a99',
-      700: '#6b8eb2',
-      800: '#7aa3cc',
-      900: '#89b7e5'
+      1: '#fbfdff',
+      2: '#f4faff',
+      3: '#e6f4fe',
+      4: '#d5efff',
+      5: '#c2e5ff',
+      6: '#acd8fc',
+      7: '#8ec8f6',
+      8: '#5eb1ef',
+      9: '#0090ff',
+      10: '#0588f0',
+      11: '#0d74ce',
+      12: '#113264'
     },
     green: {
-      100: '#28cc30',
-      200: '#44e54c',
-      300: '#66ff6d',
-      400: '#7fff85',
-      500: '#99ff9e',
-      600: '#b2ffb6',
-      700: '#ccffce',
-      800: '#e5ffe6',
-      900: '#f2fff2'
-    },
-    'dark-green': {
-      100: '#141914',
-      200: '#233324',
-      300: '#354c36',
-      400: '#3d663f',
-      500: '#4c7f4f',
-      600: '#5b995e',
-      700: '#6bb26e',
-      800: '#7acc7e',
-      900: '#89e58e'
+      1: '#fbfefb',
+      2: '#f5fbf5',
+      3: '#e9f6e9',
+      4: '#daf1db',
+      5: '#c9e8ca',
+      6: '#b2ddb5',
+      7: '#94ce9a',
+      8: '#65ba74',
+      9: '#46a758',
+      10: '#3e9b4f',
+      11: '#2a7e3b',
+      12: '#203c25'
     },
     yellow: {
-      100: '#cca028',
-      200: '#e5ba44',
-      300: '#ffd666',
-      400: '#ffdd7f',
-      500: '#ffe399',
-      600: '#ffeab2',
-      700: '#fff1cc',
-      800: '#fff8e5',
-      900: '#fffbf2'
-    },
-    'dark-yellow': {
-      100: '#191814',
-      200: '#332e23',
-      300: '#4c4635',
-      400: '#665b3d',
-      500: '#7f714c',
-      600: '#99885b',
-      700: '#b29f6b',
-      800: '#ccb67a',
-      900: '#e5cd89'
+      1: '#fefdfb',
+      2: '#fefbe9',
+      3: '#ffebc2',
+      4: '#ffe19c',
+      5: '#f8d584',
+      6: '#efc768',
+      7: '#e1b858',
+      8: '#e2a336',
+      9: '#ffc53d',
+      10: '#ffba18',
+      11: '#ab6400',
+      12: '#4f3422'
     },
     orange: {
-      100: '#cc5728',
-      200: '#e57244',
-      300: '#ff9166',
-      400: '#ffa37f',
-      500: '#ffb599',
-      600: '#ffc8b2',
-      700: '#ffdacc',
-      800: '#ffece5',
-      900: '#fff5f2'
-    },
-    'dark-orange': {
-      100: '#191514',
-      200: '#332823',
-      300: '#4c3c35',
-      400: '#66483d',
-      500: '#7f5a4c',
-      600: '#996d5b',
-      700: '#b27f6b',
-      800: '#cc917a',
-      900: '#e5a389'
+      1: '#fefcfb',
+      2: '#fff7ed',
+      3: '#ffefd6',
+      4: '#ffdfb5',
+      5: '#ffd19a',
+      6: '#ffc182',
+      7: '#f5ae73',
+      8: '#ec9455',
+      9: '#f76b15',
+      10: '#ef5f00',
+      11: '#cc4e00',
+      12: '#582d1d'
     },
     red: {
-      100: '#cc2836',
-      200: '#e54452',
-      300: '#ff6672',
-      400: '#ff7f8a',
-      500: '#ff99a1',
-      600: '#ffb2b8',
-      700: '#ffccd0',
-      800: '#ffe5e7',
-      900: '#fff2f3'
+      1: '#fffcfc',
+      2: '#fff7f7',
+      3: '#feebec',
+      4: '#ffdbdc',
+      5: '#ffcdce',
+      6: '#fdbdbe',
+      7: '#f4a9aa',
+      8: '#eb8e90',
+      9: '#e5484d',
+      10: '#dc3e42',
+      11: '#ce2c31',
+      12: '#641723'
     },
-    'dark-red': {
-      100: '#191414',
-      200: '#332324',
-      300: '#4c3537',
-      400: '#663d40',
-      500: '#7f4c50',
-      600: '#995b60',
-      700: '#b26b71',
-      800: '#cc7a81',
-      900: '#e58991'
+    white: {
+      1: 'rgba(255, 255, 255, 0.05)',
+      2: 'rgba(255, 255, 255, 0.1)',
+      3: 'rgba(255, 255, 255, 0.15)',
+      4: 'rgba(255, 255, 255, 0.2)',
+      5: 'rgba(255, 255, 255, 0.3)',
+      6: 'rgba(255, 255, 255, 0.4)',
+      7: 'rgba(255, 255, 255, 0.5)',
+      8: 'rgba(255, 255, 255, 0.6)',
+      9: 'rgba(255, 255, 255, 0.7)',
+      10: 'rgba(255, 255, 255, 0.8)',
+      11: 'rgba(255, 255, 255, 0.9)',
+      12: 'rgba(255, 255, 255, 0.95)'
+    },
+    black: {
+      1: 'rgba(0, 0, 0, 0.05)',
+      2: 'rgba(0, 0, 0, 0.1)',
+      3: 'rgba(0, 0, 0, 0.15)',
+      4: 'rgba(0, 0, 0, 0.2)',
+      5: 'rgba(0, 0, 0, 0.3)',
+      6: 'rgba(0, 0, 0, 0.4)',
+      7: 'rgba(0, 0, 0, 0.5)',
+      8: 'rgba(0, 0, 0, 0.6)',
+      9: 'rgba(0, 0, 0, 0.7)',
+      10: 'rgba(0, 0, 0, 0.8)',
+      11: 'rgba(0, 0, 0, 0.9)',
+      12: 'rgba(0, 0, 0, 0.95)'
     }
   },
   icons: {
@@ -183,75 +164,87 @@ export const lightTheme = {
   contentBackgroundColor: {
     default: {
       unselected: 'white',
-      selected: 'yellow-600'
+      selected: 'yellow-3'
     }
   },
   spanBackgroundColor: {
     default: {
       unselected: 'transparent',
-      selected: 'yellow-500'
+      selected: 'yellow-4'
     }
   },
   buttonBgColor: {
-    default: 'gray-900'
+    default: 'black-2'
   },
   buttonHoverBgColor: {
-    default: 'gray-800'
+    default: 'black-5'
   },
   buttonPulseBgColor: {
-    default: 'gray-700'
-  },
-  codeBackgroundColor: {
-    default: 'gray-200'
+    default: 'black-4'
   },
   textColor: {
     default: {
-      unselected: 'gray-100',
-      selected: 'gray-100'
+      unselected: 'gray-12',
+      selected: 'gray-12'
     }
   },
   spanTextColor: {
     default: {
       unselected: 'inherit',
-      selected: 'gray-100'
+      selected: 'gray-12'
     }
   },
   fadedTextColor: {
-    default: {
-      unselected: 'gray-700',
-      selected: 'dark-yellow-900'
-    }
+    default: 'black-5'
   },
   buttonTextColor: {
-    default: '#6e7071'
+    default: 'black-8'
   },
   borderColor: {
     default: {
-      unselected: 'gray-800',
-      selected: 'dark-yellow-900'
+      unselected: 'gray-6',
+      selected: 'yellow-5'
     }
   },
   hoverColor: {
-    default: {
-      unselected: 'gray-980',
-      selected: 'yellow-400'
-    }
+    default: 'black-1'
   },
   treeColor: {
-    default: 'gray-800'
+    default: 'gray-7'
   },
   selectedTreeColor: {
-    default: 'yellow-200'
+    default: 'yellow-6'
   },
   spanIcon: {},
   spanFontWeight: {
     default: 'inherit',
-    header: 'bold'
+    label: 'bold'
   },
   spanPadding: {
     default: '0'
   },
   spanBorderRadius: {
     default: '0'
+  },
+  codeBackgroundColor: {
+    default: 'gray-12'
+  },
+  codeFunctionColor: {
+    default: 'yellow-10'
+  },
+  codeStringColor: {
+    default: 'orange-8'
+  },
+  codeTextColor: {
+    default: 'blue-4'
+  },
+  codeConstantColor: {
+    default: 'green-10'
+  },
+  codeKeywordColor: {
+    default: 'purple-8'
+  },
+  codePanelBackgroundColor: {
+    default: 'black'
   }
 }

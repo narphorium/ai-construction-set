@@ -6,7 +6,8 @@ module.exports = {
     "extends": [
         "standard-with-typescript",
         "plugin:react/recommended",
-        "plugin:react-hooks/recommended"
+        "plugin:react-hooks/recommended",
+        "plugin:storybook/recommended"
     ],
     "ignorePatterns": [".eslintrc.cjs", "rollup.config.js", "vite.config.js", "**.stories.tsx", "**.mdx"],
     "overrides": [

@@ -10,44 +10,32 @@ export const lightTheme = extendTheme(defaultLightTheme, {
   },
   contentBackgroundColor: {
     default: {
-      unselected: 'blue-900',
-      selected: 'blue-700'
+      unselected: 'blue-2',
+      selected: 'blue-4'
     }
   },
   spanBackgroundColor: {
     default: {
       unselected: 'transparent',
-      selected: 'blue-600'
+      selected: 'blue-7'
     }
   },
   textColor: {
     default: {
-      unselected: 'gray-100',
-      selected: 'gray-100'
+      unselected: 'gray-12',
+      selected: 'gray-12'
     }
   },
   spanTextColor: {
     default: {
       unselected: 'inherit',
-      selected: 'gray-100'
-    }
-  },
-  fadedTextColor: {
-    default: {
-      unselected: 'dark-blue-900',
-      selected: 'blue-500'
+      selected: 'gray-12'
     }
   },
   borderColor: {
     default: {
-      unselected: 'blue-600',
-      selected: 'blue-500'
-    }
-  },
-  hoverColor: {
-    default: {
-      unselected: 'blue-800',
-      selected: 'blue-700'
+      unselected: 'blue-5',
+      selected: 'blue-6'
     }
   }
 })

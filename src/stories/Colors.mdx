@@ -1,9 +1,10 @@
 import { ColorPalette, Meta } from "@storybook/blocks";
+import { ThemedColorPalette } from "./ThemedColorPalette";
 import { ThemedColorItem } from "./ThemedColorItem";
 
 <Meta title="Colors" />
 
-<ColorPalette>
+<ThemedColorPalette theme="default">
   <ThemedColorItem name="gray" />
   <ThemedColorItem name="purple" />
   <ThemedColorItem name="blue" />
@@ -11,10 +12,6 @@ import { ThemedColorItem } from "./ThemedColorItem";
   <ThemedColorItem name="yellow" />
   <ThemedColorItem name="orange" />
   <ThemedColorItem name="red" />
-  <ThemedColorItem name="dark-purple" />
-  <ThemedColorItem name="dark-blue" />
-  <ThemedColorItem name="dark-green" />
-  <ThemedColorItem name="dark-yellow" />
-  <ThemedColorItem name="dark-orange" />
-  <ThemedColorItem name="dark-red" />
-</ColorPalette>
+  <ThemedColorItem name="white" />
+  <ThemedColorItem name="black" />
+</ThemedColorPalette>

@@ -24,7 +24,7 @@ export const namedSectionsContent = (): Content => {
   const section1 = new Paragraph(getGUID())
 
   const header1 = new Span(section1.uuid, 'Test Section: ')
-  header1.classNames.add('aics-paragraph-header')
+  header1.variant = 'label'
   section1.spans.push(header1)
 
   const span1 = new Span(getGUID(), 'Test Span')
@@ -35,7 +35,7 @@ export const namedSectionsContent = (): Content => {
   const section2 = new Paragraph(getGUID())
 
   const header2 = new Span(section1.uuid, 'Test Section: ')
-  header2.classNames.add('aics-paragraph-header')
+  header2.variant = 'label'
   section2.spans.push(header2)
 
   section2.selected = true

@@ -4,7 +4,7 @@ import CodeMirror, { type Extension } from '@uiw/react-codemirror'
 import React, { forwardRef, type ForwardedRef, type MouseEvent } from 'react'
 import { styled, useTheme } from 'styled-components'
 import { type Code } from '../data/Code'
-import { codeColorTheme, codeTheme } from '../themes/code'
+import { codeTheme } from '../themes/code'
 import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
@@ -20,9 +20,8 @@ const CodeBlockComponent = forwardRef(function CodeBlock (
   { className, code, extensions, selected, onSelected, onClick, onChange, variant, editable, key }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const theme = useTheme()
   const getTheme = (): Extension[] => {
-    // FIXME: This needs to use the theme instead of the variant
     if (code.variant !== undefined) {
-      return codeColorTheme(theme, code.variant)
+      return codeTheme(theme, code.variant)
     }
     return codeTheme(theme)
   }

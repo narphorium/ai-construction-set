@@ -8,6 +8,7 @@ const config = {
       "@storybook/addon-essentials",
       "@storybook/addon-interactions",
       "@storybook/addon-themes",
+      "@storybook/addon-mdx-gfm"
     ],
     framework: {
       name: "@storybook/react-vite",

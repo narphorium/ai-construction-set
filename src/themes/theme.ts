@@ -9,7 +9,7 @@ export const getColor = (theme: DefaultTheme, key: string): string | undefined =
   let shade: Shade = '500'
   if (name.includes('-')) {
     const parts = name.split('-')
-    if ((/\d{2,3}/gm).exec(parts[parts.length - 1]) !== null) {
+    if ((/\d{1,3}/gm).exec(parts[parts.length - 1]) !== null) {
       shade = parts.pop() as Shade
       name = parts.join('-')
     }

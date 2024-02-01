@@ -1,6 +1,10 @@
 import React, { type ForwardRefExoticComponent } from 'react'
 import { Code, Collapsible, Content, List, ListItem, Paragraph, Selectable, Span, Table, Tree, type Base } from '../data'
 import { NestedPaginationProvider } from '../hooks'
+import { darkTheme as darkBlueTheme } from '../themes/blue/darkTheme'
+import { lightTheme as lightBlueTheme } from '../themes/blue/lightTheme'
+import { darkTheme } from '../themes/default/darkTheme'
+import { lightTheme } from '../themes/default/lightTheme'
 import { type BaseProps, type CollapsibleProps, type PaginatedProps, type SelectableProps } from './Base'
 import { CodeBlock } from './CodeBlock'
 import { CollapsibleBlock, ListLayoutItem } from './CollapsibleBlock'
@@ -24,6 +28,7 @@ export interface BlockFactory {
   buildAll: (blocks: Base[], parent?: Base) => JSX.Element[]
   registerBuilder: (target_class: string, builder: BlockBuilder) => void
   registerTheme: (name: string, lightTheme: any, darkTheme: any) => void
+  getTheme: (name: string) => [any, any]
   getParent: (block: Base) => Base | undefined
   setParent: (block: Base, parent: Base) => void
 }
@@ -45,6 +50,9 @@ export class DefaultBlockFactory implements BlockFactory {
     this.registerBuilder(Selectable, this.buildSelectable as BlockBuilder)
     this.registerBuilder(Tree, this.buildTree as BlockBuilder)
     this.registerBuilder(Table, this.buildTable as BlockBuilder)
+
+    this.registerTheme('default', lightTheme, darkTheme)
+    this.registerTheme('blue', lightBlueTheme, darkBlueTheme)
   }
 
   registerBuilder (targetClass: any, builder: BlockBuilder): void {
@@ -54,6 +62,16 @@ export class DefaultBlockFactory implements BlockFactory {
 
   registerTheme (name: string, lightTheme: any, darkTheme: any): void {
     this.themes.set(name, [lightTheme, darkTheme])
+  }
+
+  getTheme (name: string): [any, any] {
+    if (name === '') {
+      name = 'default'
+    }
+    if (!this.themes.has(name)) {
+      throw new Error('Theme not found: ' + name)
+    }
+    return this.themes.get(name) as [any, any]
   }
 
   getParent (block: Base): Base | undefined {
@@ -146,6 +164,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const CollapsibleBlockWithSelectable = this.withSelectable(CollapsibleBlockWithCollapsible, { block })
     return <CollapsibleBlockWithSelectable
             content={block}
+            variant={block.variant}
             key={block.uuid}/>
   }
 
@@ -156,6 +175,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ListItemWithSelectable = this.withSelectable(ListItemWithCollapsible, { block })
     return <ListItemWithSelectable
             content={block}
+            variant={block.variant}
             key={block.uuid}/>
   }
 
@@ -165,6 +185,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ContentBlockWithSelectable = this.withSelectable(ContentBlockWithTheme, { block })
     return <ContentBlockWithSelectable
             content={block}
+            variant={block.variant}
             key={block.uuid} />
   }
 
@@ -174,6 +195,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ContentSectionWithSelectable = this.withSelectable(ContentSectionWithTheme, { block })
     return <ContentSectionWithSelectable
             paragraph={block}
+            variant={block.variant}
             key={block.uuid} />
   }
 
@@ -184,6 +206,7 @@ export class DefaultBlockFactory implements BlockFactory {
     return <CodeSectionWithSelectable
             code={block}
             editable={false}
+            variant={block.variant}
             key={block.uuid} />
   }
 
@@ -193,6 +216,7 @@ export class DefaultBlockFactory implements BlockFactory {
     return <ListLayoutWithTheme
             list={block}
             selected={false}
+            variant={block.variant}
             key={block.uuid} />
   }
 
@@ -202,6 +226,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ContentSpanWithSelectable = this.withSelectable(ContentSpanWithTheme, { block })
     return <ContentSpanWithSelectable
             span={block}
+            variant={block.variant}
             key={block.uuid} />
   }
 
@@ -211,6 +236,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const SentinalWithSelectable = this.withSelectable(SentinalWithTheme, { block })
     return <SentinalWithSelectable
             sentinal={block}
+            variant={block.variant}
             key={block.uuid} />
   }
 
@@ -228,6 +254,7 @@ export class DefaultBlockFactory implements BlockFactory {
         <TreeLayoutWithTheme
             level={level}
             tree={tree}
+            variant={tree.variant}
             key={tree.uuid} />
       </NestedPaginationProvider>
     } else {
@@ -243,6 +270,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const TableWithTheme = this.withTheme(TableWithRef, { block })
     return <TableWithTheme
             table={block}
+            variant={block.variant}
             key={block.uuid} />
   }
 };
