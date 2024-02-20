@@ -3,10 +3,6 @@ import { ThemeProvider } from 'styled-components'
 import { DarkModeContext } from '../hooks/DarkModeProvider'
 import { type BaseProps } from './Base'
 
-export interface BlockRef {
-  scrollIntoView: (args: any) => void
-}
-
 export const withTheme = <TProps extends BaseProps>(
   Component: ComponentType<TProps>,
   params: { lightTheme: any, darkTheme: any }
