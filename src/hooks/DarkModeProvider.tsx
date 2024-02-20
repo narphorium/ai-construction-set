@@ -1,11 +1,11 @@
 import { createContext } from 'react'
 
 interface DarkModeProps {
-  mode: string | undefined
-  setMode: (mode: string) => void
+  darkMode: boolean | undefined
+  setDarkMode: (mode: boolean) => void
 }
 
 export const DarkModeContext = createContext<DarkModeProps>({
-  mode: 'light',
-  setMode: (mode: string) => {}
+  darkMode: false,
+  setDarkMode: (mode: boolean) => {}
 })

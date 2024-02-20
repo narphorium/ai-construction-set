@@ -1,58 +1,85 @@
-import { withThemeFromJSXProvider } from "@storybook/addon-themes";
+
 import { DocsContainer } from '@storybook/blocks';
-import React, { useEffect, useState } from "react";
-import { withReactContext } from 'storybook-react-context';
+import React, { ComponentType } from "react";
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
+import { BaseProps } from '../src/components/Base';
 import { DefaultBlockFactory } from '../src/components/BlockFactory';
+import { withTheme } from '../src/components/withTheme';
 import { BlockFactoryContext } from '../src/hooks';
-import { DarkModeContext } from "../src/stories/DarkModeProvider";
-import { darkTheme } from "../src/themes/default/darkTheme";
-import { lightTheme } from "../src/themes/default/lightTheme";
+import { DarkModeContext } from "../src/hooks/DarkModeProvider";
+import useStorybookDarkMode from "../src/hooks/useStorybookDarkMode";
 
 const GlobalStyles = createGlobalStyle`
-html,
-.sbdocs-preview .docs-story {
-  background-color: ${(props) => props.theme.backgroundColor} !important;
-}
-`
-
-const ThemeProviderDecorator = withThemeFromJSXProvider({
-  themes: {
-    light: lightTheme,
-    dark: darkTheme,
-  },
-  defaultTheme: "light",
-  Provider: ThemeProvider,
-  GlobalStyles,
-})
+    html,
+    .sbdocs-preview .docs-story {
+      background-color: ${(props) => props.theme.backgroundColor} !important;
+    }
+    `
 
 const blockFactory = new DefaultBlockFactory()
 
 const ExampleContainer = ({ children, context, ...props }) => {
-  // TODO: Do I still need a theme provider here or is dark mode enough?
   const [lightTheme, darkTheme] = blockFactory.getTheme('default')
-  let theme = lightTheme
-  const [mode, setMode] = useState('light')
+  const [theme, setTheme] = React.useState(lightTheme)
+  const [darkMode, setDarkMode] = useStorybookDarkMode(context)
 
-  useEffect(() => {
-    if (context.store.globals.globals.theme === 'dark') {
-      setMode('dark')
-    } else {
-      setMode('light')
+  React.useEffect(() => {
+    if (darkMode != null) {
+      setTheme(darkMode ? darkTheme : lightTheme)
     }
-  }, [context.store.globals.globals.theme])
-
-  return <ThemeProvider theme={theme}>
-    <DarkModeContext.Provider value={{ mode: mode, setMode: (mode: string) => { setMode(mode) } }}>
+  }, [darkMode])
+  
+  return <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
+    <ThemeProvider theme={theme}>
     <BlockFactoryContext.Provider value={{ factory: blockFactory, setFactory: () => {} }}>
+    <GlobalStyles />
     <DocsContainer context={context} {...props}>{children}</DocsContainer>
-    </BlockFactoryContext.Provider> 
-    </DarkModeContext.Provider>
-  </ThemeProvider>;
+    </BlockFactoryContext.Provider>
+    </ThemeProvider>
+    </DarkModeContext.Provider>;
+};
+
+const withBackground = <TProps extends BaseProps>(Component: ComponentType<TProps>) => {
+  return (props: TProps) => {
+    return (
+      <>
+        <GlobalStyles />
+        <Component {...props} />
+      </>
+    )
+  }
+}
+
+const StoryDecorator = (Story, context) => {
+  const [lightTheme, darkTheme] = blockFactory.getTheme('default')
+  const [darkMode, setDarkMode] = useStorybookDarkMode(context)
+
+  const StoryWithBackground = withBackground(Story)
+  const StoryWithTheme = withTheme(StoryWithBackground, { lightTheme, darkTheme })
+
+  return <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
+    <BlockFactoryContext.Provider value={{ factory: blockFactory, setFactory: () => {} }}>
+    <StoryWithTheme key="theme" />
+    </BlockFactoryContext.Provider>
+    </DarkModeContext.Provider>;
 };
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
+  globalTypes: {
+    theme: {
+      description: 'Global setting for dark mode',
+      defaultValue: 'light',
+      toolbar: {
+        title: 'Theme',
+        items: [
+          {value: 'light', icon: 'sun', title: 'Light (default)'}, 
+          {value: 'dark', icon: 'moon', title: 'Dark'}
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
   parameters: {
     backgrounds: { disable: true },
     actions: { argTypesRegex: "^on[A-Z].*" },
@@ -67,11 +94,7 @@ const preview = {
     },
   },
   decorators: [
-    withReactContext({
-      Context: BlockFactoryContext,
-      initialState: { factory: blockFactory },
-    }),
-    ThemeProviderDecorator,
+    StoryDecorator
   ],
 };
   

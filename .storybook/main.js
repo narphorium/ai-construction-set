@@ -7,7 +7,6 @@ const config = {
       "@storybook/addon-links",
       "@storybook/addon-essentials",
       "@storybook/addon-interactions",
-      "@storybook/addon-themes",
       "@storybook/addon-mdx-gfm"
     ],
     framework: {
