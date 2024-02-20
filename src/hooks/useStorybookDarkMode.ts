@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function useStorybookDarkMode (context: any): [boolean, (value: boolean) => void] {
+export const useStorybookDarkMode = (context: any): [boolean, (value: boolean) => void] => {
   const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
@@ -19,5 +19,3 @@ function useStorybookDarkMode (context: any): [boolean, (value: boolean) => void
 
   return [darkMode, setDarkMode]
 }
-
-export default useStorybookDarkMode
