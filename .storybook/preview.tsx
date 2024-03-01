@@ -7,7 +7,7 @@ import { DefaultBlockFactory } from '../src/components/BlockFactory';
 import { withTheme } from '../src/components/withTheme';
 import { BlockFactoryContext } from '../src/hooks';
 import { DarkModeContext } from "../src/hooks/DarkModeProvider";
-import useStorybookDarkMode from "../src/hooks/useStorybookDarkMode";
+import { useStorybookDarkMode } from "../src/hooks/useStorybookDarkMode";
 
 const GlobalStyles = createGlobalStyle`
     html,

@@ -35,15 +35,15 @@ export const darkTheme = extendTheme(lightTheme, {
       1: '#0d1520',
       2: '#111927',
       3: '#0d2847',
-      4: '#003362',
-      5: '#004074',
+      4: '#334059',
+      5: '#4a5f79',
       6: '#104d87',
-      7: '#205d9e',
+      7: '#2f62a1',
       8: '#2870bd',
       9: '#0090ff',
       10: '#3b9eff',
       11: '#70b8ff',
-      12: '#c2e6ff'
+      12: '#b3d7f8'
     },
     green: {
       1: '#0e1511',
@@ -64,9 +64,9 @@ export const darkTheme = extendTheme(lightTheme, {
       2: '#1d180f',
       3: '#302008',
       4: '#3f2700',
-      5: '#3f3c35',
+      5: '#49453d',
       6: '#554624',
-      7: '#716545',
+      7: '#6d6651',
       8: '#897a56',
       9: '#fdba1f',
       10: '#ffc83b',
@@ -100,6 +100,20 @@ export const darkTheme = extendTheme(lightTheme, {
       10: '#ec5d5e',
       11: '#ff9592',
       12: '#ffd1d9'
+    },
+    highlight: {
+      1: 'rgba(113, 184, 255, 0.05)',
+      2: 'rgba(113, 184, 255, 0.1)',
+      3: 'rgba(113, 184, 255, 0.15)',
+      4: 'rgba(113, 184, 255, 0.2)',
+      5: 'rgba(113, 184, 255, 0.3)',
+      6: 'rgba(113, 184, 255, 0.4)',
+      7: 'rgba(113, 184, 255, 0.5)',
+      8: 'rgba(113, 184, 255, 0.6)',
+      9: 'rgba(113, 184, 255, 0.7)',
+      10: 'rgba(113, 184, 255, 0.8)',
+      11: 'rgba(113, 184, 255, 0.9)',
+      12: 'rgba(113, 184, 255, 0.95)'
     }
   },
   backgroundColor: '#2f3237',
@@ -116,13 +130,13 @@ export const darkTheme = extendTheme(lightTheme, {
     }
   },
   buttonBgColor: {
-    default: 'white-2'
+    default: 'highlight-2'
   },
   buttonHoverBgColor: {
-    default: 'white-4'
+    default: 'highlight-4'
   },
   buttonPulseBgColor: {
-    default: 'white-5'
+    default: 'highlight-5'
   },
   codeBackgroundColor: {
     default: 'gray-5'
@@ -140,10 +154,10 @@ export const darkTheme = extendTheme(lightTheme, {
     }
   },
   fadedTextColor: {
-    default: 'white-7'
+    default: 'highlight-7'
   },
   buttonTextColor: {
-    default: 'white-10'
+    default: 'highlight-10'
   },
   borderColor: {
     default: {
@@ -152,12 +166,18 @@ export const darkTheme = extendTheme(lightTheme, {
     }
   },
   hoverColor: {
-    default: 'white-1'
+    default: 'highlight-1'
   },
   treeColor: {
     default: 'gray-9'
   },
   selectedTreeColor: {
     default: 'yellow-11'
+  },
+  collapsibleTextColor: {
+    default: {
+      unselected: 'gray-12',
+      selected: 'yellow-11'
+    }
   }
 })

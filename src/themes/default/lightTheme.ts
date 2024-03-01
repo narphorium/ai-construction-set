@@ -33,8 +33,8 @@ export const lightTheme = {
       2: '#f4faff',
       3: '#e6f4fe',
       4: '#d5efff',
-      5: '#c2e5ff',
-      6: '#acd8fc',
+      5: '#c6d8ea',
+      6: '#a0c1e3',
       7: '#8ec8f6',
       8: '#5eb1ef',
       9: '#0090ff',
@@ -98,7 +98,7 @@ export const lightTheme = {
       11: '#ce2c31',
       12: '#641723'
     },
-    white: {
+    highlight: {
       1: 'rgba(255, 255, 255, 0.05)',
       2: 'rgba(255, 255, 255, 0.1)',
       3: 'rgba(255, 255, 255, 0.15)',
@@ -112,7 +112,7 @@ export const lightTheme = {
       11: 'rgba(255, 255, 255, 0.9)',
       12: 'rgba(255, 255, 255, 0.95)'
     },
-    black: {
+    shadow: {
       1: 'rgba(0, 0, 0, 0.05)',
       2: 'rgba(0, 0, 0, 0.1)',
       3: 'rgba(0, 0, 0, 0.15)',
@@ -174,13 +174,13 @@ export const lightTheme = {
     }
   },
   buttonBgColor: {
-    default: 'black-2'
+    default: 'shadow-2'
   },
   buttonHoverBgColor: {
-    default: 'black-5'
+    default: 'shadow-5'
   },
   buttonPulseBgColor: {
-    default: 'black-4'
+    default: 'shadow-4'
   },
   textColor: {
     default: {
@@ -195,10 +195,10 @@ export const lightTheme = {
     }
   },
   fadedTextColor: {
-    default: 'black-5'
+    default: 'shadow-5'
   },
   buttonTextColor: {
-    default: 'black-8'
+    default: 'shadow-8'
   },
   borderColor: {
     default: {
@@ -207,7 +207,7 @@ export const lightTheme = {
     }
   },
   hoverColor: {
-    default: 'black-1'
+    default: 'shadow-1'
   },
   treeColor: {
     default: 'gray-7'
@@ -246,5 +246,26 @@ export const lightTheme = {
   },
   codePanelBackgroundColor: {
     default: 'black'
+  },
+  collapsibleTextColor: {
+    default: 'gray-12'
+  },
+  collapsibleFontFamily: {
+    default: '"Inter", Helvetica, Arial, sans-serif'
+  },
+  collaspibleFontSize: {
+    default: 'inherit'
+  },
+  collapsibleFontWeight: {
+    default: 'inherit'
+  },
+  collapsiblePadding: {
+    default: '4px 16px'
+  },
+  collapsibleIcon: {
+    default: ''
+  },
+  collapsibleTitlePadding: {
+    default: '0 0 0 22px'
   }
 }
