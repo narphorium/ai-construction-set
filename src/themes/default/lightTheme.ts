@@ -194,6 +194,9 @@ export const lightTheme = {
       selected: 'gray-12'
     }
   },
+  secondaryTextColor: {
+    default: 'gray-11'
+  },
   fadedTextColor: {
     default: 'shadow-5'
   },
