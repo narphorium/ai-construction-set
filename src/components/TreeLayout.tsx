@@ -85,7 +85,7 @@ padding-left: 0;
 
 & .aics-tree-title {
   position: relative;
-  padding-left: 16px;
+  padding-left: 24px;
 }
 
 & .aics-tree-title > label {
@@ -106,12 +106,12 @@ padding-left: 0;
 & .aics-tree-node {
   display: block;
   position: relative;
-  padding-left: 12px;
-  margin: 0;
+  padding-left: 4px;
+  margin: 0 0 0 8px;
 }
 
 & .aics-tree-leaf-node {
-  padding-left: 26px;
+  padding-left: 24px;
 }
 
 & .aics-tree-node > .aics-tree {
@@ -132,18 +132,22 @@ padding-left: 0;
   display: block;
   position: absolute;
   z-index: -1;
-  top: -12px;
+  top: -19px;
   left: -2px;
   width: 10px;
-  height: 25px;
+  height: 32px;
   border: solid ${themedVariant('treeColor')};
   border-width: 0 0 2px 2px;
   border-bottom-left-radius: 6px;
 }
 
+.aics-tree-leaf-node::before {
+  top: -12px;
+}
+
 .aics-tree-node:nth-child(3)::before {
   top: -10px;
-  height: 23px;
+  height: 30px;
 }
 
 & .aics-tree-title:focus {
@@ -154,7 +158,7 @@ padding-left: 0;
   content: "";
   display: block;
   position: absolute;
-  top: 10px;
+  top: 17px;
   left: 9px;
   width: 8px;
   height: 8px;
@@ -171,7 +175,7 @@ padding-left: 0;
   z-index: 2;
 
   border: 2px solid ${themedVariant('treeColor')};
-  left: -4px;
+  left: 4px;
   top: 9px;
   width: 6px;
   height: 6px;
@@ -210,7 +214,7 @@ padding-left: 0;
   content: " ";
   position: absolute;
   top: 18px;
-  left: 0;
+  left: 8px;
   background-color: ${themedVariant('treeColor')};
   background-clip: content-box;
   width: 2px;
