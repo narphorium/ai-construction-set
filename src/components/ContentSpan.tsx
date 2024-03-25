@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, type ForwardedRef, type MouseEvent } from 'react'
+import React, { forwardRef, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
 import { type Selectable, type Span } from '../data'
 import { themedIcon } from '../themes/icons'
@@ -10,13 +10,7 @@ export interface ContentSpanProps extends SelectableProps {
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span, selected, onSelected, onClick, variant, key }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
-  useEffect(() => {
-    if (onSelected !== undefined) {
-      onSelected(selected as boolean)
-    }
-  }, [selected, onSelected])
-
+export const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span, selected, setSelected, onClick, variant, key }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
   const handleClick = (obj: Selectable) => (e: MouseEvent<HTMLDivElement>) => {
     if (onClick !== undefined) {
       onClick(e)

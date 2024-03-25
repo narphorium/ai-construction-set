@@ -6,12 +6,12 @@ export interface BaseProps {
 
 export interface SelectableProps extends BaseProps {
   selected?: boolean
-  onSelected?: (selected: boolean) => void
+  setSelected?: (selected: boolean) => void
 }
 
 export interface CollapsibleProps extends BaseProps {
   collapsed?: boolean
-  onToggle?: (collapsed: boolean) => void
+  setCollapsed?: (collapsed: boolean) => void
   onTransitionEnd?: () => void
 }
 

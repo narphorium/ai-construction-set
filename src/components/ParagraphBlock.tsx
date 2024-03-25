@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useContext, useEffect, type ForwardedRef, type MouseEvent } from 'react'
+import React, { forwardRef, useCallback, useContext, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
 import { type Paragraph } from '../data'
 import { BlockFactoryContext } from '../hooks'
@@ -10,14 +10,8 @@ export interface ParagraphBlockProps extends SelectableProps {
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className, paragraph, selected, onSelected, onClick, variant, key }: ParagraphBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className, paragraph, selected, setSelected, onClick, variant, key }: ParagraphBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
-
-  useEffect(() => {
-    if (onSelected !== undefined) {
-      onSelected(selected as boolean)
-    }
-  }, [selected, onSelected])
 
   const handleClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
     if (onClick !== undefined) {

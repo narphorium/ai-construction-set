@@ -86,7 +86,7 @@ button {
     border: 0;
     background-color: ${themedVariant('buttonBgColor')};
     border-radius: 4px;
-    color: ${themedVariant('fadedTextColor')};
+    color: ${themedVariant('secondaryTextColor')};
     margin: 0 1px;
     width: 22px;
     height: 22px;
@@ -128,12 +128,12 @@ button.pulse1 {
 }
 
 .aics-pagination-previous {
-  background-image: ${themedIcon('chevron-left', 20, themedVariant('textColor'))};
+  background-image: ${themedIcon('chevron-left', 20, themedVariant('secondaryTextColor'))};
   background-position: 0 1px;
 }
 
 .aics-pagination-next {
-  background-image: ${themedIcon('chevron-right', 20, themedVariant('textColor'))};
+  background-image: ${themedIcon('chevron-right', 20, themedVariant('secondaryTextColor'))};
   background-position: 2px 1px;
 }
 `

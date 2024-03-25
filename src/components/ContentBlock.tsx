@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext, useEffect, type ForwardedRef, type MouseEvent } from 'react'
+import React, { forwardRef, useContext, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
 import { type Content } from '../data'
 import { BlockFactoryContext } from '../hooks'
@@ -10,14 +10,8 @@ export interface ContentBlockProps extends SelectableProps {
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export const ContentBlockComponent = forwardRef(function ContentBlock ({ className, content, selected, onSelected, onClick, variant, key }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ContentBlockComponent = forwardRef(function ContentBlock ({ className, content, selected, setSelected, onClick, variant, key }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
-
-  useEffect(() => {
-    if (onSelected !== undefined) {
-      onSelected(selected as boolean)
-    }
-  }, [selected, onSelected])
 
   const handleClick = (e: MouseEvent<HTMLDivElement>): void => {
     if (onClick !== undefined) {

@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react'
+import React, { forwardRef, useState, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref, useEffect } from 'react'
 import { type Selectable } from '../data'
 import { getClasses, type SelectableProps } from './Base'
 
@@ -24,18 +24,26 @@ export function withSelectable <P extends SelectableProps> (
   const WithSelectable = forwardRef(function (props, ref): JSX.Element {
     const selectableProps = props as P
     const [selected, setSelected] = useState<boolean>(params.block.selected)
-    const handleSelected = (s: boolean): void => {
-      params.block.selected = s
+    useEffect(() => {
+      if (selectableProps.selected !== undefined) {
+        setSelected(selectableProps.selected)
+      }
+    }, [selectableProps.selected])
+    useEffect(() => {
+      params.block.selected = selected
+    }, [selected])
+    const handleSetSelected = (s: boolean): void => {
       setSelected(s)
-      if (selectableProps.onSelected !== undefined) {
-        selectableProps.onSelected(s)
+      // Bubble up to parent component if present
+      if (selectableProps.setSelected !== undefined) {
+        selectableProps.setSelected(s)
       }
     }
     return <Component
         {...selectableProps}
         ref={ref}
         selected={selected}
-        onSelected={handleSelected}
+        setSelected={handleSetSelected}
         className={getClasses(selectableProps.className, () => selected ? ['selected'] : [])} />
   })
 

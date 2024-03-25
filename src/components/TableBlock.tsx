@@ -11,7 +11,7 @@ export interface TableBlockProps extends SelectableProps {
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export const TableBlockComponent = forwardRef(function TableBlock ({ className, table, selected, onSelected, onClick, variant, key }: TableBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const TableBlockComponent = forwardRef(function TableBlock ({ className, table, selected, setSelected, onClick, variant, key }: TableBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
   const handleClick = (e: MouseEvent<HTMLDivElement>): void => {

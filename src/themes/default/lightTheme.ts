@@ -177,10 +177,10 @@ export const lightTheme = {
     default: 'shadow-2'
   },
   buttonHoverBgColor: {
-    default: 'shadow-5'
+    default: 'shadow-4'
   },
   buttonPulseBgColor: {
-    default: 'shadow-4'
+    default: 'shadow-5'
   },
   textColor: {
     default: {

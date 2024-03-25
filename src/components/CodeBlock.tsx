@@ -17,7 +17,7 @@ export interface CodeBlockProps extends SelectableProps {
 }
 
 const CodeBlockComponent = forwardRef(function CodeBlock (
-  { className, code, extensions, selected, onSelected, onClick, onChange, variant, editable, key }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+  { className, code, extensions, selected, setSelected, onClick, onChange, variant, editable, key }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const theme = useTheme()
   const getTheme = (): Extension[] => {
     if (code.variant !== undefined) {

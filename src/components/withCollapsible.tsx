@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react'
+import React, { forwardRef, useState, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref, useEffect } from 'react'
 import { type Collapsible } from '../data'
 import { getClasses, type CollapsibleProps } from './Base'
 
@@ -24,18 +24,26 @@ export function withCollapsible <P extends CollapsibleProps> (
   const WithCollapsible = forwardRef(function (props, ref): JSX.Element {
     const collapsibleProps = props as P
     const [collapsed, setCollapsed] = useState<boolean>(params.block.collapsed)
-    const toggleCollapsed = (c: boolean): void => {
-      params.block.collapsed = c
-      setCollapsed(!c)
-      if (collapsibleProps.onToggle !== undefined) {
-        collapsibleProps.onToggle(c)
+    useEffect(() => {
+      if (collapsibleProps.collapsed !== undefined) {
+        setCollapsed(collapsibleProps.collapsed)
+      }
+    }, [collapsibleProps.collapsed])
+    useEffect(() => {
+      params.block.collapsed = collapsed
+    }, [collapsed])
+    const handleSetCollapsed = (c: boolean): void => {
+      setCollapsed(c)
+      // Bubble up to parent component if present
+      if (collapsibleProps.setCollapsed !== undefined) {
+        collapsibleProps.setCollapsed(c)
       }
     }
     return <Component
         {...collapsibleProps}
         ref={ref}
         collapsed={collapsed}
-        onToggle={toggleCollapsed}
+        setCollapsed={handleSetCollapsed}
         className={getClasses(collapsibleProps.className, () => collapsed ? ['collapsed'] : [])} />
   })
 

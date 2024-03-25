@@ -10,7 +10,7 @@ export interface CollapsibleBlockProps extends SelectableProps, CollapsibleProps
   content: Collapsible
 }
 
-export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, content, collapsed, selected, onToggle, onSelected, onTransitionEnd, variant, key }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, content, collapsed, selected, setCollapsed: onToggle, setSelected: onSelected, onTransitionEnd, variant, key }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const inner = useRef<HTMLDivElement>(null)
 
@@ -41,20 +41,14 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
     updateInner()
   }, [collapsed, updateInner])
 
-  useEffect(() => {
-    if (onSelected !== undefined) {
-      onSelected(selected as boolean)
-    }
-  }, [selected, onSelected])
-
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     if (onToggle !== undefined && collapsed !== undefined) {
-      onToggle(collapsed)
+      onToggle(!collapsed)
       e.stopPropagation()
     }
   }
 
-  return (<div ref={ref} className={getClasses('aics-collapsible-block', className, content.classNames, () => collapsed === true ? ['collapsed'] : [])}>
+  return (<div ref={ref} className={getClasses('aics-collapsible-block', className, content.classNames)}>
       <div className="aics-collapsible-block-header">
         <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
         <div className="aics-collapsible-block-title" onClick={handleClick}>{ content.name }</div>
@@ -125,7 +119,7 @@ position: relative;
       display: inline-block;
       width: 20px;
       height: 20px;
-      background-image: ${themedIcon('chevron-right', 20, themedVariant('textColor'))};
+      background-image: ${themedIcon('chevron-right', 20, themedVariant('secondaryTextColor'))};
       background-repeat: no-repeat;
     }
   }
