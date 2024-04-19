@@ -85,7 +85,6 @@ text-align: left;
 button {
     border: 0;
     background-color: ${themedVariant('buttonBgColor')};
-    border-radius: 4px;
     color: ${themedVariant('secondaryTextColor')};
     margin: 0 1px;
     width: 22px;
@@ -134,6 +133,16 @@ button.pulse1 {
 
 .aics-pagination-next {
   background-image: ${themedIcon('chevron-right', 20, themedVariant('secondaryTextColor'))};
+  background-position: 2px 1px;
+}
+
+.aics-pagination-start {
+  background-image: ${themedIcon('start', 20, themedVariant('secondaryTextColor'))};
+  background-position: 0 1px;
+}
+
+.aics-pagination-end {
+  background-image: ${themedIcon('end', 20, themedVariant('secondaryTextColor'))};
   background-position: 2px 1px;
 }
 `

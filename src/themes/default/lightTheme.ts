@@ -135,6 +135,12 @@ export const lightTheme = {
       20: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0 0 0)" d="M522-480 333-669l51-51 240 240-240 240-51-51 189-189Z"/></svg>',
       24: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0 0 0)" d="m535.847-480-189-189L384-706.153 610.153-480 384-253.847 346.847-291l189-189Z"/></svg>'
     },
+    start: {
+      20: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0 0 0)" d="M298.001-298.001v-363.998h51.998v363.998h-51.998ZM672-301.847 493.847-480 672-658.153 709.153-621l-141 141 141 141L672-301.847Z"/></svg>'
+    },
+    end: {
+      20: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0 0 0)" d="M336-301.847 298.847-339l141-141-141-141L336-658.153 514.153-480 336-301.847Zm322.001 3.846v-363.998h51.998v363.998h-51.998Z"/></svg>'
+    },
     text: {
       12: '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path fill="rgb(0, 0, 0)" d="M164.001-278.616v-51.999h391.998v51.999H164.001Zm0-175.385v-51.998h631.998v51.998H164.001Zm0-175.384v-51.999h631.998v51.999H164.001Z"/></svg>'
     },
