@@ -48,7 +48,7 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
     }
   }
 
-  return (<div ref={ref} className={getClasses('aics-collapsible-block', className, content.classNames)}>
+  return (<div ref={ref} className={getClasses('aics-collapsible-block', className, content.classNames, () => collapsed === true ? ['collapsed'] : [])} key={key}>
       <div className="aics-collapsible-block-header">
         <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
         <div className="aics-collapsible-block-title" onClick={handleClick}>{ content.name }</div>
@@ -167,42 +167,5 @@ position: relative;
       margin-left: 0;
       margin-right: 0;
     }
-  }
-`
-
-export const ListLayoutItem = styled(CollapsibleBlock)`
-  padding: 4px 0;
-  margin: 0;
-  color: ${themedVariant('textColor')};
-  background-color: ${themedVariant('contentBackgroundColor')};
-  border-style: solid;
-  border-color: ${themedVariant('borderColor')};
-  border-top-width: 0;
-  border-bottom-width: 1px;
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-radius: 0;
-
-  & .aics-paragraph:first-child,
-  & .aics-list:first-child,
-  & .aics-collapsible-block:first-child {
-      margin-top: 0;
-  }
-
-  & .aics-paragraph:last-child,
-  & .aics-list:first-child,
-  & .aics-collapsible-block:first-child {
-      margin-bottom: 0;
-  }
-
-  &:first-child {
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
-      border-top-width: 1px;
-  }
-
-  &:last-child {
-      border-bottom-right-radius: 4px;
-      border-bottom-left-radius: 4px;
   }
 `

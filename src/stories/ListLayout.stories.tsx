@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ListLayout, ListLayoutProps } from '../components/ListLayout';
+import { ListLayout } from '../components/ListLayout';
 import { BlockFactoryContext } from '../hooks';
 import { nestedList, selectedList, simpleList, singleItemList } from './storyContent';
 
@@ -9,7 +9,7 @@ export default {
   tags: ['autodocs'],
 };
 
-const Template = (args: ListLayoutProps) => {
+const Template = (args: any) => {
   const { factory } = useContext(BlockFactoryContext)
   
   if (args.theme !== undefined) {

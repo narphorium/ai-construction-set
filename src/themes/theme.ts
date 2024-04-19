@@ -33,17 +33,19 @@ export const getColors = (theme: DefaultTheme, name: string): Record<string, str
   return colorsByKey
 }
 
-export const themedVariant = (name: string) => {
+export const themedVariant = (name: string, variant: string | null = null, selected: boolean | null = null) => {
   return (props: any) => {
     const theme = props.theme
-    const variant = props.variant !== undefined ? props.variant : 'default'
-    const selected = props.selected === true ? 'selected' : 'unselected'
+
     let value = theme[name]
+    const variantKey = variant ?? props.variant ?? 'default'
     if (value instanceof Object) {
-      value = value[variant]
+      value = value[variantKey]
     }
+
+    const isSelected = selected === true || props.selected === true ? 'selected' : 'unselected'
     if (value instanceof Object) {
-      value = value[selected]
+      value = value[isSelected]
     }
     if (typeof value === 'string') {
       const themeColor = getColor(theme, value)

@@ -7,19 +7,19 @@ import { darkTheme } from '../themes/default/darkTheme'
 import { lightTheme } from '../themes/default/lightTheme'
 import { type BaseProps, type CollapsibleProps, type PaginatedProps, type SelectableProps } from './Base'
 import { CodeBlock } from './CodeBlock'
-import { CollapsibleBlock, ListLayoutItem } from './CollapsibleBlock'
+import { CollapsibleBlock } from './CollapsibleBlock'
 import { ContentBlock } from './ContentBlock'
 import { ContentSpan } from './ContentSpan'
-import { ListLayout } from './ListLayout'
+import { ListLayout, ListLayoutItem } from './ListLayout'
 import { ParagraphBlock } from './ParagraphBlock'
 import { SentinalView } from './SentinalView'
 import { TableBlock } from './TableBlock'
 import { TreeLayout } from './TreeLayout'
 import { withCollapsible } from './withCollapsible'
 import { withPageable } from './withPageable'
-import { withRef } from './withRef'
 import { withSelectable } from './withSelectable'
 import { withTheme } from './withTheme'
+import { withRef } from './withRef'
 
 export type BlockBuilder = (block: Base) => JSX.Element
 
@@ -174,7 +174,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ListItemWithCollapsible = this.withCollapsible(ListItemWithTheme, { block })
     const ListItemWithSelectable = this.withSelectable(ListItemWithCollapsible, { block })
     return <ListItemWithSelectable
-            content={block}
+            item={block}
             variant={block.variant}
             key={block.uuid}/>
   }
@@ -215,7 +215,6 @@ export class DefaultBlockFactory implements BlockFactory {
     const ListLayoutWithTheme = this.withTheme(ListLayoutWithRef, { block })
     return <ListLayoutWithTheme
             list={block}
-            selected={false}
             variant={block.variant}
             key={block.uuid} />
   }
