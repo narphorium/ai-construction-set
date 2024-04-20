@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { TreeLayout, TreeLayoutProps } from '../components/TreeLayout';
 import { BlockFactoryContext } from '../hooks';
-import { nestedTree, paginatedTree, plainTree } from './storyContent';
+import { iconTree, nestedTree, paginatedTree, plainTree } from './storyContent';
 
 export default {
   component: TreeLayout,
@@ -27,6 +27,11 @@ Default.args = {
 export const Paginated = Template.bind({});
 Paginated.args = {
   tree: paginatedTree(),
+};
+
+export const Icon = Template.bind({});
+Icon.args = {
+  tree: iconTree(),
 };
 
 export const Nested = Template.bind({});

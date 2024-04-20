@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ListLayout } from '../components/ListLayout';
 import { BlockFactoryContext } from '../hooks';
-import { nestedList, selectedList, simpleList, singleItemList } from './storyContent';
+import { iconList, nestedList, selectedList, simpleList, singleItemList } from './storyContent';
 
 export default {
   component: ListLayout,
@@ -32,6 +32,11 @@ Default.args = {
 export const Single = Template.bind({});
 Single.args = {
   list: singleItemList(),
+};
+
+export const Icons = Template.bind({});
+Icons.args = {
+  list: iconList(),
 };
 
 export const Selected = Template.bind({});

@@ -46,8 +46,11 @@ export const namedSectionsContent = (): Content => {
   return content
 }
 
-export const plainListItem = (name: string): ListItem => {
+export const plainListItem = (name: string, icon?: string): ListItem => {
   const item = new ListItem(getGUID(), name)
+  if (icon !== undefined) {
+    item.icon = icon
+  }
   item.children.push(plainParagraph())
   return item
 }
@@ -57,6 +60,14 @@ export const simpleList = (): List => {
   list.items.push(plainListItem('First Item'))
   list.items.push(plainListItem('Second Item'))
   list.items.push(plainListItem('Third Item'))
+  return list
+}
+
+export const iconList = (): List => {
+  const list = new List(getGUID())
+  list.items.push(plainListItem('First Item', 'search'))
+  list.items.push(plainListItem('Second Item', 'search'))
+  list.items.push(plainListItem('Third Item', 'search'))
   return list
 }
 
@@ -123,6 +134,12 @@ export const paginatedTree = (): Tree => {
     tree.blocks.push(content)
   }
 
+  return tree
+}
+
+export const iconTree = (): Tree => {
+  const tree = paginatedTree()
+  tree.icon = 'search'
   return tree
 }
 

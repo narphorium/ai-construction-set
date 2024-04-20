@@ -6,6 +6,7 @@ import { BlockFactoryContext, NestedPaginationContext } from '../hooks'
 import { themedVariant } from '../themes/theme'
 import { getClasses, type PaginatedProps } from './Base'
 import { Pagination } from './Pagination'
+import { themedIcon } from '../themes'
 
 export interface TreeLayoutProps extends PaginatedProps {
   tree: Tree
@@ -29,6 +30,12 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
     return false
   }
 
+  const getTreeClasses = (tree: Tree, className: any): string => {
+    return getClasses('aics-tree', tree.classNames, className,
+      () => selectedVisitor.run(tree).length > 0 ? ['selected'] : [],
+      () => tree.icon !== undefined ? ['has-icon'] : [])
+  }
+
   const getNodeClasses = (node: Selectable): string => {
     return getClasses('aics-tree-node', node.classNames, className,
       () => selectedVisitor.run(node).length > 0 ? ['selected'] : [],
@@ -48,7 +55,7 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
   }, [tree, page])
 
   if (pages !== null && pages.getNumPages(level) > 1) {
-    return <div ref={ref} className={getClasses('aics-tree', tree.classNames, className, () => selectedVisitor.run(tree).length > 0 ? ['selected'] : [])}>
+    return <div ref={ref} className={getTreeClasses(tree, className)}>
         <div className='aics-tree-control'><span></span></div>
         <div className='aics-tree-title'>
           <label className='aics-tree-page-label'>{ tree.name }</label>
@@ -95,7 +102,15 @@ padding-left: 0;
   line-height: 24px;
   vertical-align: middle;
   color: ${themedVariant('textColor')};
-  margin-right: 8px;
+  margin-right: 12px;
+}
+
+&.has-icon .aics-tree-title > label {
+  padding-left: 26px;
+  background-position: 4px center;
+  background-size: contain;
+  background-image: ${(props) => props.tree.icon !== undefined ? themedIcon(props.tree.icon, 24, themedVariant('textColor')) : ''};
+  background-repeat: no-repeat;
 }
 
 .aics-pagination {

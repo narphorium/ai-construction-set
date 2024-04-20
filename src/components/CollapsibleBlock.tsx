@@ -41,6 +41,15 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
     updateInner()
   }, [collapsed, updateInner])
 
+  const getBlockClasses = (className: any, content: Collapsible, collapsed: boolean | undefined): string => {
+    return getClasses(
+      'aics-collapsible-block',
+      className,
+      content.classNames,
+      () => collapsed === true ? ['collapsed'] : [],
+      () => content.icon !== undefined ? ['has-icon'] : [])
+  }
+
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     if (onToggle !== undefined && collapsed !== undefined) {
       onToggle(!collapsed)
@@ -48,7 +57,7 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
     }
   }
 
-  return (<div ref={ref} className={getClasses('aics-collapsible-block', className, content.classNames, () => collapsed === true ? ['collapsed'] : [])} key={key}>
+  return (<div ref={ref} className={getBlockClasses(className, content, collapsed)} key={key}>
       <div className="aics-collapsible-block-header">
         <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
         <div className="aics-collapsible-block-title" onClick={handleClick}>{ content.name }</div>
@@ -139,14 +148,15 @@ position: relative;
       outline: 0;
     }
 
-    ::before {
-      content: '';
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      background-image: ${themedIcon(themedVariant('collapsibleTitleIcon'), 20, themedVariant('textColor'))};
-      background-repeat: no-repeat;
-    }
+    
+  }
+
+  &.has-icon .aics-collapsible-block-title {
+    padding-left: 44px;
+    background-position: 24px center;
+    background-size: contain;
+    background-image: ${(props) => props.content.icon !== undefined ? themedIcon(props.content.icon, 20, themedVariant('textColor')) : ''};
+    background-repeat: no-repeat;
   }
 
   & .aics-collapsible-block-content {
