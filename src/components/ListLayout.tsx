@@ -81,6 +81,12 @@ export const ListLayoutItem = styled(ListItemComponent)`
   border-right-width: 1px;
   border-radius: 0;
 
+  .selected & {
+    color: ${(props) => themedVariant('textColor', props.variant, true)};
+    background-color: ${(props) => themedVariant('contentBackgroundColor', props.variant, true)};
+    border-color: ${(props) => themedVariant('borderColor', props.variant, true)};
+  }
+
   & .aics-paragraph:first-child,
   & .aics-list:first-child,
   & .aics-collapsible-block:first-child {

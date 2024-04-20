@@ -94,6 +94,7 @@ export const nestedList = (): List => {
   list.items.push(plainListItem('First Item'))
 
   const item2 = new ListItem(getGUID(), 'Second Item')
+  item2.selected = true
   item2.collapsed = false
   item2.children.push(simpleList())
   list.items.push(item2)
