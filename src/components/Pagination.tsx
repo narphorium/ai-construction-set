@@ -30,42 +30,80 @@ export const PaginationComponent = ({ className, page, numPages, showEnds, setPa
   }, [page, setPage])
 
   const gotoStart = React.useCallback(() => {
-    gotoPage(1)
-    pulseButton(btn1, setBtn1)
+    if (page !== 1) {
+      gotoPage(1)
+      pulseButton(btn1, setBtn1)
+    }
   }, [page, setPage])
 
   const gotoEnd = React.useCallback(() => {
-    gotoPage(numPages)
-    pulseButton(btn4, setBtn4)
+    if (page !== numPages) {
+      gotoPage(numPages)
+      pulseButton(btn4, setBtn4)
+    }
   }, [page, setPage])
 
   const previousStep = React.useCallback(() => {
-    if (page !== undefined) {
+    if (page !== undefined && page > 1) {
       gotoPage(page - 1)
       pulseButton(btn2, setBtn2)
     }
   }, [page, setPage])
 
   const nextStep = React.useCallback(() => {
-    if (page !== undefined) {
+    if (page !== undefined && page < numPages) {
       gotoPage(page + 1)
       pulseButton(btn3, setBtn3)
     }
   }, [page, setPage])
 
+  const getStartClasses = (button: string, page?: number, numPages?: number): string => {
+    return getClasses(
+      () => page === 1 ? ['disabled'] : [],
+      'aics-pagination-start',
+      'aics-button-group-start',
+      button)
+  }
+
+  const getPreviousClasses = (button: string, showEnds: boolean, page?: number, numPages?: number): string => {
+    return getClasses(
+      () => page === 1 ? ['disabled'] : [],
+      'aics-pagination-previous',
+      () => !showEnds ? ['aics-button-group-start'] : [],
+      'aics-button-group-end',
+      button)
+  }
+
+  const getNextClasses = (button: string, showEnds: boolean, page?: number, numPages?: number): string => {
+    return getClasses(
+      () => page === numPages ? ['disabled'] : [],
+      'aics-pagination-next',
+      'aics-button-group-start',
+      () => !showEnds ? ['aics-button-group-end'] : [],
+      button)
+  }
+
+  const getEndClasses = (button: string, page?: number, numPages?: number): string => {
+    return getClasses(
+      () => page === numPages ? ['disabled'] : [],
+      'aics-pagination-end',
+      'aics-button-group-end',
+      button)
+  }
+
   if (showEnds === true) {
     return <div className={getClasses('aics-pagination', className)}>
-            <button className={'aics-pagination-start aics-button-group-start ' + btn1} title="Return to start" onClick={gotoStart}></button>
-            <button className={'aics-pagination-previous aics-button-group-end ' + btn2} title="Previous" onClick={previousStep}></button>
+            <button className={getStartClasses(btn1, page, numPages)} title="Return to start" onClick={gotoStart}></button>
+            <button className={getPreviousClasses(btn2, showEnds, page, numPages)} title="Previous" onClick={previousStep}></button>
             <span className="aics-pagination-page">{ page as number } of { numPages }</span>
-            <button className={'aics-pagination-next aics-button-group-start ' + btn3} title="Next" onClick={nextStep}></button>
-            <button className={'aics-pagination-end aics-button-group-end ' + btn4} title="Jump to end" onClick={gotoEnd}></button>
+            <button className={getNextClasses(btn3, showEnds, page, numPages)} title="Next" onClick={nextStep}></button>
+            <button className={getEndClasses(btn4, page, numPages)} title="Jump to end" onClick={gotoEnd}></button>
         </div>
   } else {
     return <div className={getClasses('aics-pagination', className)}>
-            <button className={'aics-pagination-previous aics-button-group-start aics-button-group-end ' + btn2} title="Previous" onClick={previousStep}></button>
+            <button className={getPreviousClasses(btn2, false, page, numPages)} title="Previous" onClick={previousStep}></button>
             <span className="aics-pagination-page">{ page as number } of { numPages }</span>
-            <button className={'aics-pagination-next aics-button-group-start aics-button-group-end ' + btn3} title="Next" onClick={nextStep}></button>
+            <button className={getNextClasses(btn3, false, page, numPages)} title="Next" onClick={nextStep}></button>
         </div>
   }
 }
@@ -75,10 +113,11 @@ text-align: left;
 
 .aics-pagination-page {
     vertical-align: top;
-    line-height: 22px;
+    line-height: 24px;
     margin: 0 8px;
     font-family: ${themedVariant('fontFamily')};
     font-size: 10pt;
+    font-variant-numeric: tabular-nums;
     color: ${themedVariant('textColor')};
 }
   
@@ -87,8 +126,8 @@ button {
     background-color: ${themedVariant('buttonBgColor')};
     color: ${themedVariant('secondaryTextColor')};
     margin: 0 1px;
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     background-repeat: no-repeat;
 }
 
@@ -105,6 +144,10 @@ button.aics-button-group-end {
 button:hover {
     background-color: ${themedVariant('buttonHoverBgColor')};
 }
+
+button.disabled:hover {
+  background-color: ${themedVariant('buttonBgColor')};
+}
   
 button:focus {
     outline: 0;
@@ -117,6 +160,10 @@ button.pulse1 {
     animation-direction: alternate-reverse;
     animation-timing-function: ease;
 }
+
+button.disabled.pulse1 {
+  animation-name: none;
+}
   
 @keyframes pulse1 {
     0% {}
@@ -127,22 +174,42 @@ button.pulse1 {
 }
 
 .aics-pagination-previous {
-  background-image: ${themedIcon('chevron-left', 20, themedVariant('secondaryTextColor'))};
-  background-position: 0 1px;
+  background-image: ${themedIcon('left', 20, themedVariant('secondaryTextColor'))};
+  background-position: 1px 2px;
+}
+
+.aics-pagination-previous.disabled {
+  background-image: ${themedIcon('left', 20, themedVariant('fadedTextColor'))};
 }
 
 .aics-pagination-next {
-  background-image: ${themedIcon('chevron-right', 20, themedVariant('secondaryTextColor'))};
-  background-position: 2px 1px;
+  background-image: ${themedIcon('right', 20, themedVariant('secondaryTextColor'))};
+  background-position: 2px 2px;
+}
+
+.aics-pagination-next.disabled {
+  background-image: ${themedIcon('right', 20, themedVariant('fadedTextColor'))};
 }
 
 .aics-pagination-start {
   background-image: ${themedIcon('start', 20, themedVariant('secondaryTextColor'))};
-  background-position: 0 1px;
+  background-position: 2px 0;
+  width: 28px;
+  background-size: 24px;
+}
+
+.aics-pagination-start.disabled {
+  background-image: ${themedIcon('start', 20, themedVariant('fadedTextColor'))};
 }
 
 .aics-pagination-end {
   background-image: ${themedIcon('end', 20, themedVariant('secondaryTextColor'))};
-  background-position: 2px 1px;
+  background-position: 0;
+  width: 28px;
+  background-size: 24px;
+}
+
+.aics-pagination-end.disabled {
+  background-image: ${themedIcon('end', 20, themedVariant('fadedTextColor'))};
 }
 `

@@ -119,7 +119,7 @@ position: relative;
       display: inline-block;
       width: 20px;
       height: 20px;
-      background-image: ${themedIcon('chevron-right', 20, themedVariant('secondaryTextColor'))};
+      background-image: ${themedIcon('right', 20, themedVariant('secondaryTextColor'))};
       background-repeat: no-repeat;
     }
   }
