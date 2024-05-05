@@ -6,8 +6,8 @@ export interface SentinalViewProps extends SelectableProps {
   sentinal: Selectable
 }
 
-export const SentinalView = forwardRef(function SentinalView ({ sentinal, selected, setSelected, variant, key }: SentinalViewProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  return <div ref={ref} className="aics-sentinal"></div>
+export const SentinalView = forwardRef(function SentinalView ({ sentinal, selected, setSelected, variant }: SentinalViewProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+  return <div ref={ref} key={sentinal.uuid} className="aics-sentinal"></div>
 })
 
 SentinalView.displayName = 'SentinalView'

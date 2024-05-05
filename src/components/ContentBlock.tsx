@@ -10,7 +10,7 @@ export interface ContentBlockProps extends SelectableProps {
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export const ContentBlockComponent = forwardRef(function ContentBlock ({ className, content, selected, setSelected, onClick, variant, key }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ContentBlockComponent = forwardRef(function ContentBlock ({ className, content, selected, setSelected, onClick, variant }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
   const handleClick = (e: MouseEvent<HTMLDivElement>): void => {
@@ -19,7 +19,7 @@ export const ContentBlockComponent = forwardRef(function ContentBlock ({ classNa
     }
   }
 
-  return <div ref={ref} className={getClasses('aics-content-block', className, content.classNames)} onClick={handleClick}>
+  return <div ref={ref} key={content.uuid} className={getClasses('aics-content-block', className, content.classNames)} onClick={handleClick}>
          { factory?.buildAll(content.children, content) }
     </div>
 })

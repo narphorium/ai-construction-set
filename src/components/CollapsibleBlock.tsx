@@ -10,7 +10,7 @@ export interface CollapsibleBlockProps extends SelectableProps, CollapsibleProps
   content: Collapsible
 }
 
-export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, content, collapsed, selected, setCollapsed: onToggle, setSelected: onSelected, onTransitionEnd, variant, key }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, content, collapsed, selected, setCollapsed: onToggle, setSelected: onSelected, onTransitionEnd, variant }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const inner = useRef<HTMLDivElement>(null)
 
@@ -57,7 +57,7 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
     }
   }
 
-  return (<div ref={ref} className={getBlockClasses(className, content, collapsed)} key={key}>
+  return (<div ref={ref} className={getBlockClasses(className, content, collapsed)} key={content.uuid}>
       <div className="aics-collapsible-block-header">
         <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
         <div className="aics-collapsible-block-title" onClick={handleClick}>{ content.name }</div>

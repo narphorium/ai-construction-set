@@ -164,8 +164,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const CollapsibleBlockWithSelectable = this.withSelectable(CollapsibleBlockWithCollapsible, { block })
     return <CollapsibleBlockWithSelectable
             content={block}
-            variant={block.variant}
-            key={block.uuid}/>
+            variant={block.variant} />
   }
 
   buildListItem (block: ListItem): JSX.Element {
@@ -175,8 +174,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ListItemWithSelectable = this.withSelectable(ListItemWithCollapsible, { block })
     return <ListItemWithSelectable
             item={block}
-            variant={block.variant}
-            key={block.uuid}/>
+            variant={block.variant}/>
   }
 
   buildContent (block: Content): JSX.Element {
@@ -185,8 +183,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ContentBlockWithSelectable = this.withSelectable(ContentBlockWithTheme, { block })
     return <ContentBlockWithSelectable
             content={block}
-            variant={block.variant}
-            key={block.uuid} />
+            variant={block.variant} />
   }
 
   buildSection (block: Paragraph): JSX.Element {
@@ -195,8 +192,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ContentSectionWithSelectable = this.withSelectable(ContentSectionWithTheme, { block })
     return <ContentSectionWithSelectable
             paragraph={block}
-            variant={block.variant}
-            key={block.uuid} />
+            variant={block.variant} />
   }
 
   buildCode (block: Code): JSX.Element {
@@ -206,8 +202,7 @@ export class DefaultBlockFactory implements BlockFactory {
     return <CodeSectionWithSelectable
             code={block}
             editable={false}
-            variant={block.variant}
-            key={block.uuid} />
+            variant={block.variant} />
   }
 
   buildList (block: List): JSX.Element {
@@ -215,8 +210,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ListLayoutWithTheme = this.withTheme(ListLayoutWithRef, { block })
     return <ListLayoutWithTheme
             list={block}
-            variant={block.variant}
-            key={block.uuid} />
+            variant={block.variant} />
   }
 
   buildSpan (block: Span): JSX.Element {
@@ -225,8 +219,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const ContentSpanWithSelectable = this.withSelectable(ContentSpanWithTheme, { block })
     return <ContentSpanWithSelectable
             span={block}
-            variant={block.variant}
-            key={block.uuid} />
+            variant={block.variant} />
   }
 
   buildSelectable (block: Selectable): JSX.Element {
@@ -235,8 +228,7 @@ export class DefaultBlockFactory implements BlockFactory {
     const SentinalWithSelectable = this.withSelectable(SentinalWithTheme, { block })
     return <SentinalWithSelectable
             sentinal={block}
-            variant={block.variant}
-            key={block.uuid} />
+            variant={block.variant} />
   }
 
   buildTree (tree: Tree): JSX.Element {
@@ -248,19 +240,16 @@ export class DefaultBlockFactory implements BlockFactory {
     if (level === 1) {
       return <NestedPaginationProvider
                 pages={[1]}
-                numPages={[1]}
-                key={tree.uuid}>
+                numPages={[1]} >
         <TreeLayoutWithTheme
             level={level}
             tree={tree}
-            variant={tree.variant}
-            key={tree.uuid} />
+            variant={tree.variant} />
       </NestedPaginationProvider>
     } else {
       return <TreeLayoutWithTheme
               level={level}
-              tree={tree}
-              key={tree.uuid} />
+              tree={tree} />
     }
   }
 
@@ -269,7 +258,6 @@ export class DefaultBlockFactory implements BlockFactory {
     const TableWithTheme = this.withTheme(TableWithRef, { block })
     return <TableWithTheme
             table={block}
-            variant={block.variant}
-            key={block.uuid} />
+            variant={block.variant} />
   }
 };

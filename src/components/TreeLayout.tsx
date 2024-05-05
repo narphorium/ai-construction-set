@@ -12,7 +12,7 @@ export interface TreeLayoutProps extends PaginatedProps {
   tree: Tree
 }
 
-export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, tree, level, page, setPage, variant, key }: TreeLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, tree, level, page, setPage, variant }: TreeLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const pages = useContext(NestedPaginationContext)
   const selectedVisitor = new SelectedVisitor()
@@ -55,7 +55,7 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
   }, [tree, page])
 
   if (pages !== null && pages.getNumPages(level) > 1) {
-    return <div ref={ref} className={getTreeClasses(tree, className)}>
+    return <div ref={ref} key={tree.uuid} className={getTreeClasses(tree, className)}>
         <div className='aics-tree-control'><span></span></div>
         <div className='aics-tree-title'>
           <label className='aics-tree-page-label'>{ tree.name }</label>
@@ -68,7 +68,7 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
         }) }
     </div>
   } else {
-    return <div ref={ref} className={getClasses()} key={tree.uuid}>
+    return <div ref={ref} key={tree.uuid} className={getClasses()}>
       { filterBlocks().map((block) => {
         return factory?.build(block, tree)
       }) }

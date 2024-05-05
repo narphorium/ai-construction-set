@@ -10,10 +10,10 @@ export interface ListLayoutProps extends BaseProps {
   list: List
 }
 
-export const ListLayoutComponent = forwardRef(function ListLayout ({ className, list, variant, key }: ListLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ListLayoutComponent = forwardRef(function ListLayout ({ className, list, variant }: ListLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
-  return <div ref={ref} className={getClasses('aics-list', className, list.classNames)} key={key}>
+  return <div ref={ref} className={getClasses('aics-list', className, list.classNames)} key={list.uuid}>
         { factory?.buildAll(list.items, list) }
     </div>
 })
@@ -28,7 +28,7 @@ export interface ListItemProps extends SelectableProps, CollapsibleProps {
   item: ListItem
 }
 
-export const ListItemComponent = forwardRef(function ListItem ({ className, item, selected, setSelected, collapsed, setCollapsed, variant, key }: ListItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ListItemComponent = forwardRef(function ListItem ({ className, item, selected, setSelected, collapsed, setCollapsed, variant }: ListItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const selectedVisitor = new SelectedVisitor()
 
@@ -61,8 +61,7 @@ export const ListItemComponent = forwardRef(function ListItem ({ className, item
     setSelected={setSelected}
     collapsed={collapsed}
     setCollapsed={setCollapsed}
-    variant={variant}
-    key={item.uuid} />
+    variant={variant} />
   </div>
 })
 

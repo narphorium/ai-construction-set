@@ -1,7 +1,6 @@
 export interface BaseProps {
   className?: string | string[]
   variant?: string
-  key: any
 }
 
 export interface SelectableProps extends BaseProps {

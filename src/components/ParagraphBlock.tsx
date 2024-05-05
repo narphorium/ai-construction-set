@@ -10,7 +10,7 @@ export interface ParagraphBlockProps extends SelectableProps {
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className, paragraph, selected, setSelected, onClick, variant, key }: ParagraphBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className, paragraph, selected, setSelected, onClick, variant }: ParagraphBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
   const handleClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
@@ -19,7 +19,7 @@ const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className,
     }
   }, [onClick])
 
-  return <div ref={ref} className={ getClasses('aics-paragraph', className, paragraph.classNames) } onClick={handleClick}>
+  return <div ref={ref} key={paragraph.uuid} className={ getClasses('aics-paragraph', className, paragraph.classNames) } onClick={handleClick}>
     <span>
       { factory?.buildAll(paragraph.spans, paragraph) }
     </span>
