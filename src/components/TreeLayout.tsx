@@ -70,7 +70,9 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
   } else {
     return <div ref={ref} key={tree.uuid} className={getClasses()}>
       { filterBlocks().map((block) => {
-        return factory?.build(block, tree)
+        return <div className={getNodeClasses(block as Selectable)} key={block.uuid}>
+        { factory?.build(block, tree) }
+        </div>
       }) }
     </div>
   }
