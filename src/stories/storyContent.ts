@@ -5,16 +5,16 @@ export const getGUID = (): string => {
   return uuid.v4()
 }
 
-export const plainParagraph = (content = 'Test Span'): Paragraph => {
+export const plainParagraph = (text = 'Test Span'): Paragraph => {
   const paragraph = new Paragraph(getGUID())
-  const span = new Span(getGUID(), content)
+  const span = new Span(getGUID(), text)
   paragraph.spans.push(span)
   return paragraph
 }
 
-export const plainContent = (): Content => {
+export const plainContent = (text = 'Test Span'): Content => {
   const content = new Content(getGUID())
-  content.children.push(plainParagraph())
+  content.children.push(plainParagraph(text))
   return content
 }
 
@@ -148,7 +148,7 @@ export const nestedTree = (): Tree => {
   outerNode.name = 'Root Node'
 
   for (let i = 1; i <= 3; i++) {
-    const b1 = plainContent()
+    const b1 = plainContent(`First outer node ${i}`)
     b1.iteration = i
     outerNode.children.push(b1)
 
@@ -176,7 +176,7 @@ export const nestedTree = (): Tree => {
       innerNode.children.push(bi2)
     }
 
-    const b2 = plainContent()
+    const b2 = plainContent(`Last outer node ${i}`)
     b2.iteration = i
     outerNode.children.push(b2)
   }

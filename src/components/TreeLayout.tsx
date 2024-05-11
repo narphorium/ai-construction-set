@@ -62,7 +62,7 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
           <Pagination level={level} page={page} numPages={pages.getNumPages(level)} setPage={setPage} key={block.uuid} />
         </div>
         { filterBlocks().map((childBlock) => {
-          return <div className={getNodeClasses(childBlock as Selectable)} key={block.uuid}>
+          return <div className={getNodeClasses(childBlock as Selectable)} key={childBlock.uuid}>
             { factory?.build(childBlock, block) }
             </div>
         }) }
@@ -70,7 +70,7 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
   } else {
     return <div ref={ref} key={block.uuid} className={getClasses()}>
       { filterBlocks().map((childBlock) => {
-        return <div className={getNodeClasses(childBlock as Selectable)} key={block.uuid}>
+        return <div className={getNodeClasses(childBlock as Selectable)} key={childBlock.uuid}>
         { factory?.build(childBlock, block) }
         </div>
       }) }
