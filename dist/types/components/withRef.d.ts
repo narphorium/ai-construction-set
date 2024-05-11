@@ -1,7 +1,6 @@
-import React, { type ComponentType, type Dispatch, type SetStateAction } from 'react';
-interface Base {
-    selected?: boolean | Dispatch<SetStateAction<boolean>>;
-    onSelected?: (selected: boolean) => void;
+import React, { type ComponentType, type ForwardRefExoticComponent, type PropsWithoutRef, type RefAttributes } from 'react';
+import { type BlockProps } from './Base';
+export interface BlockRef {
+    scrollIntoView: (args: any) => void;
 }
-export declare const withRef: <TProps extends Base>(Component: React.ComponentType<TProps>) => (props: TProps) => JSX.Element;
-export {};
+export declare const withRef: <TProps extends BlockProps>(Component: React.ComponentType<TProps>) => React.ForwardRefExoticComponent<React.PropsWithoutRef<TProps> & React.RefAttributes<any>>;

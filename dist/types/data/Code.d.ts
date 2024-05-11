@@ -1,4 +1,4 @@
-import { Section } from './Section';
-export declare class Code extends Section {
+import { Paragraph } from './Paragraph';
+export declare class Code extends Paragraph {
     language: string | null;
 }

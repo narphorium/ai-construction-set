@@ -1,9 +1,10 @@
-import React, { type ComponentType, type Dispatch, type SetStateAction } from 'react';
-interface Base {
-    selected?: boolean | Dispatch<SetStateAction<boolean>>;
-    onSelected?: (selected: boolean) => void;
-}
-export declare const withSelectable: <TProps extends Base>(Component: React.ComponentType<TProps>, params: {
-    selected: boolean;
-}) => (props: TProps) => JSX.Element;
-export {};
+import { type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react';
+import { type SelectableProps } from './Base';
+export declare function withSelectable<P extends SelectableProps, C extends ComponentClass<P>>(Component: C & ComponentType<P>): ForwardRefExoticComponent<Omit<ComponentPropsWithoutRef<C> & {
+    ref?: Ref<InstanceType<C>>;
+}, keyof SelectableProps>>;
+export declare function withSelectable<P extends SelectableProps & {
+    ref?: Ref<any>;
+}>(Component: ForwardRefExoticComponent<P>): ForwardRefExoticComponent<Omit<P, keyof SelectableProps>>;
+export declare function withSelectable<P extends SelectableProps>(Component: FunctionComponent<P>): ForwardRefExoticComponent<Omit<P, keyof SelectableProps>>;
+export default withSelectable;
