@@ -1,5 +1,5 @@
 import React, { forwardRef, useContext, useEffect, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react'
-import { SelectedVisitor, type Tree } from '../data'
+import { type Base, SelectedVisitor } from '../data'
 import { NestedPaginationContext, NestedPaginationDispatchContext, type NestedPaginationState } from '../hooks'
 import { getClasses, type PaginatedProps } from './Base'
 
@@ -12,25 +12,19 @@ function getNumPages (state: NestedPaginationState | null, level: number): numbe
 }
 
 export function withPageable<P extends PaginatedProps, C extends ComponentClass<P>> (
-  Component: C & ComponentType<P>,
-  params: { tree: Tree }
+  Component: C & ComponentType<P>
 ): ForwardRefExoticComponent<Omit<ComponentPropsWithoutRef<C> & { ref?: Ref<InstanceType<C>> }, keyof PaginatedProps>>
 
 export function withPageable<P extends PaginatedProps & { ref?: Ref<any> }> (
-  Component: ForwardRefExoticComponent<P>,
-  params: { tree: Tree }
+  Component: ForwardRefExoticComponent<P>
 ): ForwardRefExoticComponent<Omit<P, keyof PaginatedProps>>
 
 export function withPageable<P extends PaginatedProps> (
-  Component: FunctionComponent<P>,
-  params: { tree: Tree }
+  Component: FunctionComponent<P>
 ): ForwardRefExoticComponent<Omit<P, keyof PaginatedProps>>
 
 export function withPageable <P extends PaginatedProps> (
-  Component: ComponentType<P>,
-  params: {
-    tree: Tree
-  }
+  Component: ComponentType<P>
 ): any {
   const WithPageable = forwardRef(function (props, ref): JSX.Element {
     const pageableProps = props as P
@@ -39,7 +33,7 @@ export function withPageable <P extends PaginatedProps> (
 
     useEffect(() => {
       let numPages = 1
-      params.tree.blocks.forEach((block) => {
+      pageableProps.block.children.forEach((block: Base) => {
         if (block.iteration === undefined) {
           block.iteration = 1
         } else if (block.iteration > numPages) {
@@ -53,9 +47,10 @@ export function withPageable <P extends PaginatedProps> (
     }, [pageableProps.level, pagesDispatch])
 
     const setPage = (p: number): void => {
-      params.tree.page = p
+      pageableProps.block.page = p
       if (pagesDispatch !== null && getPage(pages, pageableProps.level) !== p) {
         pagesDispatch({ type: 'goto', page: p, level: pageableProps.level })
+        pageableProps.block.page = p //  FIXME: Should this be validated?
         if (pageableProps.setPage !== undefined) {
           pageableProps.setPage(p)
         }
@@ -67,8 +62,8 @@ export function withPageable <P extends PaginatedProps> (
     useEffect(() => {
       const page = getPage(pages, pageableProps.level)
       if (page !== null) {
-        if (selectedVisitor.run(params.tree, page).length > 0) {
-          params.tree.blocks.forEach((block) => {
+        if (selectedVisitor.run(pageableProps.block, page).length > 0) {
+          pageableProps.block.children.forEach((block: Base) => {
             if (block.iteration !== undefined && selectedVisitor.run(block, page).length > 0) {
               setPage(block.iteration)
             }

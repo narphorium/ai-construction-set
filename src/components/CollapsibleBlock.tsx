@@ -7,10 +7,10 @@ import { themedVariant } from '../themes/theme'
 import { getClasses, type CollapsibleProps, type SelectableProps } from './Base'
 
 export interface CollapsibleBlockProps extends SelectableProps, CollapsibleProps {
-  content: Collapsible
+  block: Collapsible
 }
 
-export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, content, collapsed, selected, setCollapsed: onToggle, setSelected: onSelected, onTransitionEnd, variant }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, block, collapsed, setCollapsed: onToggle, onTransitionEnd }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const inner = useRef<HTMLDivElement>(null)
 
@@ -57,14 +57,14 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
     }
   }
 
-  return (<div ref={ref} className={getBlockClasses(className, content, collapsed)} key={content.uuid}>
+  return (<div ref={ref} className={getBlockClasses(className, block, collapsed)} key={block.uuid}>
       <div className="aics-collapsible-block-header">
         <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
-        <div className="aics-collapsible-block-title" onClick={handleClick}>{ content.name }</div>
+        <div className="aics-collapsible-block-title" onClick={handleClick}>{ block.name }</div>
       </div>
       <div className='aics-collapsible-block-content'>
         <div className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={onTransitionEnd}>
-        { factory?.buildAll(content.children, content) }
+        { factory?.buildAll(block.children, block) }
         </div>
       </div>
     </div>
@@ -155,7 +155,7 @@ position: relative;
     padding-left: 44px;
     background-position: 24px center;
     background-size: contain;
-    background-image: ${(props) => props.content.icon !== undefined ? themedIcon(props.content.icon, 20, themedVariant('textColor')) : ''};
+    background-image: ${(props) => props.block.icon !== undefined ? themedIcon(props.block.icon, 20, themedVariant('textColor')) : ''};
     background-repeat: no-repeat;
   }
 

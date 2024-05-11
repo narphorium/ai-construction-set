@@ -6,12 +6,16 @@ import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface ContentBlockProps extends SelectableProps {
-  content: Content
+  block: Content
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export const ContentBlockComponent = forwardRef(function ContentBlock ({ className, content, selected, setSelected, onClick, variant }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ContentBlockComponent = forwardRef(function ContentBlock ({ className, block, onClick }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
+
+  const getContentClasses = (block: Content, className: string | string[] | undefined): string => {
+    return getClasses('aics-content-block', className, block.classNames)
+  }
 
   const handleClick = (e: MouseEvent<HTMLDivElement>): void => {
     if (onClick !== undefined) {
@@ -19,8 +23,8 @@ export const ContentBlockComponent = forwardRef(function ContentBlock ({ classNa
     }
   }
 
-  return <div ref={ref} key={content.uuid} className={getClasses('aics-content-block', className, content.classNames)} onClick={handleClick}>
-         { factory?.buildAll(content.children, content) }
+  return <div ref={ref} key={block.uuid} className={getContentClasses(block, className)} onClick={handleClick}>
+         { factory?.buildAll(block.children, block) }
     </div>
 })
 

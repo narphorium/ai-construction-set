@@ -9,7 +9,7 @@ import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface CodeBlockProps extends SelectableProps {
-  code: Code
+  block: Code
   extensions?: any[]
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
   onChange?: (value: string, viewUpdate: ViewUpdate) => void
@@ -17,11 +17,11 @@ export interface CodeBlockProps extends SelectableProps {
 }
 
 const CodeBlockComponent = forwardRef(function CodeBlock (
-  { className, code, extensions, selected, setSelected, onClick, onChange, variant, editable }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+  { className, block, extensions, onClick, onChange, editable }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const theme = useTheme()
   const getTheme = (): Extension[] => {
-    if (code.variant !== undefined) {
-      return codeTheme(theme, code.variant)
+    if (block.variant !== undefined) {
+      return codeTheme(theme, block.variant)
     }
     return codeTheme(theme)
   }
@@ -33,7 +33,7 @@ const CodeBlockComponent = forwardRef(function CodeBlock (
   }
 
   let codeContent = ''
-  code.spans.forEach((span) => {
+  block.spans.forEach((span) => {
     codeContent += span.content
   })
 
@@ -43,7 +43,7 @@ const CodeBlockComponent = forwardRef(function CodeBlock (
   }
   config.push(python())
 
-  return (<div ref={ref} key={code.uuid} className={getClasses('aics-code-block', className, code.classNames)} onClick={handleClick}>
+  return (<div ref={ref} key={block.uuid} className={getClasses('aics-code-block', className, block.classNames)} onClick={handleClick}>
       <CodeMirror
         value={codeContent}
         basicSetup={false}

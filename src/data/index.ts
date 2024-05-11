@@ -9,4 +9,4 @@ export * from './Span'
 export * from './Table'
 export * from './Tree'
 export * from './Visitor'
-
+export * from './Pageable'

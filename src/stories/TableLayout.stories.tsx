@@ -14,10 +14,14 @@ const Template = (args: TableBlockProps) => {
   const { factory } = useContext(BlockFactoryContext)
 
   const content = new Content(getGUID());
-  content.children.push(args.table);
+  content.children.push(args.block);
   
   if (args.theme !== undefined) {
     content.theme = args.theme;
+  }
+
+  if (args.selected !== undefined) {
+    content.selected = args.selected;
   }
   
   return (
@@ -29,18 +33,18 @@ const Template = (args: TableBlockProps) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  table: simpleTable(),
+  block: simpleTable(),
 };
 
 export const Selected = Template.bind({});
 Selected.args = {
-  table: simpleTable(),
+  block: simpleTable(),
   selected: true,
 };
 
 export const Blue = Template.bind({});
 Blue.args = {
-  table: simpleTable(),
+  block: simpleTable(),
   theme: 'blue',
 };
 

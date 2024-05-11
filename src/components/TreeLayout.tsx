@@ -9,21 +9,21 @@ import { Pagination } from './Pagination'
 import { themedIcon } from '../themes'
 
 export interface TreeLayoutProps extends PaginatedProps {
-  tree: Tree
+  block: Tree
 }
 
-export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, tree, level, page, setPage, variant }: TreeLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, block, level, page, setPage }: TreeLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const pages = useContext(NestedPaginationContext)
   const selectedVisitor = new SelectedVisitor()
 
-  const isFollowingSiblingSelected = (block: Base): boolean => {
-    const index = tree.blocks.indexOf(block)
+  const isFollowingSiblingSelected = (sibling: Base): boolean => {
+    const index = block.children.indexOf(sibling)
     if (index < 0) {
       return false
     }
-    for (let i = index + 1; i < tree.blocks.length; i++) {
-      if (selectedVisitor.run(tree.blocks[i]).length > 0) {
+    for (let i = index + 1; i < block.children.length; i++) {
+      if (selectedVisitor.run(block.children[i]).length > 0) {
         return true
       }
     }
@@ -46,32 +46,32 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
 
   const filterBlocks = useCallback(() => {
     const filteredBlocks: Base[] = []
-    tree.blocks.forEach((block) => {
+    block.children.forEach((block) => {
       if (block.iteration === undefined || block.iteration === page) {
         filteredBlocks.push(block)
       }
     })
     return filteredBlocks
-  }, [tree, page])
+  }, [block, page])
 
   if (pages !== null && pages.getNumPages(level) > 1) {
-    return <div ref={ref} key={tree.uuid} className={getTreeClasses(tree, className)}>
+    return <div ref={ref} key={block.uuid} className={getTreeClasses(block, className)}>
         <div className='aics-tree-control'><span></span></div>
         <div className='aics-tree-title'>
-          <label className='aics-tree-page-label'>{ tree.name }</label>
-          <Pagination level={level} page={page} numPages={pages.getNumPages(level)} setPage={setPage} key={tree.uuid} />
+          <label className='aics-tree-page-label'>{ block.name }</label>
+          <Pagination level={level} page={page} numPages={pages.getNumPages(level)} setPage={setPage} key={block.uuid} />
         </div>
-        { filterBlocks().map((block) => {
-          return <div className={getNodeClasses(block as Selectable)} key={block.uuid}>
-            { factory?.build(block, tree) }
+        { filterBlocks().map((childBlock) => {
+          return <div className={getNodeClasses(childBlock as Selectable)} key={block.uuid}>
+            { factory?.build(childBlock, block) }
             </div>
         }) }
     </div>
   } else {
-    return <div ref={ref} key={tree.uuid} className={getClasses()}>
-      { filterBlocks().map((block) => {
-        return <div className={getNodeClasses(block as Selectable)} key={block.uuid}>
-        { factory?.build(block, tree) }
+    return <div ref={ref} key={block.uuid} className={getClasses()}>
+      { filterBlocks().map((childBlock) => {
+        return <div className={getNodeClasses(childBlock as Selectable)} key={block.uuid}>
+        { factory?.build(childBlock, block) }
         </div>
       }) }
     </div>
@@ -111,7 +111,7 @@ padding-left: 0;
   padding-left: 26px;
   background-position: 4px center;
   background-size: contain;
-  background-image: ${(props) => props.tree.icon !== undefined ? themedIcon(props.tree.icon, 24, themedVariant('textColor')) : ''};
+  background-image: ${(props) => props.block.icon !== undefined ? themedIcon(props.block.icon, 24, themedVariant('textColor')) : ''};
   background-repeat: no-repeat;
 }
 

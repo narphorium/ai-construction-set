@@ -36,6 +36,10 @@ export const getColors = (theme: DefaultTheme, name: string): Record<string, str
 export const themedVariant = (name: string, variant: string | null = null, selected: boolean | null = null) => {
   return (props: any) => {
     const theme = props.theme
+    if (props.block !== undefined) {
+      // If the props object has a block property, then use the block for the styled component
+      props = props.block
+    }
 
     let value = theme[name]
     const variantKey = variant ?? props.variant ?? 'default'

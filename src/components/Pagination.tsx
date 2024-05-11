@@ -2,14 +2,17 @@ import React, { type Dispatch, type SetStateAction } from 'react'
 import { styled } from 'styled-components'
 import { themedIcon } from '../themes/icons'
 import { themedVariant } from '../themes/theme'
-import { getClasses, type PaginatedProps } from './Base'
+import { type BaseProps, getClasses } from './Base'
 
-export interface PaginationProps extends PaginatedProps {
+export interface PaginationProps extends BaseProps {
+  level: number
+  page?: number
+  setPage?: (page: number) => void
   numPages: number
   showEnds?: boolean
 }
 
-export const PaginationComponent = ({ className, page, numPages, showEnds, setPage, variant }: PaginationProps): JSX.Element => {
+export const PaginationComponent = ({ className, page, numPages, showEnds, setPage }: PaginationProps): JSX.Element => {
   const [btn1, setBtn1] = React.useState('')
   const [btn2, setBtn2] = React.useState('')
   const [btn3, setBtn3] = React.useState('')
@@ -115,16 +118,16 @@ text-align: left;
     vertical-align: top;
     line-height: 24px;
     margin: 0 8px;
-    font-family: ${themedVariant('fontFamily')};
+    font-family: ${themedVariant('fontFamily', null, false)};
     font-size: 10pt;
     font-variant-numeric: tabular-nums;
-    color: ${themedVariant('textColor')};
+    color: ${themedVariant('textColor', null, false)};
 }
   
 button {
     border: 0;
-    background-color: ${themedVariant('buttonBgColor')};
-    color: ${themedVariant('secondaryTextColor')};
+    background-color: ${themedVariant('buttonBgColor', null, false)};
+    color: ${themedVariant('secondaryTextColor', null, false)};
     margin: 0 1px;
     width: 24px;
     height: 24px;
@@ -142,11 +145,11 @@ button.aics-button-group-end {
 }
   
 button:hover {
-    background-color: ${themedVariant('buttonHoverBgColor')};
+    background-color: ${themedVariant('buttonHoverBgColor', null, false)};
 }
 
 button.disabled:hover {
-  background-color: ${themedVariant('buttonBgColor')};
+  background-color: ${themedVariant('buttonBgColor', null, false)};
 }
   
 button:focus {
@@ -168,48 +171,48 @@ button.disabled.pulse1 {
 @keyframes pulse1 {
     0% {}
     50% {
-      background-color: ${themedVariant('buttonPulseBgColor')};
+      background-color: ${themedVariant('buttonPulseBgColor', null, false)};
     }
     100% {}
 }
 
 .aics-pagination-previous {
-  background-image: ${themedIcon('left', 20, themedVariant('secondaryTextColor'))};
+  background-image: ${themedIcon('left', 20, themedVariant('secondaryTextColor', null, false))};
   background-position: 1px 2px;
 }
 
 .aics-pagination-previous.disabled {
-  background-image: ${themedIcon('left', 20, themedVariant('fadedTextColor'))};
+  background-image: ${themedIcon('left', 20, themedVariant('fadedTextColor', null, false))};
 }
 
 .aics-pagination-next {
-  background-image: ${themedIcon('right', 20, themedVariant('secondaryTextColor'))};
+  background-image: ${themedIcon('right', 20, themedVariant('secondaryTextColor', null, false))};
   background-position: 2px 2px;
 }
 
 .aics-pagination-next.disabled {
-  background-image: ${themedIcon('right', 20, themedVariant('fadedTextColor'))};
+  background-image: ${themedIcon('right', 20, themedVariant('fadedTextColor', null, false))};
 }
 
 .aics-pagination-start {
-  background-image: ${themedIcon('start', 20, themedVariant('secondaryTextColor'))};
+  background-image: ${themedIcon('start', 20, themedVariant('secondaryTextColor', null, false))};
   background-position: 2px 0;
   width: 28px;
   background-size: 24px;
 }
 
 .aics-pagination-start.disabled {
-  background-image: ${themedIcon('start', 20, themedVariant('fadedTextColor'))};
+  background-image: ${themedIcon('start', 20, themedVariant('fadedTextColor', null, false))};
 }
 
 .aics-pagination-end {
-  background-image: ${themedIcon('end', 20, themedVariant('secondaryTextColor'))};
+  background-image: ${themedIcon('end', 20, themedVariant('secondaryTextColor', null, false))};
   background-position: 0;
   width: 28px;
   background-size: 24px;
 }
 
 .aics-pagination-end.disabled {
-  background-image: ${themedIcon('end', 20, themedVariant('fadedTextColor'))};
+  background-image: ${themedIcon('end', 20, themedVariant('fadedTextColor', null, false))};
 }
 `

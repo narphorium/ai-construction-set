@@ -6,11 +6,11 @@ import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface ContentSpanProps extends SelectableProps {
-  span: Span
+  block: Span
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export const ContentSpanComponent = forwardRef(function ContentSpan ({ className, span, selected, setSelected, onClick, variant }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
+export const ContentSpanComponent = forwardRef(function ContentSpan ({ className, block, onClick }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
   const handleClick = (obj: Selectable) => (e: MouseEvent<HTMLDivElement>) => {
     if (onClick !== undefined) {
       onClick(e)
@@ -26,10 +26,10 @@ export const ContentSpanComponent = forwardRef(function ContentSpan ({ className
   }
 
   return <span ref={ref}
-      key={span.uuid}
-      className={getSpanClasses(span)}
-      onClick={handleClick(span)}
-      dangerouslySetInnerHTML={{ __html: span.content }}></span>
+      key={block.uuid}
+      className={getSpanClasses(block)}
+      onClick={handleClick(block)}
+      dangerouslySetInnerHTML={{ __html: block.content }}></span>
 })
 
 ContentSpanComponent.displayName = 'ContentSpan'

@@ -13,12 +13,12 @@ const Template = (args: any) => {
   const { factory } = useContext(BlockFactoryContext)
   
   if (args.theme !== undefined) {
-    args.list.theme = args.theme;
+    args.block.theme = args.theme;
   }
 
   return (
     <>
-      { factory?.build(args.list) }
+      { factory?.build(args.block) }
     </>
   );
 };
@@ -26,31 +26,31 @@ const Template = (args: any) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  list: simpleList(),
+  block: simpleList(),
 };
 
 export const Single = Template.bind({});
 Single.args = {
-  list: singleItemList(),
+  block: singleItemList(),
 };
 
 export const Icons = Template.bind({});
 Icons.args = {
-  list: iconList(),
+  block: iconList(),
 };
 
 export const Selected = Template.bind({});
 Selected.args = {
-  list: selectedList(),
+  block: selectedList(),
 };
 
 export const Nested = Template.bind({});
 Nested.args = {
-  list: nestedList()
+  block: nestedList()
 };
 
 export const Blue = Template.bind({});
 Blue.args = {
-  list: nestedList(),
+  block: nestedList(),
   theme: 'blue',
 };

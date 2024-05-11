@@ -1,8 +1,6 @@
-import { Base } from './Base'
+import { Pageable } from './Pageable'
 
-export class Tree extends Base {
+export class Tree extends Pageable {
   public name?: string
   public icon?: string
-  public page?: number
-  public blocks: Base[] = []
 }

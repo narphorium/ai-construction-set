@@ -2,19 +2,19 @@ import React, { forwardRef, useContext, type ForwardedRef } from 'react'
 import { styled } from 'styled-components'
 import { type List, SelectedVisitor, type ListItem } from '../data'
 import { BlockFactoryContext } from '../hooks'
-import { type BaseProps, getClasses, type SelectableProps, type CollapsibleProps } from './Base'
+import { type BlockProps, getClasses, type SelectableProps, type CollapsibleProps } from './Base'
 import { themedVariant } from '../themes'
 import { CollapsibleBlock } from './CollapsibleBlock'
 
-export interface ListLayoutProps extends BaseProps {
-  list: List
+export interface ListLayoutProps extends BlockProps {
+  block: List
 }
 
-export const ListLayoutComponent = forwardRef(function ListLayout ({ className, list, variant }: ListLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ListLayoutComponent = forwardRef(function ListLayout ({ className, block }: ListLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
 
-  return <div ref={ref} className={getClasses('aics-list', className, list.classNames)} key={list.uuid}>
-        { factory?.buildAll(list.items, list) }
+  return <div ref={ref} className={getClasses('aics-list', className, block.classNames)} key={block.uuid}>
+        { factory?.buildAll(block.items, block) }
     </div>
 })
 
@@ -25,10 +25,10 @@ margin: 4px 0;
 `
 
 export interface ListItemProps extends SelectableProps, CollapsibleProps {
-  item: ListItem
+  block: ListItem
 }
 
-export const ListItemComponent = forwardRef(function ListItem ({ className, item, selected, setSelected, collapsed, setCollapsed, variant }: ListItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const ListItemComponent = forwardRef(function ListItem ({ className, block, selected, setSelected, collapsed, setCollapsed, variant }: ListItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const selectedVisitor = new SelectedVisitor()
 
@@ -53,10 +53,10 @@ export const ListItemComponent = forwardRef(function ListItem ({ className, item
     )
   }
 
-  return <div className={getItemClasses(item)} key={item.uuid}>
+  return <div className={getItemClasses(block)} key={block.uuid}>
     <CollapsibleBlock
     ref={ref}
-    content={item}
+    block={block}
     selected={selected}
     setSelected={setSelected}
     collapsed={collapsed}

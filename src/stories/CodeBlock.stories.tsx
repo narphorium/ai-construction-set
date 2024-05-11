@@ -14,25 +14,25 @@ const Template = (args: CodeBlockProps) => {
   const { factory } = useContext(BlockFactoryContext)
   
   if (args.theme !== undefined) {
-    args.code.theme = args.theme;
+    args.block.theme = args.theme;
   }
   const content = new Content(getGUID());
-  content.children.push(args.code);
+  content.children.push(args.block);
   return (
     <>
-      { factory?.build(args.code) }
+      { factory?.build(args.block) }
     </>
   );
 };
 
 export const Default = Template.bind({});
 Default.args = {
-  code: simplePythonCode(),
+  block: simplePythonCode(),
 };
 
 export const Blue = Template.bind({});
 Blue.args = {
-  code: simplePythonCode(),
+  block: simplePythonCode(),
   theme: 'blue',
 };
 

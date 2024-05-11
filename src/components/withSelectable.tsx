@@ -1,39 +1,39 @@
 import React, { forwardRef, useState, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref, useEffect } from 'react'
-import { type Selectable } from '../data'
 import { getClasses, type SelectableProps } from './Base'
 
 export function withSelectable<P extends SelectableProps, C extends ComponentClass<P>> (
-  Component: C & ComponentType<P>,
-  params: { block: Selectable }
+  Component: C & ComponentType<P>
 ): ForwardRefExoticComponent<Omit<ComponentPropsWithoutRef<C> & { ref?: Ref<InstanceType<C>> }, keyof SelectableProps>>
 
 export function withSelectable<P extends SelectableProps & { ref?: Ref<any> }> (
-  Component: ForwardRefExoticComponent<P>,
-  params: { block: Selectable }
+  Component: ForwardRefExoticComponent<P>
 ): ForwardRefExoticComponent<Omit<P, keyof SelectableProps>>
 
 export function withSelectable<P extends SelectableProps> (
-  Component: FunctionComponent<P>,
-  params: { block: Selectable }
+  Component: FunctionComponent<P>
 ): ForwardRefExoticComponent<Omit<P, keyof SelectableProps>>
 
 export function withSelectable <P extends SelectableProps> (
-  Component: ComponentType<P>,
-  params: { block: Selectable }
+  Component: ComponentType<P>
 ): any {
   const WithSelectable = forwardRef(function (props, ref): JSX.Element {
     const selectableProps = props as P
-    const [selected, setSelected] = useState<boolean>(params.block.selected)
+    console.log('WithSelectable', selectableProps)
+    const [selected, setSelected] = useState<boolean>(selectableProps.block.selected)
+
     useEffect(() => {
       if (selectableProps.selected !== undefined) {
         setSelected(selectableProps.selected)
       }
     }, [selectableProps.selected])
+
     useEffect(() => {
-      params.block.selected = selected
+      selectableProps.block.selected = selected
     }, [selected])
+
     const handleSetSelected = (s: boolean): void => {
       setSelected(s)
+      selectableProps.block.selected = s
       // Bubble up to parent component if present
       if (selectableProps.setSelected !== undefined) {
         selectableProps.setSelected(s)

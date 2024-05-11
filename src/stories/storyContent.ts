@@ -117,9 +117,9 @@ export const nestedList = (): List => {
 
 export const plainTree = (): Tree => {
   const tree = new Tree(getGUID())
-  tree.blocks.push(plainContent())
-  tree.blocks.push(singleItemList())
-  tree.blocks.push(simpleList())
+  tree.children.push(plainContent())
+  tree.children.push(singleItemList())
+  tree.children.push(simpleList())
   return tree
 }
 
@@ -131,7 +131,7 @@ export const paginatedTree = (): Tree => {
     const content = new Content(getGUID())
     content.iteration = i
     content.children.push(plainParagraph('Test Span ' + i))
-    tree.blocks.push(content)
+    tree.children.push(content)
   }
 
   return tree
@@ -150,22 +150,22 @@ export const nestedTree = (): Tree => {
   for (let i = 1; i <= 3; i++) {
     const b1 = plainContent()
     b1.iteration = i
-    outerNode.blocks.push(b1)
+    outerNode.children.push(b1)
 
     const innerNode = new Tree(getGUID())
     innerNode.name = `Inner Node ${i}`
     innerNode.iteration = i
-    outerNode.blocks.push(innerNode)
+    outerNode.children.push(innerNode)
 
     for (let j = 1; j <= 3; j++) {
       const bi1 = plainContent()
       bi1.iteration = j
-      innerNode.blocks.push(bi1)
+      innerNode.children.push(bi1)
 
       const content = new Content(getGUID())
       content.iteration = j
       content.children.push(plainParagraph(`Root node ${i}<br/>Inner node ${j}`))
-      innerNode.blocks.push(content)
+      innerNode.children.push(content)
 
       if (i === 1 && j === 1) {
         content.selected = true
@@ -173,12 +173,12 @@ export const nestedTree = (): Tree => {
 
       const bi2 = plainContent()
       bi2.iteration = j
-      innerNode.blocks.push(bi2)
+      innerNode.children.push(bi2)
     }
 
     const b2 = plainContent()
     b2.iteration = i
-    outerNode.blocks.push(b2)
+    outerNode.children.push(b2)
   }
 
   return outerNode

@@ -6,12 +6,16 @@ import { themedVariant } from '../themes/theme'
 import { getClasses, type SelectableProps } from './Base'
 
 export interface ParagraphBlockProps extends SelectableProps {
-  paragraph: Paragraph
+  block: Paragraph
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className, paragraph, selected, setSelected, onClick, variant }: ParagraphBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className, block, onClick }: ParagraphBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
+
+  const getParagraphClasses = (block: Paragraph, className: string | string[] | undefined): string => {
+    return getClasses('aics-paragraph', className, block.classNames)
+  }
 
   const handleClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
     if (onClick !== undefined) {
@@ -19,9 +23,9 @@ const ParagraphBlockComponent = forwardRef(function ParagraphBlock ({ className,
     }
   }, [onClick])
 
-  return <div ref={ref} key={paragraph.uuid} className={ getClasses('aics-paragraph', className, paragraph.classNames) } onClick={handleClick}>
+  return <div ref={ref} key={block.uuid} className={ getParagraphClasses(block, className) } onClick={handleClick}>
     <span>
-      { factory?.buildAll(paragraph.spans, paragraph) }
+      { factory?.buildAll(block.spans, block) }
     </span>
   </div>
 })

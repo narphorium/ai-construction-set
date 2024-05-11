@@ -14,28 +14,28 @@ const Template = (args: TreeLayoutProps) => {
 
   return (
     <>
-      { factory?.build(args.tree) }
+      { factory?.build(args.block) }
     </>
   );
 };
 
 export const Default = Template.bind({});
 Default.args = {
-  tree: plainTree(),
+  block: plainTree(),
 };
 
 export const Paginated = Template.bind({});
 Paginated.args = {
-  tree: paginatedTree(),
+  block: paginatedTree(),
 };
 
 export const Icon = Template.bind({});
 Icon.args = {
-  tree: iconTree(),
+  block: iconTree(),
 };
 
 export const Nested = Template.bind({});
 Nested.args = {
-  tree: nestedTree(),
+  block: nestedTree(),
 };
 

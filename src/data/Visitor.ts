@@ -149,7 +149,7 @@ export class BaseVisitor implements Visitor {
 
   _traverseTree (block: Tree): void {
     this.visitTree(block)
-    block.blocks.forEach((item: Base) => {
+    block.children.forEach((item: Base) => {
       this.traverse(item)
     })
     this.leaveTree(block)
