@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useContext, type ForwardedRef } from 'react'
+import React, { forwardRef, useContext, type ForwardedRef } from 'react'
 import styled from 'styled-components'
 import { Tree, type Base, type Selectable } from '../data'
 import { SelectedVisitor } from '../data/Visitor'
@@ -30,39 +30,39 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
     return false
   }
 
-  const getTreeClasses = (tree: Tree, className: any): string => {
+  const getTreeClasses = (tree: Tree, className: any, page: number): string => {
     return getClasses('aics-tree', tree.classNames, className,
-      () => selectedVisitor.run(tree).length > 0 ? ['selected'] : [],
+      () => selectedVisitor.run(tree, page).length > 0 ? ['selected'] : [],
       () => tree.icon !== undefined ? ['has-icon'] : [])
   }
 
-  const getNodeClasses = (node: Selectable): string => {
+  const getNodeClasses = (node: Selectable, page: number): string => {
     return getClasses('aics-tree-node', node.classNames, className,
-      () => selectedVisitor.run(node).length > 0 ? ['selected'] : [],
+      () => selectedVisitor.run(node, page).length > 0 ? ['selected'] : [],
       () => !(node instanceof Tree) ? ['aics-tree-leaf-node'] : [],
       () => isFollowingSiblingSelected(node) ? ['before-selected'] : []
     )
   }
 
-  const filterBlocks = useCallback(() => {
+  const filterBlocks = (): Base[] => {
     const filteredBlocks: Base[] = []
-    block.children.forEach((block) => {
-      if (block.iteration === undefined || block.iteration === page) {
-        filteredBlocks.push(block)
+    block.children.forEach((child) => {
+      if (child.iteration === undefined || child.iteration === page) {
+        filteredBlocks.push(child)
       }
     })
     return filteredBlocks
-  }, [block, page])
+  }
 
   if (pages !== null && pages.getNumPages(level) > 1) {
-    return <div ref={ref} key={block.uuid} className={getTreeClasses(block, className)}>
+    return <div ref={ref} key={block.uuid} className={getTreeClasses(block, className, page)}>
         <div className='aics-tree-control'><span></span></div>
         <div className='aics-tree-title'>
           <label className='aics-tree-page-label'>{ block.name }</label>
           <Pagination level={level} page={page} numPages={pages.getNumPages(level)} setPage={setPage} key={block.uuid} />
         </div>
         { filterBlocks().map((childBlock) => {
-          return <div className={getNodeClasses(childBlock as Selectable)} key={childBlock.uuid}>
+          return <div className={getNodeClasses(childBlock as Selectable, page)} key={childBlock.uuid}>
             { factory?.build(childBlock, block) }
             </div>
         }) }
@@ -70,7 +70,7 @@ export const TreeLayoutComponent = forwardRef(function TreeLayout ({ className, 
   } else {
     return <div ref={ref} key={block.uuid} className={getClasses()}>
       { filterBlocks().map((childBlock) => {
-        return <div className={getNodeClasses(childBlock as Selectable)} key={childBlock.uuid}>
+        return <div key={childBlock.uuid}>
         { factory?.build(childBlock, block) }
         </div>
       }) }

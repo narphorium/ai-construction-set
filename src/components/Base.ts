@@ -1,24 +1,23 @@
-import { type Collapsible, type Base, type Selectable, type Pageable } from '../data'
+import { type Collapsible, type Selectable, type Pageable, type Base } from '../data'
+import { type BlockAction } from '../hooks/useBlock'
 
 export interface BaseProps {
   className?: string | string[]
-  variant?: string
 }
 
 export interface BlockProps extends BaseProps {
   block: Base
+  dispatch: (action: BlockAction) => void
   theme?: string
 }
 
 export interface SelectableProps extends BlockProps {
   block: Selectable
-  selected?: boolean
   setSelected?: (selected: boolean) => void
 }
 
 export interface CollapsibleProps extends BlockProps {
   block: Collapsible
-  collapsed?: boolean
   setCollapsed?: (collapsed: boolean) => void
   onTransitionEnd?: () => void
 }
@@ -26,7 +25,7 @@ export interface CollapsibleProps extends BlockProps {
 export interface PaginatedProps extends BlockProps {
   block: Pageable
   level: number
-  page?: number
+  page: number
   setPage?: (page: number) => void
 }
 

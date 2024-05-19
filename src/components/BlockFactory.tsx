@@ -21,7 +21,7 @@ import { withSelectable } from './withSelectable'
 import { withTheme } from './withTheme'
 import { withRef } from './withRef'
 
-export type BlockBuilder = (block: Base) => JSX.Element
+export type BlockBuilder = (block: Base, parent?: Base) => JSX.Element
 
 export interface BlockFactory {
   build: (block: Base, parent?: Base) => JSX.Element
@@ -100,7 +100,7 @@ export class DefaultBlockFactory implements BlockFactory {
         if (parent !== undefined) {
           this.setParent(block, parent)
         }
-        const component = handler(block)
+        const component = handler(block, parent)
         return component
       }
     }
@@ -152,107 +152,89 @@ export class DefaultBlockFactory implements BlockFactory {
     return withPageable(Component)
   }
 
-  buildCollapsible (block: Collapsible): JSX.Element {
-    const CollapsibleBlockWithRef = withRef(CollapsibleBlock)
-    const CollapsibleBlockWithTheme = this.withTheme(CollapsibleBlockWithRef, { block })
+  buildCollapsible (block: Collapsible, parent?: Base): JSX.Element {
+    const CollapsibleBlockWithTheme = this.withTheme(CollapsibleBlock, { block })
     const CollapsibleBlockWithCollapsible = this.withCollapsible(CollapsibleBlockWithTheme)
     const CollapsibleBlockWithSelectable = this.withSelectable(CollapsibleBlockWithCollapsible)
-    return <CollapsibleBlockWithSelectable
-            block={block}
-            variant={block.variant} />
+    const CollapsibleBlockWithRef = withRef(CollapsibleBlockWithSelectable)
+    return <CollapsibleBlockWithRef block={block} />
   }
 
-  buildListItem (block: ListItem): JSX.Element {
-    const ListItemWithRef = withRef(ListLayoutItem)
-    const ListItemWithTheme = this.withTheme(ListItemWithRef, { block })
+  buildListItem (block: ListItem, parent?: Base): JSX.Element {
+    const ListItemWithTheme = this.withTheme(ListLayoutItem, { block })
     const ListItemWithCollapsible = this.withCollapsible(ListItemWithTheme)
     const ListItemWithSelectable = this.withSelectable(ListItemWithCollapsible)
-    return <ListItemWithSelectable
-            block={block}
-            variant={block.variant}/>
+    const ListItemWithRef = withRef(ListItemWithSelectable)
+    return <ListItemWithRef list={parent} block={block} />
   }
 
-  buildContent (block: Content): JSX.Element {
-    const ContentBlockWithRef = withRef(ContentBlock)
-    const ContentBlockWithTheme = this.withTheme(ContentBlockWithRef, { block })
+  buildContent (block: Content, parent?: Base): JSX.Element {
+    const ContentBlockWithTheme = this.withTheme(ContentBlock, { block })
     const ContentBlockWithSelectable = this.withSelectable(ContentBlockWithTheme)
-    return <ContentBlockWithSelectable
-            block={block}
-            variant={block.variant} />
+    const ContentBlockWithRef = withRef(ContentBlockWithSelectable)
+    return <ContentBlockWithRef block={block} />
   }
 
-  buildSection (block: Paragraph): JSX.Element {
-    const ContentSectionWithRef = withRef(ParagraphBlock)
-    const ContentSectionWithTheme = this.withTheme(ContentSectionWithRef, { block })
+  buildSection (block: Paragraph, parent?: Base): JSX.Element {
+    const ContentSectionWithTheme = this.withTheme(ParagraphBlock, { block })
     const ContentSectionWithSelectable = this.withSelectable(ContentSectionWithTheme)
-    return <ContentSectionWithSelectable
-            block={block}
-            variant={block.variant} />
+    const ContentSectionWithRef = withRef(ContentSectionWithSelectable)
+    return <ContentSectionWithRef block={block} />
   }
 
-  buildCode (block: Code): JSX.Element {
-    const CodeSectionWithRef = withRef(CodeBlock)
-    const CodeSectionWithTheme = this.withTheme(CodeSectionWithRef, { block })
+  buildCode (block: Code, parent?: Base): JSX.Element {
+    const CodeSectionWithTheme = this.withTheme(CodeBlock, { block })
     const CodeSectionWithSelectable = this.withSelectable(CodeSectionWithTheme)
-    return <CodeSectionWithSelectable
+    const CodeSectionWithRef = withRef(CodeSectionWithSelectable)
+    return <CodeSectionWithRef
             block={block}
-            editable={false}
-            variant={block.variant} />
+            editable={false} />
   }
 
-  buildList (block: List): JSX.Element {
-    const ListLayoutWithRef = withRef(ListLayout)
-    const ListLayoutWithTheme = this.withTheme(ListLayoutWithRef, { block })
-    return <ListLayoutWithTheme
-            block={block}
-            variant={block.variant} />
+  buildList (block: List, parent?: Base): JSX.Element {
+    const ListLayoutWithTheme = this.withTheme(ListLayout, { block })
+    const ListLayoutWithRef = withRef(ListLayoutWithTheme)
+    return <ListLayoutWithRef block={block} />
   }
 
-  buildSpan (block: Span): JSX.Element {
-    const ContentSpanWithRef = withRef(ContentSpan)
-    const ContentSpanWithTheme = this.withTheme(ContentSpanWithRef, { block })
+  buildSpan (block: Span, parent?: Base): JSX.Element {
+    const ContentSpanWithTheme = this.withTheme(ContentSpan, { block })
     const ContentSpanWithSelectable = this.withSelectable(ContentSpanWithTheme)
-    return <ContentSpanWithSelectable
-            block={block}
-            variant={block.variant} />
+    const ContentSpanWithRef = withRef(ContentSpanWithSelectable)
+    return <ContentSpanWithRef block={block} />
   }
 
-  buildSelectable (block: Selectable): JSX.Element {
-    const SentinalWithRef = withRef(SentinalView)
-    const SentinalWithTheme = this.withTheme(SentinalWithRef, { block })
+  buildSelectable (block: Selectable, parent?: Base): JSX.Element {
+    const SentinalWithTheme = this.withTheme(SentinalView, { block })
     const SentinalWithSelectable = this.withSelectable(SentinalWithTheme)
-    return <SentinalWithSelectable
-            block={block}
-            variant={block.variant} />
+    const SentinalWithRef = withRef(SentinalWithSelectable)
+    return <SentinalWithRef block={block} />
   }
 
-  buildTree (block: Tree): JSX.Element {
-    const TreeWithRef = withRef(TreeLayout)
-    const PageableTreeLayout = this.withPageable(TreeWithRef)
+  buildTree (block: Tree, parent?: Base): JSX.Element {
+    const PageableTreeLayout = this.withPageable(TreeLayout)
     const TreeLayoutWithTheme = this.withTheme(PageableTreeLayout, { block })
+    const TreeWithRef = withRef(TreeLayoutWithTheme)
     const level = this.getTreeLevel(block)
     // Every top-level component has a nested pagination provider
     if (level === 1) {
       return <NestedPaginationProvider
                 pages={[1]}
                 numPages={[1]} >
-        <TreeLayoutWithTheme
+        <TreeWithRef
             level={level}
-            block={block}
-            variant={block.variant} />
+            block={block} />
       </NestedPaginationProvider>
     } else {
-      return <TreeLayoutWithTheme
+      return <TreeWithRef
               level={level}
               block={block} />
     }
   }
 
-  buildTable (block: Table): JSX.Element {
-    const TableWithRef = withRef(TableBlock)
-    const TableWithTheme = this.withTheme(TableWithRef, { block })
-    return <TableWithTheme
-            block={block}
-            variant={block.variant} />
+  buildTable (block: Table, parent?: Base): JSX.Element {
+    const TableWithTheme = this.withTheme(TableBlock, { block })
+    const TableWithRef = withRef(TableWithTheme)
+    return <TableWithRef block={block} />
   }
 };

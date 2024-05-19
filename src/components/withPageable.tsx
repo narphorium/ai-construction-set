@@ -1,7 +1,8 @@
 import React, { forwardRef, useContext, useEffect, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react'
-import { type Base, SelectedVisitor } from '../data'
+import { type Base } from '../data'
 import { NestedPaginationContext, NestedPaginationDispatchContext, type NestedPaginationState } from '../hooks'
 import { getClasses, type PaginatedProps } from './Base'
+import { BlockActionType } from '../hooks/useBlock'
 
 function getPage (state: NestedPaginationState | null, level: number): number {
   return state !== null ? state.pages[level - 1] : 1
@@ -46,38 +47,29 @@ export function withPageable <P extends PaginatedProps> (
       }
     }, [pageableProps.level, pagesDispatch])
 
+    const getPageableClasses = (pages: NestedPaginationState | null, pageableProps: P): string => {
+      return getClasses(
+        pageableProps.className,
+        () => getNumPages(pages, pageableProps.level) > 1 ? ['aics-paginated'] : [])
+    }
+
     const setPage = (p: number): void => {
-      pageableProps.block.page = p
       if (pagesDispatch !== null && getPage(pages, pageableProps.level) !== p) {
         pagesDispatch({ type: 'goto', page: p, level: pageableProps.level })
-        pageableProps.block.page = p //  FIXME: Should this be validated?
+        //  FIXME: Should this be validated?
+        pageableProps.dispatch({ type: BlockActionType.SET_PAGE, page: p })
         if (pageableProps.setPage !== undefined) {
           pageableProps.setPage(p)
         }
       }
     }
 
-    // Automatically turn to the selected page
-    const selectedVisitor = new SelectedVisitor()
-    useEffect(() => {
-      const page = getPage(pages, pageableProps.level)
-      if (page !== null) {
-        if (selectedVisitor.run(pageableProps.block, page).length > 0) {
-          pageableProps.block.children.forEach((block: Base) => {
-            if (block.iteration !== undefined && selectedVisitor.run(block, page).length > 0) {
-              setPage(block.iteration)
-            }
-          })
-        }
-      }
-    }, [pages])
-
     return <Component
             {...pageableProps}
             ref={ref}
             page={getPage(pages, pageableProps.level)}
             setPage={setPage}
-            classNames={getClasses(pageableProps.className, () => getNumPages(pages, pageableProps.level) > 1 ? ['aics-paginated'] : [])} />
+            classNames={getPageableClasses(pages, pageableProps)} />
   })
 
   const componentName = Component.displayName ?? Component.name ?? 'Component'

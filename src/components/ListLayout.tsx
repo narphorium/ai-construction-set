@@ -25,15 +25,14 @@ margin: 4px 0;
 `
 
 export interface ListItemProps extends SelectableProps, CollapsibleProps {
+  list: List
   block: ListItem
 }
 
-export const ListItemComponent = forwardRef(function ListItem ({ className, block, selected, setSelected, collapsed, setCollapsed, variant }: ListItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const { factory } = useContext(BlockFactoryContext)
+export const ListItemComponent = forwardRef(function ListItem ({ className, list, block, dispatch, setSelected, setCollapsed }: ListItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const selectedVisitor = new SelectedVisitor()
 
-  const isFollowingSiblingSelected = (item: ListItem): boolean => {
-    const list = factory?.getParent(item) as List
+  const isFollowingSiblingSelected = (list: List, item: ListItem): boolean => {
     const index = list.items.indexOf(item)
     if (index < 0) {
       return false
@@ -46,22 +45,20 @@ export const ListItemComponent = forwardRef(function ListItem ({ className, bloc
     return false
   }
 
-  const getItemClasses = (node: ListItem): string => {
+  const getItemClasses = (list: List, node: ListItem): string => {
     return getClasses('aics-list-item', node.classNames, className,
       () => node.selected ? ['selected'] : [],
-      () => isFollowingSiblingSelected(node) ? ['before-selected'] : []
+      () => isFollowingSiblingSelected(list, node) ? ['before-selected'] : []
     )
   }
 
-  return <div className={getItemClasses(block)} key={block.uuid}>
+  return <div className={getItemClasses(list, block)} key={block.uuid}>
     <CollapsibleBlock
     ref={ref}
     block={block}
-    selected={selected}
+    dispatch={dispatch}
     setSelected={setSelected}
-    collapsed={collapsed}
-    setCollapsed={setCollapsed}
-    variant={variant} />
+    setCollapsed={setCollapsed} />
   </div>
 })
 
@@ -81,9 +78,9 @@ export const ListLayoutItem = styled(ListItemComponent)`
   border-radius: 0;
 
   .selected & {
-    color: ${(props) => themedVariant('textColor', props.variant, true)};
-    background-color: ${(props) => themedVariant('contentBackgroundColor', props.variant, true)};
-    border-color: ${(props) => themedVariant('borderColor', props.variant, true)};
+    color: ${(props) => themedVariant('textColor', props.block.variant, true)};
+    background-color: ${(props) => themedVariant('contentBackgroundColor', props.block.variant, true)};
+    border-color: ${(props) => themedVariant('borderColor', props.block.variant, true)};
   }
 
   & .aics-paragraph:first-child,

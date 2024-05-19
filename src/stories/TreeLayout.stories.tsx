@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { TreeLayout, TreeLayoutProps } from '../components/TreeLayout';
 import { BlockFactoryContext } from '../hooks';
 import { iconTree, nestedTree, paginatedTree, plainTree } from './storyContent';
+import { Tree } from '../data';
 
 export default {
   component: TreeLayout,
@@ -9,7 +10,11 @@ export default {
   tags: ['autodocs'],
 };
 
-const Template = (args: TreeLayoutProps) => {
+interface TreeLayoutStoryProps {
+  block: Tree
+}
+
+const Template = (args: TreeLayoutStoryProps) => {
   const { factory } = useContext(BlockFactoryContext)
 
   return (

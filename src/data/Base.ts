@@ -5,8 +5,4 @@ export abstract class Base {
   theme?: string
 
   public constructor (public uuid: string) {}
-
-  public getClassNames (selectedIndex: number): string[] {
-    return Array.from(this.classNames)
-  }
 }

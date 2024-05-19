@@ -1,14 +1,34 @@
-import React, { forwardRef, useImperativeHandle, useRef, type ComponentType, type ForwardRefExoticComponent, type PropsWithoutRef, type RefAttributes } from 'react'
-import { type BlockProps } from './Base'
+import React, { type ComponentClass, type ComponentPropsWithoutRef, type Ref, forwardRef, useImperativeHandle, useRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent } from 'react'
+import { type BaseProps } from './Base'
+import useBlock from '../hooks/useBlock'
+import { type Base } from '../data'
 
 export interface BlockRef {
   scrollIntoView: (args: any) => void
 }
 
-export const withRef = <TProps extends BlockProps>(
-  Component: ComponentType<TProps>
-): ForwardRefExoticComponent<PropsWithoutRef<TProps> & RefAttributes<any>> => {
-  const WithRef = forwardRef(function (props: TProps, _ref): JSX.Element {
+interface WithRefProps extends BaseProps {
+  block: Base
+}
+
+export function withRef<P extends WithRefProps, C extends ComponentClass<P>> (
+  Component: C & ComponentType<P>
+): ForwardRefExoticComponent<Omit<ComponentPropsWithoutRef<C> & { ref?: Ref<InstanceType<C>> }, keyof WithRefProps>>
+
+export function withRef<P extends WithRefProps & { ref?: Ref<any> }> (
+  Component: ForwardRefExoticComponent<P>
+): ForwardRefExoticComponent<Omit<P, keyof WithRefProps>>
+
+export function withRef<P extends WithRefProps> (
+  Component: FunctionComponent<P>
+): ForwardRefExoticComponent<Omit<P, keyof WithRefProps>>
+
+export function withRef <P extends WithRefProps> (
+  Component: ComponentType<P>
+): any {
+  const WithRef = forwardRef(function (props, _ref): JSX.Element {
+    const blockProps = props as P
+    const { state, dispatch } = useBlock(blockProps.block)
     const ref = useRef<BlockRef>(null)
 
     useImperativeHandle(ref, () => ({
@@ -18,11 +38,15 @@ export const withRef = <TProps extends BlockProps>(
     }))
 
     return <Component
-          {...props}
-          ref={ref} />
+          {...blockProps}
+          ref={ref}
+          block={state}
+          dispatch={dispatch} />
   })
 
   const componentName = Component.displayName ?? Component.name ?? 'Component'
   WithRef.displayName = `withRef(${componentName})`
   return WithRef
 }
+
+export default withRef

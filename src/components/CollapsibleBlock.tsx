@@ -5,25 +5,27 @@ import { BlockFactoryContext } from '../hooks'
 import { themedIcon } from '../themes/icons'
 import { themedVariant } from '../themes/theme'
 import { getClasses, type CollapsibleProps, type SelectableProps } from './Base'
+import { BlockActionType } from '../hooks/useBlock'
 
 export interface CollapsibleBlockProps extends SelectableProps, CollapsibleProps {
   block: Collapsible
 }
 
-export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, block, collapsed, setCollapsed: onToggle, onTransitionEnd }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, block, dispatch, setCollapsed, onTransitionEnd }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const { factory } = useContext(BlockFactoryContext)
   const inner = useRef<HTMLDivElement>(null)
 
   const updateInner = useCallback(() => {
+    console.log('updateInner', inner.current, block.collapsed)
     if (inner.current != null) {
-      if (collapsed === true) {
+      if (block.collapsed) {
         const h = -(inner.current.offsetHeight + 40)
         inner.current.setAttribute('style', 'margin-top: ' + h + 'px')
       } else {
         inner.current.setAttribute('style', 'margin-top: 0px')
       }
     }
-  }, [inner, collapsed])
+  }, [block.collapsed])
 
   // FIXME: This was causing a loop of updates
   // useResizeDetector({
@@ -38,8 +40,9 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
   }, [])
 
   useEffect(() => {
+    console.log('CollapsibleBlock useEffect', block.collapsed)
     updateInner()
-  }, [collapsed, updateInner])
+  }, [block.collapsed, updateInner, setCollapsed])
 
   const getBlockClasses = (className: any, content: Collapsible, collapsed: boolean | undefined): string => {
     return getClasses(
@@ -51,13 +54,14 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
   }
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-    if (onToggle !== undefined && collapsed !== undefined) {
-      onToggle(!collapsed)
+    dispatch({ type: BlockActionType.SET_COLLAPSED, collapsed: !block.collapsed })
+    if (setCollapsed !== undefined && block.collapsed !== undefined) {
+      setCollapsed(!block.collapsed)
       e.stopPropagation()
     }
   }
 
-  return (<div ref={ref} className={getBlockClasses(className, block, collapsed)} key={block.uuid}>
+  return (<div ref={ref} className={getBlockClasses(className, block, block.collapsed)} key={block.uuid}>
       <div className="aics-collapsible-block-header">
         <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
         <div className="aics-collapsible-block-title" onClick={handleClick}>{ block.name }</div>

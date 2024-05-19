@@ -1,5 +1,6 @@
-import React, { forwardRef, useState, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref, useEffect } from 'react'
+import React, { forwardRef, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react'
 import { getClasses, type CollapsibleProps } from './Base'
+import { BlockActionType } from '../hooks/useBlock'
 
 export function withCollapsible<P extends CollapsibleProps, C extends ComponentClass<P>> (
   Component: C & ComponentType<P>
@@ -18,21 +19,13 @@ export function withCollapsible <P extends CollapsibleProps> (
 ): any {
   const WithCollapsible = forwardRef(function (props, ref): JSX.Element {
     const collapsibleProps = props as P
-    const [collapsed, setCollapsed] = useState<boolean>(collapsibleProps.block.collapsed)
 
-    useEffect(() => {
-      if (collapsibleProps.collapsed !== undefined) {
-        setCollapsed(collapsibleProps.collapsed)
-      }
-    }, [collapsibleProps.collapsed])
-
-    useEffect(() => {
-      collapsibleProps.block.collapsed = collapsed
-    }, [collapsed])
+    const getCollapsibleClasses = (collapsibleProps: CollapsibleProps): string => {
+      return getClasses(collapsibleProps.className, () => collapsibleProps.block.collapsed ? ['collapsed'] : [])
+    }
 
     const handleSetCollapsed = (c: boolean): void => {
-      setCollapsed(c)
-      collapsibleProps.block.collapsed = c
+      collapsibleProps.dispatch({ type: BlockActionType.SET_COLLAPSED, collapsed: c })
 
       // Bubble up to parent component if present
       if (collapsibleProps.setCollapsed !== undefined) {
@@ -42,9 +35,8 @@ export function withCollapsible <P extends CollapsibleProps> (
     return <Component
         {...collapsibleProps}
         ref={ref}
-        collapsed={collapsed}
         setCollapsed={handleSetCollapsed}
-        className={getClasses(collapsibleProps.className, () => collapsed ? ['collapsed'] : [])} />
+        className={getCollapsibleClasses(collapsibleProps)} />
   })
 
   const componentName = Component.displayName ?? Component.name ?? 'Component'

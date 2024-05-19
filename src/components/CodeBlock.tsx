@@ -13,11 +13,10 @@ export interface CodeBlockProps extends SelectableProps {
   extensions?: any[]
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
   onChange?: (value: string, viewUpdate: ViewUpdate) => void
-  editable: boolean
 }
 
 const CodeBlockComponent = forwardRef(function CodeBlock (
-  { className, block, extensions, onClick, onChange, editable }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+  { className, block, extensions, onClick, onChange }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const theme = useTheme()
   const getTheme = (): Extension[] => {
     if (block.variant !== undefined) {
@@ -48,7 +47,7 @@ const CodeBlockComponent = forwardRef(function CodeBlock (
         value={codeContent}
         basicSetup={false}
         theme={getTheme()}
-        editable={editable}
+        editable={block.editable}
         extensions={config}
         onChange={(value: string, viewUpdate: ViewUpdate) => {
           if (onChange !== undefined) {

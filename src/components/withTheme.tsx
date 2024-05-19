@@ -1,4 +1,4 @@
-import React, { forwardRef, type ComponentType, type ForwardRefExoticComponent, type PropsWithoutRef, type RefAttributes } from 'react'
+import React, { forwardRef, useEffect, type ComponentType, type ForwardRefExoticComponent, type PropsWithoutRef, type RefAttributes } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { DarkModeContext } from '../hooks/DarkModeProvider'
 import { type BaseProps } from './Base'
@@ -11,7 +11,7 @@ export const withTheme = <TProps extends BaseProps>(
     const { darkMode } = React.useContext(DarkModeContext)
     const [theme, setTheme] = React.useState(params.lightTheme)
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (darkMode != null) {
         setTheme(darkMode ? params.darkTheme : params.lightTheme)
       }
