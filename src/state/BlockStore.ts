@@ -1,6 +1,7 @@
 import * as uuid from 'uuid'
 import { type StoreApi, createStore } from 'zustand/vanilla'
 import { type Block } from '../data/blocks'
+import { Behavior } from '../data/behaviors'
 
 export interface BlockStoreState {
   rootBlocks: string[]
@@ -9,11 +10,13 @@ export interface BlockStoreState {
 
 export interface BlockStoreActions {
   getRootBlockIds: () => string[]
-  getBlock: (uuid: string) => Block | undefined
-  addBlock: (block: Block) => string
-  addRootBlock: (block: Block) => string
-  addChildBlock: (block: Block, parent: string) => string
-  updateBlock: (uid: string, updates: Partial<any>) => void
+  getBlock: <T extends Block>(uuid: string) => T | undefined
+  getBehavior: <T extends Behavior>(uuid: string) => T | undefined
+  addBlock: <T extends Block>(block: T) => string
+  addRootBlock: <T extends Block>(block: T) => string
+  addChildBlock: <T extends Block>(block: T, parent: string) => string
+  updateBlock: <T extends Block>(uid: string, updates: Partial<T>) => void
+  updateBehavior: <T extends Behavior>(uid: string, updates: Partial<T>) => void
   deleteBlock: (uid: string) => void
 }
 
@@ -28,7 +31,7 @@ const getGUID = (): string => {
   return uuid.v4()
 }
 
-const addBlock = (state: BlockStoreState, block: Block): BlockStoreState => {
+const addBlock = <T extends Block>(state: BlockStoreState, block: T): BlockStoreState => {
   const newBlocks = new Map(state.blocks)
   if (block.uuid === '') {
     block.uuid = getGUID()
@@ -37,7 +40,18 @@ const addBlock = (state: BlockStoreState, block: Block): BlockStoreState => {
   return { ...state, blocks: newBlocks }
 }
 
-const updateBlock = (state: BlockStoreState, uuid: string, updates: Partial<Block>): BlockStoreState => {
+const updateBlock = <T extends Block>(state: BlockStoreState, uuid: string, updates: Partial<T>): BlockStoreState => {
+  const block = state.blocks.get(uuid)
+  if (block === undefined) {
+    return state
+  }
+  const newBlock = { ...block, ...updates }
+  const newBlocks = new Map(state.blocks)
+  newBlocks.set(uuid, newBlock)
+  return { ...state, blocks: newBlocks }
+}
+
+const updateBehavior = <T extends Behavior>(state: BlockStoreState, uuid: string, updates: Partial<T>): BlockStoreState => {
   const block = state.blocks.get(uuid)
   if (block === undefined) {
     return state
@@ -85,24 +99,30 @@ export const createBlockStore = (
 
     getBlock: <T extends Block>(uuid: string) => get().blocks.get(uuid) as T | undefined,
 
+    getBehavior: <T extends Behavior>(uuid: string) => get().blocks.get(uuid) as T | undefined,
+
     addBlock: (block: Block): string => {
       set((state) => addBlock(state, block))
       return block.uuid
     },
 
-    addRootBlock: (block: Block): string => {
+    addRootBlock: <T extends Block>(block: T): string => {
       // FIXME: There should just be a document that is the root
       set((state) => addRootBlock(state, block))
       return block.uuid
     },
 
-    addChildBlock: (block: Block, parent: string): string => {
+    addChildBlock: <T extends Block>(block: T, parent: string): string => {
       set((state) => addBlock(state, block))
       return block.uuid
     },
 
-    updateBlock: (uuid: string, updates: Partial<any>) => {
+    updateBlock: <T extends Block>(uuid: string, updates: Partial<T>) => {
       set((state) => updateBlock(state, uuid, updates))
+    },
+
+    updateBehavior: <T extends Behavior>(uuid: string, updates: Partial<T>) => {
+      set((state) => updateBehavior(state, uuid, updates))
     },
 
     deleteBlock: (uuid: string) => {
