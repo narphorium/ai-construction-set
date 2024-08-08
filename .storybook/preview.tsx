@@ -1,13 +1,9 @@
 
 import { DocsContainer } from '@storybook/blocks';
 import React, { ComponentType } from "react";
-import { ThemeProvider, createGlobalStyle } from 'styled-components';
-import { BaseProps } from '../src/components/Base';
-import { DefaultBlockFactory } from '../src/components/BlockFactory';
-import { withTheme } from '../src/components/withTheme';
-import { BlockFactoryContext } from '../src/hooks';
-import { DarkModeContext } from "../src/hooks/DarkModeProvider";
-import { useStorybookDarkMode } from "../src/hooks/useStorybookDarkMode";
+import { createGlobalStyle } from 'styled-components';
+import { DefaultThemeRegistry } from '../src/state/ThemeRegistry';
+import { BlockRegistryProvider, BlockRendererProvider, BlockStoreProvider, ThemeProvider, useStorybookDarkMode } from '../src/state/hooks';
 
 const GlobalStyles = createGlobalStyle`
     html,
@@ -16,10 +12,10 @@ const GlobalStyles = createGlobalStyle`
     }
     `
 
-const blockFactory = new DefaultBlockFactory()
+const themeRegistry = new DefaultThemeRegistry()
 
 const ExampleContainer = ({ children, context, ...props }) => {
-  const [lightTheme, darkTheme] = blockFactory.getTheme('default')
+  const [lightTheme, darkTheme] = themeRegistry.getTheme('default')
   const [theme, setTheme] = React.useState(lightTheme)
   const [darkMode, setDarkMode] = useStorybookDarkMode(context)
 
@@ -28,19 +24,21 @@ const ExampleContainer = ({ children, context, ...props }) => {
       setTheme(darkMode ? darkTheme : lightTheme)
     }
   }, [darkMode])
-  
-  return <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
-    <ThemeProvider theme={theme}>
-    <BlockFactoryContext.Provider value={{ factory: blockFactory, setFactory: () => {} }}>
-    <GlobalStyles />
-    <DocsContainer context={context} {...props}>{children}</DocsContainer>
-    </BlockFactoryContext.Provider>
-    </ThemeProvider>
-    </DarkModeContext.Provider>;
+
+  return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
+    <BlockRegistryProvider>
+      <BlockStoreProvider>
+        <BlockRendererProvider>
+          <GlobalStyles />
+          <DocsContainer context={context} {...props}>{children}</DocsContainer>
+        </BlockRendererProvider>
+      </BlockStoreProvider>
+    </BlockRegistryProvider>
+  </ThemeProvider>;
 };
 
-const withBackground = <TProps extends BaseProps>(Component: ComponentType<TProps>) => {
-  return (props: TProps) => {
+const withBackground = (Component: ComponentType<any>) => {
+  return (props: any) => {
     return (
       <>
         <GlobalStyles />
@@ -51,17 +49,19 @@ const withBackground = <TProps extends BaseProps>(Component: ComponentType<TProp
 }
 
 const StoryDecorator = (Story, context) => {
-  const [lightTheme, darkTheme] = blockFactory.getTheme('default')
+  const [theme, setTheme] = React.useState('default')
   const [darkMode, setDarkMode] = useStorybookDarkMode(context)
 
   const StoryWithBackground = withBackground(Story)
-  const StoryWithTheme = withTheme(StoryWithBackground, { lightTheme, darkTheme })
-
-  return <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
-    <BlockFactoryContext.Provider value={{ factory: blockFactory, setFactory: () => {} }}>
-    <StoryWithTheme key="theme" />
-    </BlockFactoryContext.Provider>
-    </DarkModeContext.Provider>;
+  return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
+    <BlockRegistryProvider>
+      <BlockStoreProvider>
+        <BlockRendererProvider>
+          <StoryWithBackground />
+        </BlockRendererProvider>
+      </BlockStoreProvider>
+    </BlockRegistryProvider>
+  </ThemeProvider>;
 };
 
 /** @type { import('@storybook/react').Preview } */
@@ -73,8 +73,8 @@ const preview = {
       toolbar: {
         title: 'Theme',
         items: [
-          {value: 'light', icon: 'sun', title: 'Light (default)'}, 
-          {value: 'dark', icon: 'moon', title: 'Dark'}
+          { value: 'light', icon: 'sun', title: 'Light (default)' },
+          { value: 'dark', icon: 'moon', title: 'Dark' }
         ],
         dynamicTitle: true,
       },
@@ -97,5 +97,5 @@ const preview = {
     StoryDecorator
   ],
 };
-  
+
 export default preview;

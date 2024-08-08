@@ -29,7 +29,7 @@ export const useBlockStore = (): BlockStore => {
   const blockStoreContext = useContext(BlockStoreContext)
 
   if (blockStoreContext === null) {
-    throw new Error('useBlockStore must be use within BlockStoreProvider')
+    throw new Error('useBlockStore must be used within BlockStoreProvider')
   }
 
   return useStore(blockStoreContext)

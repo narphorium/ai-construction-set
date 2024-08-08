@@ -1,4 +1,4 @@
-import { Block } from "../../data/blocks"
+import { Block } from "../blocks"
 import { BlockSelector } from "../selectors"
 import { useBlockRegistry } from "./useBlockRegistry"
 import { useBlockStore } from "./useBlockStore"
@@ -24,7 +24,8 @@ export const useBlock = <T extends Block>(selector: string | BlockSelector<T>): 
     throw new Error('Block not found')
   }
 
-  let actions = registry.createBlockService<T>(store, block.uuid)
+  // Add actions to block
+  let actions = registry.createBlockActions<T>(store, block.uuid)
 
   return { ...block, ...actions }
 }
@@ -34,10 +35,13 @@ export const useBlocks = <T extends Block>(selector: BlockSelector<T>): T[] => {
   const registry = useBlockRegistry()
 
   let blocks = selector(store.blocks.values())
+
+  // Add actions to blocks
   blocks.forEach((block: T) => {
-    let actions = registry.createBlockService<T>(store, block.uuid)
+    let actions = registry.createBlockActions<T>(store, block.uuid)
     Object.assign(block, actions)
   })
+
   return blocks
 }
 
