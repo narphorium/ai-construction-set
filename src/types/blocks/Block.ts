@@ -1,5 +1,7 @@
+export type BlockID = string
+
 export interface BlockProps {
-  uuid: string
+  uuid: BlockID
   type: string
   classNames: Set<string>
   parent?: string

@@ -1,5 +1,5 @@
 import { BlockActions, BlockProps, createBlock } from "../blocks"
-import { BlockStore } from "../BlockStore"
+import { BlockStore } from "../../state/BlockStore"
 
 export interface ListProps extends BlockProps { }
 

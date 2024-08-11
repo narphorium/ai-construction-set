@@ -1,6 +1,6 @@
 import { createPageable, createSelectable, PageableProps, SelectableProps } from "../behaviors"
 import { BlockActions, BlockProps, createBlock } from "../blocks"
-import { BlockStore } from "../BlockStore"
+import { BlockStore } from "../../state/BlockStore"
 
 export interface TreeProps extends BlockProps, SelectableProps, PageableProps {
   name?: string
