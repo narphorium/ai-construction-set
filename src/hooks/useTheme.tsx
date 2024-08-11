@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useRef } from 'react'
-import { DefaultThemeRegistry, ThemeRegistry } from '../ThemeRegistry'
+import { DefaultThemeRegistry, ThemeRegistry } from '../themes/ThemeRegistry'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 interface ThemeContextProps {

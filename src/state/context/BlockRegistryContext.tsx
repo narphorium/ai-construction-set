@@ -31,13 +31,3 @@ export const BlockRegistryProvider = ({ registry, children }: BlockRegistryProvi
     </BlockRegistryContext.Provider>
   )
 }
-
-export const useBlockRegistry = (): BlockRegistry => {
-  const { registry } = useContext(BlockRegistryContext)
-
-  if (registry === undefined) {
-    throw new Error('useBlockRegistry must be used within BlockRegistryProvider')
-  }
-
-  return registry
-}

@@ -1,12 +1,12 @@
 import React, { createContext, ReactNode, useContext, useRef } from 'react'
 import { DefaultBlockRenderer, type BlockRenderer } from '../../components/BlockRenderer'
 
-interface BlockRendererProps {
+interface BlockRendererContextProps {
   renderer: BlockRenderer | undefined
   setRenderer: (renderer: BlockRenderer) => void
 }
 
-export const BlockRendererContext = createContext<BlockRendererProps>({
+export const BlockRendererContext = createContext<BlockRendererContextProps>({
   renderer: undefined,
   setRenderer: (renderer: BlockRenderer) => { }
 })
@@ -29,14 +29,4 @@ export const BlockRendererProvider = ({ renderer, children }: BlockRendererProvi
       {children}
     </BlockRendererContext.Provider>
   )
-}
-
-export const useBlockRenderer = (): BlockRenderer => {
-  const { renderer } = useContext(BlockRendererContext)
-
-  if (renderer === undefined) {
-    throw new Error('useBlockRenderer must be used within BlockRendererProvider')
-  }
-
-  return renderer
 }

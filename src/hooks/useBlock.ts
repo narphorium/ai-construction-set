@@ -1,24 +1,30 @@
-import { Block } from "../blocks"
-import { BlockSelector } from "../selectors"
+import { Block, BlockID } from "../types/blocks"
+import { BlockQuery } from "../state/matchers"
 import { useBlockRegistry } from "./useBlockRegistry"
 import { useBlockStore } from "./useBlockStore"
+import { useDocument } from "./useDocument"
 
 
-export const useBlock = <T extends Block>(selector: string | BlockSelector<T>): T => {
+export const useBlock = <T extends Block>(selector: BlockID | BlockQuery): T => {
   const store = useBlockStore()
   const registry = useBlockRegistry()
+  const document = useDocument()
 
   let block: T | undefined = undefined
   if (typeof selector === 'string') {
-    block = store.getBlock<T>(selector)
+    block = store.getBlock<T>(selector as BlockID)
   } else {
-    const matches = selector(store.blocks.values())
+    if (document === undefined) {
+      throw new Error('Document not found')
+    }
+
+    const matches = store.findBlocks(document, selector, registry)
     if (matches.length === 0) {
       throw new Error('No block found')
     } else if (matches.length > 1) {
       throw new Error('Multiple blocks found')
     }
-    block = matches[0]
+    block = matches[0] as T
   }
   if (block === undefined) {
     throw new Error('Block not found')
@@ -30,11 +36,16 @@ export const useBlock = <T extends Block>(selector: string | BlockSelector<T>): 
   return { ...block, ...actions }
 }
 
-export const useBlocks = <T extends Block>(selector: BlockSelector<T>): T[] => {
+export const useBlocks = <T extends Block>(selector: BlockQuery): T[] => {
   const store = useBlockStore()
   const registry = useBlockRegistry()
+  const document = useDocument()
 
-  let blocks = selector(store.blocks.values())
+  if (document === undefined) {
+    throw new Error('Document not found')
+  }
+
+  let blocks: T[] = store.findBlocks(document, selector, registry).map((block) => block as T)
 
   // Add actions to blocks
   blocks.forEach((block: T) => {
