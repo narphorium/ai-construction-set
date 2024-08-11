@@ -1,10 +1,10 @@
 import { BlockStore } from "."
-import { BehaviorActions, BehaviorProps, createCollapsibleActions, createPageableActions, createSelectableActions } from "./behaviors"
-import { BlockActions, BlockProps, createCheckboxActions, createCodeActions, createParagraphActions, createSectionActions, createSpanActions } from "./blocks"
-import { createListActions, createTableRowActions, createTableActions, createTreeActions } from "./layouts"
-import { createCollapsible, createPageable, createSelectable } from "./behaviors"
-import { Block, createCheckbox, createCode, createParagraph, createSection, createSpan } from "./blocks"
-import { createList, createTree, createTable, createTableRow } from "./layouts"
+import { BehaviorActions, BehaviorProps, createCollapsibleActions, createPageableActions, createSelectableActions } from "./../types/behaviors"
+import { BlockActions, BlockProps, createCheckboxActions, createCodeActions, createParagraphActions, createSectionActions, createSpanActions } from "./../types/blocks"
+import { createListActions, createTableRowActions, createTableActions, createTreeActions } from "../types/layouts"
+import { createCollapsible, createPageable, createSelectable } from "./../types/behaviors"
+import { Block, createCheckbox, createCode, createParagraph, createSection, createSpan } from "./../types/blocks"
+import { createList, createTree, createTable, createTableRow } from "../types/layouts"
 
 export type BlockBuilder<T extends Block> = (props: Partial<T>) => T
 
@@ -61,7 +61,7 @@ export class BlockRegistry {
     return block
   }
 
-  createBlockService<T extends BlockActions>(store: BlockStore, blockId: string): T {
+  createBlockActions<T extends BlockActions>(store: BlockStore, blockId: string): T {
     const block = store.getBlock(blockId)
     if (block === undefined) {
       throw new Error(`Block ${blockId} not found`)
@@ -129,7 +129,6 @@ export class DefaultBlockRegistry extends BlockRegistry {
       service: createTableRowActions,
       behaviors: ['aics:selectable']
     })
-
 
     // Register layouts
     this.registerBlock({

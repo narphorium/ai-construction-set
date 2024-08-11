@@ -1,0 +1,12 @@
+import { BlockRegistry } from "../BlockRegistry";
+import { Block } from "../../types/blocks";
+import { BlockMatcher } from "./BlockMatcher";
+
+export class TextMatcher<T extends Block> implements BlockMatcher {
+  constructor(private property: keyof T, private text: string) { }
+
+  match(registry: BlockRegistry, block: Block): boolean {
+    const b = block as T;
+    return this.property in b && (b[this.property] as string).indexOf(this.text) >= 0;
+  }
+}
