@@ -1,6 +1,6 @@
 import { BlockStore } from "."
 import { BehaviorActions, BehaviorProps, createCollapsibleActions, createPageableActions, createSelectableActions } from "./../types/behaviors"
-import { BlockActions, BlockProps, createCheckboxActions, createCodeActions, createParagraphActions, createSectionActions, createSpanActions } from "./../types/blocks"
+import { BlockActions, BlockID, BlockProps, createCheckboxActions, createCodeActions, createParagraphActions, createSectionActions, createSpanActions } from "./../types/blocks"
 import { createListActions, createTableRowActions, createTableActions, createTreeActions } from "../types/layouts"
 import { createCollapsible, createPageable, createSelectable } from "./../types/behaviors"
 import { Block, createCheckbox, createCode, createParagraph, createSection, createSpan } from "./../types/blocks"
@@ -8,23 +8,23 @@ import { createList, createTree, createTable, createTableRow } from "../types/la
 
 export type BlockBuilder<T extends Block> = (props: Partial<T>) => T
 
-export type BlockServiceBuilder<T extends BlockActions> = (store: BlockStore, blockId: string) => T
+export type BlockActionsBuilder<T extends BlockActions> = (store: BlockStore, blockId: BlockID) => T
 
 export interface BlockSpec<P extends BlockProps, A extends BlockActions> {
   name: string
   builder: BlockBuilder<P>
-  service: BlockServiceBuilder<A>
+  actionsBuilder: BlockActionsBuilder<A>
   behaviors: string[]
 }
 
 export type BehaviorBuilder<T extends BehaviorActions> = (props: Partial<T>) => T
 
-export type BehaviorServiceBuilder<T extends BehaviorActions> = (store: BlockStore, blockId: string) => T
+export type BehaviorActionsBuilder<T extends BehaviorActions> = (store: BlockStore, blockId: BlockID) => T
 
 export interface BehaviorSpec<P extends BehaviorProps, A extends BehaviorActions> {
   name: string
   builder: BehaviorBuilder<P>
-  service: BehaviorServiceBuilder<A>
+  actionsBuilder: BehaviorActionsBuilder<A>
 }
 
 export class BlockRegistry {
@@ -44,13 +44,13 @@ export class BlockRegistry {
     this.behaviorsByType[spec.name] = spec
   }
 
-  createBlock<T extends Block>(blockType: string, props: Partial<any> = {}): T {
+  createBlock<P extends BlockProps>(blockType: string, props: Partial<any> = {}): P {
     const blockSpec = this.blocksByType[blockType]
     if (blockSpec === undefined) {
       throw new Error(`Block type ${blockType} not registered`)
     }
 
-    let block = blockSpec.builder(props as Partial<T>)
+    let block = blockSpec.builder(props as Partial<P>)
     blockSpec.behaviors.forEach((behaviorType: string) => {
       const behaviorSpec = this.behaviorsByType[behaviorType]
       if (behaviorSpec === undefined) {
@@ -61,25 +61,21 @@ export class BlockRegistry {
     return block
   }
 
-  createBlockActions<T extends BlockActions>(store: BlockStore, blockId: string): T {
-    const block = store.getBlock(blockId)
-    if (block === undefined) {
-      throw new Error(`Block ${blockId} not found`)
-    }
+  createBlockActions<A extends BlockActions>(store: BlockStore, block: Block): A {
     const blockSpec = this.blocksByType[block.type]
     if (blockSpec === undefined) {
       throw new Error(`Block type ${block.type} not registered`)
     }
 
-    let service = blockSpec.service(store, blockId)
+    let blockActions = blockSpec.actionsBuilder(store, block.uuid)
     blockSpec.behaviors.forEach((behaviorType: string) => {
       const behaviorSpec = this.behaviorsByType[behaviorType]
       if (behaviorSpec === undefined) {
         throw new Error(`Behavior type ${behaviorType} not registered`)
       }
-      service &= behaviorSpec.service(store, blockId)
+      blockActions = { ...blockActions, ...behaviorSpec.actionsBuilder(store, block.uuid) }
     })
-    return service
+    return blockActions
   }
 
   hasBehavior(blockType: string, behaviorType: string): boolean {
@@ -96,37 +92,37 @@ export class DefaultBlockRegistry extends BlockRegistry {
     this.registerBlock({
       name: 'aics:checkbox',
       builder: createCheckbox,
-      service: createCheckboxActions,
+      actionsBuilder: createCheckboxActions,
       behaviors: ['aics:selectable']
     })
     this.registerBlock({
       name: 'aics:code',
       builder: createCode,
-      service: createCodeActions,
+      actionsBuilder: createCodeActions,
       behaviors: ['aics:selectable']
     })
     this.registerBlock({
       name: 'aics:paragraph',
       builder: createParagraph,
-      service: createParagraphActions,
+      actionsBuilder: createParagraphActions,
       behaviors: ['aics:selectable']
     })
     this.registerBlock({
       name: 'aics:section',
       builder: createSection,
-      service: createSectionActions,
+      actionsBuilder: createSectionActions,
       behaviors: ['aics:selectable', 'aics:collapsible']
     })
     this.registerBlock({
       name: 'aics:span',
       builder: createSpan,
-      service: createSpanActions,
+      actionsBuilder: createSpanActions,
       behaviors: ['aics:selectable']
     })
     this.registerBlock({
       name: 'aics:tableRow',
       builder: createTableRow,
-      service: createTableRowActions,
+      actionsBuilder: createTableRowActions,
       behaviors: ['aics:selectable']
     })
 
@@ -134,19 +130,19 @@ export class DefaultBlockRegistry extends BlockRegistry {
     this.registerBlock({
       name: 'aics:list',
       builder: createList,
-      service: createListActions,
+      actionsBuilder: createListActions,
       behaviors: []
     })
     this.registerBlock({
       name: 'aics:table',
       builder: createTable,
-      service: createTableActions,
+      actionsBuilder: createTableActions,
       behaviors: ['aics:selectable', 'aics:pageable']
     })
     this.registerBlock({
       name: 'aics:tree',
       builder: createTree,
-      service: createTreeActions,
+      actionsBuilder: createTreeActions,
       behaviors: ['aics:selectable', 'aics:pageable']
     })
 
@@ -154,17 +150,17 @@ export class DefaultBlockRegistry extends BlockRegistry {
     this.registerBehavior({
       name: 'aics:collapsible',
       builder: createCollapsible,
-      service: createCollapsibleActions,
+      actionsBuilder: createCollapsibleActions,
     })
     this.registerBehavior({
       name: 'aics:pageable',
       builder: createPageable,
-      service: createPageableActions,
+      actionsBuilder: createPageableActions,
     })
     this.registerBehavior({
       name: 'aics:selectable',
       builder: createSelectable,
-      service: createSelectableActions,
+      actionsBuilder: createSelectableActions,
     })
 
 

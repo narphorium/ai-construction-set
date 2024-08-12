@@ -1,4 +1,5 @@
-import { BlockStore } from "../BlockStore"
+import { BlockStore } from "../../state"
+import { BlockID } from "../blocks"
 import { Behavior, BehaviorActions, createBehavior } from "./Behavior"
 
 export interface PageableProps extends Behavior {
@@ -21,60 +22,47 @@ export interface PageableActions extends BehaviorActions {
   gotoEnd: () => void
   gotoNext: () => void
   gotoPrevious: () => void
-  getNumPages: () => number
   setNumPages: (numPages: number) => void
 }
 
-const gotoPage = (store: BlockStore, blockId: string, page: number): void => {
-  const block = store.getBehavior<Pageable>(blockId)
-  if (block?.page !== undefined && block?.numPages !== undefined && page >= 1 && page <= block.numPages && page !== block.page) {
-    store.updateBehavior<Pageable>(blockId, { page })
+const gotoPage = (page: number) => {
+  return (state: PageableProps): Partial<PageableProps> => {
+    if (state.page !== undefined && state.numPages !== undefined && page >= 1 && page <= state.numPages && page !== state.page) {
+      return { page }
+    }
+    return {}
   }
 }
 
-const gotoStart = (store: BlockStore, blockId: string): void => {
-  gotoPage(store, blockId, 1)
-}
-
-const gotoEnd = (store: BlockStore, blockId: string): void => {
-  const block = store.getBehavior<Pageable>(blockId)
-  if (block?.page !== undefined && block?.numPages !== undefined && block.page !== block.numPages) {
-    store.updateBehavior<Pageable>(blockId, { page: block.numPages })
+const gotoEnd = (state: PageableProps): Partial<PageableProps> => {
+  if (state.page !== undefined && state.numPages !== undefined && state.page !== state.numPages) {
+    return { page: state.numPages }
   }
+  return {}
 }
 
-const gotoNext = (store: BlockStore, blockId: string): void => {
-  const block = store.getBehavior<Pageable>(blockId)
-  if (block?.page !== undefined && block?.numPages !== undefined && block.page + 1 < block.numPages) {
-    store.updateBehavior<Pageable>(blockId, { page: block.page + 1 })
+const gotoNext = (state: PageableProps): Partial<PageableProps> => {
+  if (state.page !== undefined && state.numPages !== undefined && state.page + 1 < state.numPages) {
+    return { page: state.page + 1 }
   }
+  return {}
 }
 
-const gotoPrevious = (store: BlockStore, blockId: string): void => {
-  const block = store.getBehavior<Pageable>(blockId)
-  if (block?.page !== undefined && block?.numPages !== undefined && block.page - 1 >= 1) {
-    store.updateBehavior<Pageable>(blockId, { page: block.page - 1 })
+const gotoPrevious = (state: PageableProps): Partial<PageableProps> => {
+  if (state.page !== undefined && state.numPages !== undefined && state.page - 1 >= 1) {
+    return { page: state.page - 1 }
   }
+  return {}
 }
 
-const getNumPages = (store: BlockStore, blockId: string): number => {
-  const block = store.getBehavior<Pageable>(blockId)
-  return block?.numPages ?? 1
-}
-
-const setNumPages = (store: BlockStore, blockId: string, numPages: number): void => {
-  store.updateBehavior<Pageable>(blockId, { numPages })
-}
-
-export const createPageableActions = (store: BlockStore, blockId: string): PageableActions => {
+export const createPageableActions = (store: BlockStore, blockId: BlockID): PageableActions => {
   return {
-    gotoPage: (page: number) => gotoPage(store, blockId, page),
-    gotoStart: () => gotoStart(store, blockId),
-    gotoEnd: () => gotoEnd(store, blockId),
-    gotoNext: () => gotoNext(store, blockId),
-    gotoPrevious: () => gotoPrevious(store, blockId),
-    getNumPages: () => getNumPages(store, blockId),
-    setNumPages: (numPages: number) => setNumPages(store, blockId, numPages)
+    gotoPage: (page: number) => store.updateBehavior<PageableProps>(blockId, gotoPage(page)),
+    gotoStart: () => store.updateBehavior<PageableProps>(blockId, gotoPage(1)),
+    gotoEnd: () => store.updateBehavior<PageableProps>(blockId, gotoEnd),
+    gotoNext: () => store.updateBehavior<PageableProps>(blockId, gotoNext),
+    gotoPrevious: () => store.updateBehavior<PageableProps>(blockId, gotoPrevious),
+    setNumPages: (numPages: number) => store.updateBehavior<PageableProps>(blockId, { numPages }),
   }
 }
 

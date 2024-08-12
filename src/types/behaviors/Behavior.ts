@@ -1,3 +1,6 @@
+import { BlockStore } from "../../state"
+import { BlockID } from "../blocks"
+
 export interface BehaviorProps {
 }
 
@@ -10,9 +13,8 @@ export const createBehavior = (props: Partial<BehaviorProps> = {}): BehaviorProp
 export interface BehaviorActions {
 }
 
-export const createBehaviorActions = (props: Partial<BehaviorActions> = {}): BehaviorActions => {
+export const createBehaviorActions = (store: BlockStore, blockId: BlockID): BehaviorActions => {
   return {
-    ...props
   } as BehaviorActions
 }
 

@@ -31,7 +31,7 @@ export const useBlock = <T extends Block>(selector: BlockID | BlockQuery): T => 
   }
 
   // Add actions to block
-  let actions = registry.createBlockActions<T>(store, block.uuid)
+  let actions = registry.createBlockActions<T>(store, block)
 
   return { ...block, ...actions }
 }
@@ -49,7 +49,7 @@ export const useBlocks = <T extends Block>(selector: BlockQuery): T[] => {
 
   // Add actions to blocks
   blocks.forEach((block: T) => {
-    let actions = registry.createBlockActions<T>(store, block.uuid)
+    let actions = registry.createBlockActions<T>(store, block)
     Object.assign(block, actions)
   })
 

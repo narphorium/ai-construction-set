@@ -1,4 +1,5 @@
-import { BlockStore } from "../BlockStore"
+import { BlockStore } from "../../state"
+import { BlockID } from "../blocks"
 import { Behavior, BehaviorActions, createBehavior } from "./Behavior"
 
 export interface SelectableProps extends Behavior {
@@ -21,13 +22,9 @@ export interface SelectableActions extends BehaviorActions {
   setSelected: (selected: boolean) => void
 }
 
-const setSelected = (store: BlockStore, blockId: string, selected: boolean): void => {
-  store.updateBehavior<SelectableProps>(blockId, { selected })
-}
-
-export const createSelectableActions = (store: BlockStore, blockId: string): SelectableActions => {
+export const createSelectableActions = (store: BlockStore, blockId: BlockID): SelectableActions => {
   return {
-    setSelected: (selected: boolean) => setSelected(store, blockId, selected)
+    setSelected: (selected: boolean) => store.updateBehavior<SelectableProps>(blockId, { selected }),
   }
 }
 

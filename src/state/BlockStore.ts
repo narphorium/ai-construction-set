@@ -1,12 +1,12 @@
 import * as uuid from 'uuid'
 import { type StoreApi, createStore } from 'zustand/vanilla'
-import { Block, BlockID } from './../types/blocks'
-import { Behavior } from './../types/behaviors'
-import { DocumentID, type Document } from '../types/Document'
+import { Block, BlockID, BlockProps } from './../types/blocks'
+import { Behavior, BehaviorProps } from './../types/behaviors'
+import { DocumentID, DocumentProps, type Document } from '../types/Document'
 import { BlockMatcher, BlockQuery, Matchable } from './matchers'
 import { BlockRegistry } from './BlockRegistry'
 import { BlockSelector, ChildSelector } from './selectors'
-import { AddBlock, AddChildBlock, AddDocument, AddRootBlock, DeleteBlock, DeleteDocument, UpdateBehavior, UpdateBlock, UpdateDocument } from './mutations'
+import { AddBlock, AddChildBlock, AddDocument, AddRootBlock, BlockMutation, DeleteBlock, DeleteDocument, UpdateBehavior, UpdateBlock, UpdateDocument } from './mutations'
 
 
 export interface BlockStoreState {
@@ -16,10 +16,12 @@ export interface BlockStoreState {
 }
 
 export interface BlockStoreActions {
+  applyBlockMutation: (mutation: BlockMutation, block: BlockID) => void
+
   // Documents
   addDocument: (document: Document) => string
   getDocument: (uuid: DocumentID) => Document | undefined
-  updateDocument: (uuid: DocumentID, updates: Partial<Document>) => void
+  updateDocument: (uuid: DocumentID, updates: Partial<Document> | ((state: DocumentProps) => Partial<DocumentProps>)) => void
   addRootBlock: <T extends Block>(block: T, document: DocumentID) => string
   deleteDocument: (uuid: DocumentID) => void
 
@@ -31,12 +33,12 @@ export interface BlockStoreActions {
   getChildBlocks: <T extends Block>(parent: BlockID) => T[]
   findBlock: (root: Document | Block, selector: BlockQuery, registry: BlockRegistry) => Block | undefined
   findBlocks: (root: Document | Block, selector: BlockQuery, registry: BlockRegistry) => Block[]
-  updateBlock: <T extends Block>(uuid: BlockID, updates: Partial<T>) => void
+  updateBlock: <T extends BlockProps>(uuid: BlockID, updates: Partial<T> | ((state: T) => Partial<T>)) => void
   deleteBlock: (uuid: BlockID) => void
 
   // Behaviors
   getBehavior: <T extends Behavior>(uuid: string) => T | undefined
-  updateBehavior: <T extends Behavior>(uid: string, updates: Partial<T>) => void
+  updateBehavior: <T extends Behavior>(uid: string, updates: Partial<T> | ((state: T) => Partial<T>)) => void
 }
 
 export type BlockStore = BlockStoreState & BlockStoreActions
@@ -122,16 +124,43 @@ export const createBlockStore = (
       return block.uuid
     },
 
-    updateDocument: (document: DocumentID, updates: Partial<Document>) => {
-      set((state) => new UpdateDocument(updates).apply(state, document))
+    updateDocument: (document: DocumentID, updates: Partial<DocumentProps> | ((state: DocumentProps) => Partial<DocumentProps>)) => {
+      set((state) => {
+        if (typeof updates === 'function') {
+          const state = get().documents.get(document) as DocumentProps
+          if (state === undefined) {
+            throw new Error('Document not found')
+          }
+          updates = updates(state)
+        }
+        return new UpdateDocument(updates).apply(state, document)
+      })
     },
 
-    updateBlock: <T extends Block>(block: BlockID, updates: Partial<T>) => {
-      set((state) => new UpdateBlock<T>(updates).apply(state, block))
+    updateBlock: <T extends BlockProps>(block: BlockID, updates: Partial<T> | ((state: T) => Partial<T>)) => {
+      set((state) => {
+        if (typeof updates === 'function') {
+          const state = (get().blocks.get(block) as unknown) as T
+          if (state === undefined) {
+            throw new Error('Block not found')
+          }
+          updates = updates(state)
+        }
+        return new UpdateBlock<T>(updates).apply(state, block)
+      })
     },
 
-    updateBehavior: <T extends Behavior>(uuid: BlockID, updates: Partial<T>) => {
-      set((state) => new UpdateBehavior<T>(updates).apply(state, uuid))
+    updateBehavior: <T extends BehaviorProps>(block: BlockID, updates: Partial<T> | ((state: T) => Partial<T>)) => {
+      set((state) => {
+        if (typeof updates === 'function') {
+          const state = (get().blocks.get(block) as unknown) as T
+          if (state === undefined) {
+            throw new Error('Behavior not found')
+          }
+          updates = updates(state)
+        }
+        return new UpdateBehavior<T>(updates).apply(state, block)
+      })
     },
 
     deleteDocument: (document: DocumentID) => {
@@ -149,6 +178,10 @@ export const createBlockStore = (
 
     findBlocks(root: Block | Document, selector: BlockQuery, registry: BlockRegistry) {
       return findBlocks(get(), root, selector, registry)
-    }
-  }))
+    },
+
+    applyBlockMutation: (mutation: BlockMutation, block: BlockID) => {
+      set((state) => mutation.apply(state, block))
+    },
+  })) as StoreApi<BlockStore>
 }

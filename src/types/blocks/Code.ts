@@ -1,5 +1,5 @@
-import { BlockStore } from "../BlockStore"
-import { BlockActions } from "./Block"
+import { BlockStore } from "../../state"
+import { BlockActions, BlockID } from "./Block"
 import { createParagraph, ParagraphProps } from "./Paragraph"
 
 
@@ -19,7 +19,7 @@ export const createCode = (props: Partial<CodeProps> = {}): CodeProps => {
 
 export interface CodeActions extends BlockActions { }
 
-export const createCodeActions = (store: BlockStore, blockId: string): CodeActions => {
+export const createCodeActions = (store: BlockStore, blockId: BlockID): CodeActions => {
   return {}
 }
 

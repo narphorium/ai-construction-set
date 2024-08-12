@@ -1,6 +1,6 @@
 import { createSelectable, SelectableProps } from "../behaviors"
-import { BlockStore } from "../BlockStore"
-import { BlockActions, BlockProps, createBlock } from "./Block"
+import { BlockActions, BlockID, BlockProps, createBlock } from "./Block"
+import { BlockStore } from "../../state"
 
 export interface SpanProps extends BlockProps, SelectableProps {
   datatype?: string
@@ -23,21 +23,10 @@ export interface SpanActions extends BlockActions {
   append(text: string): void
 }
 
-const clear = (store: BlockStore, blockId: string) => {
-  store.updateBlock<SpanProps>(blockId, { content: '' })
-}
-
-const append = (store: BlockStore, blockId: string, text: string) => {
-  const span = store.getBlock<SpanProps>(blockId)
-  if (span != null) {
-    store.updateBlock<SpanProps>(blockId, { content: span.content + text })
-  }
-}
-
-export const createSpanActions = (store: BlockStore, blockId: string): SpanActions => {
+export const createSpanActions = (store: BlockStore, blockId: BlockID): SpanActions => {
   return {
-    clear: () => clear(store, blockId),
-    append: (text: string) => append(store, blockId, text),
+    clear: () => store.updateBlock<SpanProps>(blockId, { content: '' }),
+    append: (text: string) => store.updateBlock<SpanProps>(blockId, (state: SpanProps) => ({ content: state.content + text })),
   }
 }
 
