@@ -2,8 +2,10 @@
 import { DocsContainer } from '@storybook/blocks';
 import React, { ComponentType } from "react";
 import { createGlobalStyle } from 'styled-components';
-import { DefaultThemeRegistry } from '../src/state/ThemeRegistry';
-import { BlockRegistryProvider, BlockRendererProvider, BlockStoreProvider, ThemeProvider, useStorybookDarkMode } from '../src/state/hooks';
+import { DefaultThemeRegistry } from '../src/themes/ThemeRegistry';
+import { BlockRegistryProvider, BlockRendererProvider, BlockStoreProvider, DocumentProvider, ThemeProvider } from '../src/state/context';
+import { useStorybookDarkMode } from '../src/hooks/useStorybookDarkMode';
+import { DefaultBlockRenderer } from '../src/components/DefaultBlockRenderer';
 
 const GlobalStyles = createGlobalStyle`
     html,
@@ -13,24 +15,20 @@ const GlobalStyles = createGlobalStyle`
     `
 
 const themeRegistry = new DefaultThemeRegistry()
+const renderer = new DefaultBlockRenderer()
 
 const ExampleContainer = ({ children, context, ...props }) => {
-  const [lightTheme, darkTheme] = themeRegistry.getTheme('default')
-  const [theme, setTheme] = React.useState(lightTheme)
+  const [theme, setTheme] = React.useState('default')
   const [darkMode, setDarkMode] = useStorybookDarkMode(context)
-
-  React.useEffect(() => {
-    if (darkMode != null) {
-      setTheme(darkMode ? darkTheme : lightTheme)
-    }
-  }, [darkMode])
 
   return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
     <BlockRegistryProvider>
       <BlockStoreProvider>
-        <BlockRendererProvider>
-          <GlobalStyles />
-          <DocsContainer context={context} {...props}>{children}</DocsContainer>
+        <BlockRendererProvider renderer={renderer}>
+          <DocumentProvider>
+            <GlobalStyles />
+            <DocsContainer context={context} {...props}>{children}</DocsContainer>
+          </DocumentProvider>
         </BlockRendererProvider>
       </BlockStoreProvider>
     </BlockRegistryProvider>
@@ -56,8 +54,10 @@ const StoryDecorator = (Story, context) => {
   return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
     <BlockRegistryProvider>
       <BlockStoreProvider>
-        <BlockRendererProvider>
-          <StoryWithBackground />
+        <BlockRendererProvider renderer={renderer}>
+          <DocumentProvider>
+            <StoryWithBackground />
+          </DocumentProvider>
         </BlockRendererProvider>
       </BlockStoreProvider>
     </BlockRegistryProvider>

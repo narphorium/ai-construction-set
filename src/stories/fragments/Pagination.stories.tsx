@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Pagination } from '../components/Pagination';
+import { Pagination } from '../../components/fragments/Pagination';
 
 export default {
   component: Pagination,
-  title: 'Components/Pagination',
+  title: 'Fragments/Pagination',
   tags: ['autodocs'],
 };
 
@@ -11,7 +11,7 @@ const Template = (args: any) => {
   const [page, setPage] = useState<number>(args.page)
 
   return (
-    <Pagination 
+    <Pagination
       {...args}
       page={page}
       setPage={setPage} />
