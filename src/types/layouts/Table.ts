@@ -1,6 +1,6 @@
 import { createPageable, createSelectable, PageableProps, SelectableProps } from "../behaviors"
 import { BlockActions, BlockProps, createBlock } from "../blocks"
-import { BlockStore } from "../../state/BlockStore"
+import { BlockGetter, BlockSetter } from "../blocks/Block"
 
 export interface TableRowProps extends BlockProps, SelectableProps {
   isHeader?: boolean
@@ -30,13 +30,13 @@ export const createTable = (props: Partial<TableProps>): TableProps => {
 
 export interface TableActions extends BlockActions { }
 
-export const createTableActions = (store: BlockStore, blockId: string): TableActions => {
+export const createTableActions = (get: BlockGetter<TableProps>, set: BlockSetter<TableProps>): TableActions => {
   return {}
 }
 
 export interface TableRowActions extends BlockActions { }
 
-export const createTableRowActions = (store: BlockStore, blockId: string): TableRowActions => {
+export const createTableRowActions = (get: BlockGetter<TableRowProps>, set: BlockSetter<TableRowProps>): TableRowActions => {
   return {}
 }
 

@@ -1,6 +1,6 @@
-import { BlockStore } from "../../state"
+import { BlockGetter, BlockSetter } from './Block'
 import { createSelectable, SelectableProps } from "../behaviors"
-import { BlockActions, BlockID, BlockProps, createBlock } from "./Block"
+import { BlockActions, BlockProps, createBlock } from "./Block"
 
 export interface ParagraphProps extends BlockProps, SelectableProps { }
 
@@ -15,7 +15,7 @@ export const createParagraph = (props: Partial<ParagraphProps> = {}): ParagraphP
 
 export interface ParagraphActions extends BlockActions { }
 
-export const createParagraphActions = (store: BlockStore, blockId: BlockID): ParagraphActions => {
+export const createParagraphActions = (get: BlockGetter<ParagraphProps>, set: BlockSetter<ParagraphProps>): ParagraphActions => {
   return {}
 }
 

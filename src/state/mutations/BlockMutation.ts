@@ -1,6 +1,6 @@
 import { Behavior } from "../../types/behaviors";
 import { Block, BlockID } from "../../types/blocks";
-import { BlockStoreState } from "../BlockStore";
+import { BlockStoreState } from "../BlockStoreState";
 import { AddBlock, addChild, deleteChild } from "./BlockStoreMutation";
 
 export interface BlockMutation {

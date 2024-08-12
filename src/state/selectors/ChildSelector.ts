@@ -1,5 +1,5 @@
 import { BlockID } from "../../types/blocks";
-import { BlockStoreState } from "../BlockStore";
+import { BlockStoreState } from "../BlockStoreState";
 import { BlockSelector } from "./BlockSelector";
 
 export class ChildSelector implements BlockSelector {

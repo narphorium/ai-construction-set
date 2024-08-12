@@ -1,30 +1,27 @@
-import { BlockStore } from "."
-import { BehaviorActions, BehaviorProps, createCollapsibleActions, createPageableActions, createSelectableActions } from "./../types/behaviors"
-import { BlockActions, BlockID, BlockProps, createCheckboxActions, createCodeActions, createParagraphActions, createSectionActions, createSpanActions } from "./../types/blocks"
+import { BehaviorActions, BehaviorGetter, BehaviorProps, BehaviorSetter, createCollapsibleActions, createPageableActions, createSelectableActions } from "./../types/behaviors"
+import { BlockActions, BlockGetter, BlockProps, BlockSetter, createCheckboxActions, createCodeActions, createParagraphActions, createSectionActions, createSpanActions } from "./../types/blocks"
 import { createListActions, createTableRowActions, createTableActions, createTreeActions } from "../types/layouts"
 import { createCollapsible, createPageable, createSelectable } from "./../types/behaviors"
-import { Block, createCheckbox, createCode, createParagraph, createSection, createSpan } from "./../types/blocks"
+import { createCheckbox, createCode, createParagraph, createSection, createSpan } from "./../types/blocks"
 import { createList, createTree, createTable, createTableRow } from "../types/layouts"
 
-export type BlockBuilder<T extends Block> = (props: Partial<T>) => T
-
-export type BlockActionsBuilder<T extends BlockActions> = (store: BlockStore, blockId: BlockID) => T
+export type BlockBuilder<P extends BlockProps> = (props: Partial<P>) => P
+export type BlockActionsBuilder<P extends BlockProps, A extends BlockActions> = (get: BlockGetter<P>, set: BlockSetter<P>) => A
 
 export interface BlockSpec<P extends BlockProps, A extends BlockActions> {
   name: string
   builder: BlockBuilder<P>
-  actionsBuilder: BlockActionsBuilder<A>
+  actionsBuilder: BlockActionsBuilder<P, A>
   behaviors: string[]
 }
 
-export type BehaviorBuilder<T extends BehaviorActions> = (props: Partial<T>) => T
-
-export type BehaviorActionsBuilder<T extends BehaviorActions> = (store: BlockStore, blockId: BlockID) => T
+export type BehaviorBuilder<P extends BehaviorProps> = (props: Partial<P>) => P
+export type BehaviorActionsBuilder<P extends BehaviorProps, A extends BehaviorActions> = (get: BehaviorGetter<P>, set: BehaviorSetter<P>) => A
 
 export interface BehaviorSpec<P extends BehaviorProps, A extends BehaviorActions> {
   name: string
   builder: BehaviorBuilder<P>
-  actionsBuilder: BehaviorActionsBuilder<A>
+  actionsBuilder: BehaviorActionsBuilder<P, A>
 }
 
 export class BlockRegistry {
@@ -61,19 +58,20 @@ export class BlockRegistry {
     return block
   }
 
-  createBlockActions<A extends BlockActions>(store: BlockStore, block: Block): A {
+  createBlockActions<P extends BlockProps, A extends BlockActions>(get: BlockGetter<P>, set: BlockSetter<P>): A {
+    const block = get()
     const blockSpec = this.blocksByType[block.type]
     if (blockSpec === undefined) {
       throw new Error(`Block type ${block.type} not registered`)
     }
 
-    let blockActions = blockSpec.actionsBuilder(store, block.uuid)
+    let blockActions = blockSpec.actionsBuilder(get, set)
     blockSpec.behaviors.forEach((behaviorType: string) => {
       const behaviorSpec = this.behaviorsByType[behaviorType]
       if (behaviorSpec === undefined) {
         throw new Error(`Behavior type ${behaviorType} not registered`)
       }
-      blockActions = { ...blockActions, ...behaviorSpec.actionsBuilder(store, block.uuid) }
+      blockActions = { ...blockActions, ...behaviorSpec.actionsBuilder(get, set) }
     })
     return blockActions
   }

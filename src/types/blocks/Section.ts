@@ -1,6 +1,6 @@
 import { Collapsible, createCollapsible, createSelectable, Selectable } from '../behaviors'
-import { BlockStore } from '../../state/'
-import { Block, BlockActions, BlockID, createBlock } from './Block'
+import { BlockGetter, BlockSetter } from './Block'
+import { Block, BlockActions, createBlock } from './Block'
 
 export interface SectionProps extends Block, Selectable, Collapsible {
   summary?: string
@@ -19,7 +19,7 @@ export const createSection = (props: Partial<SectionProps> = {}): SectionProps =
 
 export interface SectionActions extends BlockActions { }
 
-export const createSectionActions = (store: BlockStore, blockId: BlockID): SectionActions => {
+export const createSectionActions = (get: BlockGetter<SectionProps>, set: BlockSetter<SectionProps>): SectionActions => {
   return {}
 }
 

@@ -1,6 +1,4 @@
-import { BlockStore } from "../../state"
-import { BlockID } from "../blocks"
-import { Behavior, BehaviorActions, createBehavior } from "./Behavior"
+import { Behavior, BehaviorActions, BehaviorGetter, BehaviorSetter, createBehavior } from "./Behavior"
 
 export interface PageableProps extends Behavior {
   page: number
@@ -55,14 +53,15 @@ const gotoPrevious = (state: PageableProps): Partial<PageableProps> => {
   return {}
 }
 
-export const createPageableActions = (store: BlockStore, blockId: BlockID): PageableActions => {
+export const createPageableActions = (get: BehaviorGetter<PageableProps>, set: BehaviorSetter<PageableProps>): PageableActions => {
   return {
-    gotoPage: (page: number) => store.updateBehavior<PageableProps>(blockId, gotoPage(page)),
-    gotoStart: () => store.updateBehavior<PageableProps>(blockId, gotoPage(1)),
-    gotoEnd: () => store.updateBehavior<PageableProps>(blockId, gotoEnd),
-    gotoNext: () => store.updateBehavior<PageableProps>(blockId, gotoNext),
-    gotoPrevious: () => store.updateBehavior<PageableProps>(blockId, gotoPrevious),
-    setNumPages: (numPages: number) => store.updateBehavior<PageableProps>(blockId, { numPages }),
+    // FIXME: Cleanup the API here
+    gotoPage: (page: number) => set(gotoPage(page)(get())),
+    gotoStart: () => set(gotoPage(1)(get())),
+    gotoEnd: () => set(gotoEnd(get())),
+    gotoNext: () => set(gotoNext(get())),
+    gotoPrevious: () => set(gotoPrevious(get())),
+    setNumPages: (numPages: number) => set({ numPages }),
   }
 }
 

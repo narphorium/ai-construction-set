@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { useStore } from 'zustand'
 import { type BlockStore } from '../state/BlockStore'
-import { BlockStoreContext } from '../state/context'
+import { BlockStoreContext } from '../state/context/BlockStoreContext'
 
 export const useBlockStore = (): BlockStore => {
   const blockStoreContext = useContext(BlockStoreContext)

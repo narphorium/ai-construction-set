@@ -1,6 +1,4 @@
-import { BehaviorActions, BehaviorProps, createBehavior } from "./Behavior"
-import { BlockStore } from "../../state"
-import { BlockID } from "../blocks"
+import { BehaviorActions, BehaviorGetter, BehaviorProps, BehaviorSetter, createBehavior } from "./Behavior"
 
 export interface CollapsibleProps extends BehaviorProps {
   collapsed: boolean
@@ -21,10 +19,10 @@ export interface CollapsibleActions extends BehaviorActions {
   toggleCollapsed: () => void
 }
 
-export const createCollapsibleActions = (store: BlockStore, blockId: BlockID): CollapsibleActions => {
+export const createCollapsibleActions = (get: BehaviorGetter<CollapsibleProps>, set: BehaviorSetter<CollapsibleProps>): CollapsibleActions => {
   return {
-    setCollapsed: (collapsed: boolean) => store.updateBehavior<CollapsibleProps>(blockId, { collapsed }),
-    toggleCollapsed: () => store.updateBehavior<CollapsibleProps>(blockId, (state: CollapsibleProps) => ({ collapsed: !state.collapsed })),
+    setCollapsed: (collapsed: boolean) => set({ collapsed }),
+    toggleCollapsed: () => set({ collapsed: !get().collapsed }),
   }
 }
 

@@ -1,4 +1,4 @@
-import { BlockStoreState, getGUID } from "../BlockStore"
+import { BlockStoreState } from "../BlockStoreState"
 import { Document, DocumentID } from "../../types/Document"
 import { Block } from "../../types/blocks"
 import { AddBlock } from "./BlockStoreMutation"

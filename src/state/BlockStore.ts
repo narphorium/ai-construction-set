@@ -6,14 +6,11 @@ import { DocumentID, DocumentProps, type Document } from '../types/Document'
 import { BlockMatcher, BlockQuery, Matchable } from './matchers'
 import { BlockRegistry } from './BlockRegistry'
 import { BlockSelector, ChildSelector } from './selectors'
-import { AddBlock, AddChildBlock, AddDocument, AddRootBlock, BlockMutation, DeleteBlock, DeleteDocument, UpdateBehavior, UpdateBlock, UpdateDocument } from './mutations'
+import { AddChildBlock, BlockMutation, DeleteBlock, UpdateBehavior, UpdateBlock } from './mutations/BlockMutation'
+import { AddRootBlock, DeleteDocument, UpdateDocument } from './mutations/DocumentMutation'
+import { AddBlock, AddDocument } from './mutations/BlockStoreMutation'
+import { BlockStoreState } from './BlockStoreState'
 
-
-export interface BlockStoreState {
-  documents: Map<string, Document>
-  blocks: Map<string, Block>
-  children: Map<string, string[]>
-}
 
 export interface BlockStoreActions {
   applyBlockMutation: (mutation: BlockMutation, block: BlockID) => void
@@ -104,12 +101,18 @@ export const createBlockStore = (
       return new ChildSelector().select(get(), parent).map((uuid) => get().blocks.get(uuid) as T)
     },
 
-    addDocument(document) {
+    addDocument(document: Document) {
+      if (document.uuid === '') {
+        document.uuid = getGUID()
+      }
       set((state) => new AddDocument(document).apply(state))
       return document.uuid
     },
 
     addBlock: (block: Block): string => {
+      if (block.uuid === '') {
+        block.uuid = getGUID()
+      }
       set((state) => new AddBlock(block).apply(state))
       return block.uuid
     },

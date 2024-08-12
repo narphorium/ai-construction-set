@@ -1,5 +1,5 @@
-import React, { createContext, ReactNode, useContext, useRef } from 'react'
-import { DefaultBlockRenderer, type BlockRenderer } from '../../components/BlockRenderer'
+import React, { createContext, ReactNode, useRef } from 'react'
+import { type BlockRenderer } from '../../components/BlockRenderer'
 
 interface BlockRendererContextProps {
   renderer: BlockRenderer | undefined
@@ -20,8 +20,6 @@ export const BlockRendererProvider = ({ renderer, children }: BlockRendererProvi
   const rendererRef = useRef<BlockRenderer>()
   if (renderer !== undefined) {
     rendererRef.current = renderer
-  } else if (rendererRef.current === undefined) {
-    rendererRef.current = new DefaultBlockRenderer()
   }
 
   return (

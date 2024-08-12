@@ -1,4 +1,4 @@
-import { BlockStoreState, getGUID } from "../BlockStore"
+import { BlockStoreState } from "../BlockStoreState"
 import { Document } from "../../types/Document"
 import { Block, BlockID } from "../../types/blocks"
 
@@ -27,9 +27,6 @@ export class AddDocument implements BlockStoreMutation {
 
   apply(state: BlockStoreState): BlockStoreState {
     const newDocuments = new Map(state.documents)
-    if (this.document.uuid === '') {
-      this.document.uuid = getGUID()
-    }
     newDocuments.set(this.document.uuid, this.document)
     return { ...state, documents: newDocuments }
   }
@@ -40,9 +37,6 @@ export class AddBlock<T extends Block> implements BlockStoreMutation {
 
   apply(state: BlockStoreState): BlockStoreState {
     const newBlocks = new Map(state.blocks)
-    if (this.block.uuid === '') {
-      this.block.uuid = getGUID()
-    }
     newBlocks.set(this.block.uuid, this.block)
 
     if (this.block.parent !== undefined) {

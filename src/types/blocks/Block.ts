@@ -19,6 +19,9 @@ export const createBlock = (props: Partial<BlockProps> = {}): BlockProps => {
   } as Block
 }
 
+export type BlockGetter<P extends BlockProps> = () => P
+export type BlockSetter<P extends BlockProps> = (state: Partial<P>) => void
+
 export interface BlockActions {
 }
 

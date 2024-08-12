@@ -1,6 +1,6 @@
+import { BlockGetter, BlockSetter } from './Block'
 import { createSelectable, Selectable } from '../behaviors'
-import { BlockActions, BlockID, createBlock, type Block } from './Block'
-import { BlockStore } from '../../state'
+import { BlockActions, createBlock, type Block } from './Block'
 
 export interface CheckboxProps extends Block, Selectable {
   checked: boolean
@@ -22,10 +22,10 @@ export interface CheckboxActions extends BlockActions {
   toggleChecked(): void
 }
 
-export const createCheckboxActions = (store: BlockStore, blockId: BlockID): CheckboxActions => {
+export const createCheckboxActions = (get: BlockGetter<CheckboxProps>, set: BlockSetter<CheckboxProps>): CheckboxActions => {
   return {
-    setChecked: (checked: boolean) => store.updateBlock<Checkbox>(blockId, { checked }),
-    toggleChecked: () => store.updateBlock<CheckboxProps>(blockId, (state: CheckboxProps) => ({ checked: !state.checked })),
+    setChecked: (checked: boolean) => set({ checked }),
+    toggleChecked: () => set({ checked: !get().checked }),
   }
 }
 

@@ -1,5 +1,5 @@
+import { BlockGetter, BlockSetter } from "../blocks/Block"
 import { BlockActions, BlockProps, createBlock } from "../blocks"
-import { BlockStore } from "../../state/BlockStore"
 
 export interface ListProps extends BlockProps { }
 
@@ -13,7 +13,7 @@ export const createList = (props: Partial<ListProps> = {}): ListProps => {
 
 export interface ListActions extends BlockActions { }
 
-export const createListActions = (store: BlockStore, blockId: string): ListActions => {
+export const createListActions = (get: BlockGetter<ListProps>, set: BlockSetter<ListProps>): ListActions => {
   return {}
 }
 
