@@ -280,5 +280,9 @@ export const lightTheme = {
   },
   collapsibleTitlePadding: {
     default: '0 0 0 22px'
+  },
+  blockDisplay: {
+    default: 'block',
+    hidden: 'none'
   }
 }
