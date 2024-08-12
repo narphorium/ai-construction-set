@@ -1,5 +1,4 @@
-import React, { createContext, ReactNode, useContext, useRef } from 'react'
-import { DefaultBlockRenderer, type BlockRenderer } from '../../components/BlockRenderer'
+import React, { createContext, ReactNode, useRef } from 'react'
 import { createDocument, Document } from '../../types'
 
 interface DocumentContextProps {
@@ -17,7 +16,7 @@ export interface DocumentContextProviderProps {
   children: ReactNode
 }
 
-export const DocumentContextProvider = ({ document, children }: DocumentContextProviderProps): JSX.Element => {
+export const DocumentProvider = ({ document, children }: DocumentContextProviderProps): JSX.Element => {
   const documentRef = useRef<Document>()
   if (document !== undefined) {
     documentRef.current = document
