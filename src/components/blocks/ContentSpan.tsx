@@ -1,35 +1,36 @@
 import React, { forwardRef, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
-import { type Selectable, type Span } from '../data'
-import { themedIcon } from '../themes/icons'
-import { themedVariant } from '../themes/theme'
-import { getClasses, type SelectableProps } from './Base'
+import { themedIcon } from '../../themes/icons'
+import { themedVariant } from '../../themes/theme'
+import { Span } from '../../types/blocks'
+import { SelectableComponentProps } from '../behaviors'
+import { Selectable } from '../../types/behaviors'
+import { useClasses } from '../../hooks/useClasses'
 
-export interface ContentSpanProps extends SelectableProps {
-  block: Span
+export interface ContentSpanProps extends SelectableComponentProps {
+  block: Span & Selectable
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export const ContentSpanComponent = forwardRef(function ContentSpan ({ className, block, onClick }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
-  const handleClick = (obj: Selectable) => (e: MouseEvent<HTMLDivElement>) => {
+export const ContentSpanComponent = forwardRef(function ContentSpan({ className, block, onClick }: ContentSpanProps, ref: ForwardedRef<HTMLSpanElement>): JSX.Element {
+  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (onClick !== undefined) {
       onClick(e)
     }
   }
 
-  const getSpanClasses = (span: Span): string => {
-    return getClasses(
-      'aics-content-span',
-      className,
-      span.classNames,
-      () => span.datatype !== undefined ? [`aics-content-span-${span.datatype}`] : [])
-  }
+  const spanClasses = useClasses([
+    'aics-content-span',
+    className,
+    block.classNames,
+    () => block.datatype !== undefined ? [`aics-content-span-${block.datatype}`] : []
+  ], [className, block.classNames, block.datatype])
 
   return <span ref={ref}
-      key={block.uuid}
-      className={getSpanClasses(block)}
-      onClick={handleClick(block)}
-      dangerouslySetInnerHTML={{ __html: block.content }}></span>
+    key={block.uuid}
+    className={spanClasses}
+    onClick={handleClick}
+    dangerouslySetInnerHTML={{ __html: block.content }}></span>
 })
 
 ContentSpanComponent.displayName = 'ContentSpan'

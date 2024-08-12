@@ -1,18 +1,21 @@
-import React, { forwardRef, useCallback, useContext, useEffect, useRef, type ForwardedRef } from 'react'
+import React, { forwardRef, useCallback, useEffect, useRef, type ForwardedRef } from 'react'
 import { styled } from 'styled-components'
-import { type Collapsible } from '../data'
-import { BlockFactoryContext } from '../hooks'
-import { themedIcon } from '../themes/icons'
-import { themedVariant } from '../themes/theme'
-import { getClasses, type CollapsibleProps, type SelectableProps } from './Base'
-import { BlockActionType } from '../hooks/useBlock'
+import { themedIcon } from '../../themes/icons'
+import { themedVariant } from '../../themes/theme'
+import { BlockLayout } from '../layouts/BlockLayout'
+import { CollapsibleComponentProps, SelectableComponentProps } from '../behaviors'
+import { Collapsible, Selectable } from '../../types/behaviors'
+import { Section } from '../../types/blocks'
+import { useBlockStore } from '../../hooks/useBlockStore'
+import { useClasses } from '../../hooks/useClasses'
 
-export interface CollapsibleBlockProps extends SelectableProps, CollapsibleProps {
-  block: Collapsible
+export interface CollapsibleBlockProps extends SelectableComponentProps, CollapsibleComponentProps {
+  block: Section & Collapsible & Selectable
 }
 
-export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({ className, block, dispatch, setCollapsed, onTransitionEnd }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const { factory } = useContext(BlockFactoryContext)
+export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock({ className, block, setCollapsed, onTransitionEnd }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+  const blockStore = useBlockStore()
+  const children = blockStore.getChildBlocks(block.uuid)
   const inner = useRef<HTMLDivElement>(null)
 
   const updateInner = useCallback(() => {
@@ -44,34 +47,32 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock ({
     updateInner()
   }, [block.collapsed, updateInner, setCollapsed])
 
-  const getBlockClasses = (className: any, content: Collapsible, collapsed: boolean | undefined): string => {
-    return getClasses(
-      'aics-collapsible-block',
-      className,
-      content.classNames,
-      () => collapsed === true ? ['collapsed'] : [],
-      () => content.icon !== undefined ? ['has-icon'] : [])
-  }
+  const blockClasses = useClasses([
+    'aics-collapsible-block',
+    className,
+    block.classNames,
+    () => block.icon !== undefined ? ['has-icon'] : []
+  ], [className, block.classNames, block.icon])
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-    dispatch({ type: BlockActionType.SET_COLLAPSED, collapsed: !block.collapsed })
+    block.toggleCollapsed()
     if (setCollapsed !== undefined && block.collapsed !== undefined) {
       setCollapsed(!block.collapsed)
       e.stopPropagation()
     }
   }
 
-  return (<div ref={ref} className={getBlockClasses(className, block, block.collapsed)} key={block.uuid}>
-      <div className="aics-collapsible-block-header">
-        <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
-        <div className="aics-collapsible-block-title" onClick={handleClick}>{ block.name }</div>
-      </div>
-      <div className='aics-collapsible-block-content'>
-        <div className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={onTransitionEnd}>
-        { factory?.buildAll(block.children, block) }
-        </div>
+  return (<div ref={ref} className={blockClasses} key={block.uuid}>
+    <div className="aics-collapsible-block-header">
+      <div className="aics-collapsible-block-control" onClick={handleClick}><span></span></div>
+      <div className="aics-collapsible-block-title" onClick={handleClick}>{block.summary}</div>
+    </div>
+    <div className='aics-collapsible-block-content'>
+      <div className='aics-collapsible-block-inner' ref={inner} onTransitionEnd={onTransitionEnd}>
+        <BlockLayout blocks={children} parent={block} />
       </div>
     </div>
+  </div>
   )
 })
 

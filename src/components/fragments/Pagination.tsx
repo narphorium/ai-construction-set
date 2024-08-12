@@ -1,15 +1,16 @@
 import React, { type Dispatch, type SetStateAction } from 'react'
 import { styled } from 'styled-components'
-import { themedIcon } from '../themes/icons'
-import { themedVariant } from '../themes/theme'
-import { type BaseProps, getClasses } from './Base'
+import { themedIcon } from '../../themes/icons'
+import { themedVariant } from '../../themes/theme'
+import { useClasses } from '../../hooks'
 
-export interface PaginationProps extends BaseProps {
+export interface PaginationProps {
   level: number
   page?: number
   setPage?: (page: number) => void
   numPages: number
   showEnds?: boolean
+  className?: string
 }
 
 export const PaginationComponent = ({ className, page, numPages, showEnds, setPage }: PaginationProps): JSX.Element => {
@@ -60,54 +61,55 @@ export const PaginationComponent = ({ className, page, numPages, showEnds, setPa
     }
   }, [page, setPage])
 
-  const getStartClasses = (button: string, page?: number, numPages?: number): string => {
-    return getClasses(
-      () => page === 1 ? ['disabled'] : [],
-      'aics-pagination-start',
-      'aics-button-group-start',
-      button)
-  }
+  const paginationClasses = useClasses([
+    'aics-pagination',
+    className
+  ], [className])
 
-  const getPreviousClasses = (button: string, showEnds: boolean, page?: number, numPages?: number): string => {
-    return getClasses(
-      () => page === 1 ? ['disabled'] : [],
-      'aics-pagination-previous',
-      () => !showEnds ? ['aics-button-group-start'] : [],
-      'aics-button-group-end',
-      button)
-  }
+  const startClasses = useClasses([
+    'aics-pagination-start',
+    'aics-button-group-start',
+    btn1
+  ], [btn1])
 
-  const getNextClasses = (button: string, showEnds: boolean, page?: number, numPages?: number): string => {
-    return getClasses(
-      () => page === numPages ? ['disabled'] : [],
-      'aics-pagination-next',
-      'aics-button-group-start',
-      () => !showEnds ? ['aics-button-group-end'] : [],
-      button)
-  }
+  const previousClasses = useClasses([
+    () => page === 1 ? ['disabled'] : [],
+    'aics-pagination-previous',
+    () => !showEnds ? ['aics-button-group-start'] : [],
+    'aics-button-group-end',
+    btn2
+  ], [page, showEnds, btn2])
 
-  const getEndClasses = (button: string, page?: number, numPages?: number): string => {
-    return getClasses(
-      () => page === numPages ? ['disabled'] : [],
-      'aics-pagination-end',
-      'aics-button-group-end',
-      button)
-  }
+  const nextClasses = useClasses([
+    () => page === numPages ? ['disabled'] : [],
+    'aics-pagination-next',
+    'aics-button-group-start',
+    () => !showEnds ? ['aics-button-group-end'] : [],
+    btn3
+  ], [page, numPages, btn3])
+
+  const endClasses = useClasses([
+    () => page === numPages ? ['disabled'] : [],
+    'aics-pagination-end',
+    'aics-button-group-end',
+    btn4
+  ], [page, numPages, btn4])
+
 
   if (showEnds === true) {
-    return <div className={getClasses('aics-pagination', className)}>
-            <button className={getStartClasses(btn1, page, numPages)} title="Return to start" onClick={gotoStart}></button>
-            <button className={getPreviousClasses(btn2, showEnds, page, numPages)} title="Previous" onClick={previousStep}></button>
-            <span className="aics-pagination-page">{ page as number } of { numPages }</span>
-            <button className={getNextClasses(btn3, showEnds, page, numPages)} title="Next" onClick={nextStep}></button>
-            <button className={getEndClasses(btn4, page, numPages)} title="Jump to end" onClick={gotoEnd}></button>
-        </div>
+    return <div className={paginationClasses}>
+      <button className={startClasses} title="Return to start" onClick={gotoStart}></button>
+      <button className={previousClasses} title="Previous" onClick={previousStep}></button>
+      <span className="aics-pagination-page">{page as number} of {numPages}</span>
+      <button className={nextClasses} title="Next" onClick={nextStep}></button>
+      <button className={endClasses} title="Jump to end" onClick={gotoEnd}></button>
+    </div>
   } else {
-    return <div className={getClasses('aics-pagination', className)}>
-            <button className={getPreviousClasses(btn2, false, page, numPages)} title="Previous" onClick={previousStep}></button>
-            <span className="aics-pagination-page">{ page as number } of { numPages }</span>
-            <button className={getNextClasses(btn3, false, page, numPages)} title="Next" onClick={nextStep}></button>
-        </div>
+    return <div className={paginationClasses}>
+      <button className={previousClasses} title="Previous" onClick={previousStep}></button>
+      <span className="aics-pagination-page">{page as number} of {numPages}</span>
+      <button className={nextClasses} title="Next" onClick={nextStep}></button>
+    </div>
   }
 }
 
