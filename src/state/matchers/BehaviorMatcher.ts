@@ -1,5 +1,5 @@
 import { BlockRegistry } from "../BlockRegistry";
-import { Block } from "../blocks";
+import { Block } from "../../types/blocks";
 import { BlockMatcher } from "./BlockMatcher";
 
 export class BehaviorMatcher implements BlockMatcher {

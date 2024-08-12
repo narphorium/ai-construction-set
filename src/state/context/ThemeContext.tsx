@@ -1,6 +1,8 @@
-import React, { createContext, ReactNode, useContext, useRef } from 'react'
-import { DefaultThemeRegistry, ThemeRegistry } from '../../themes/ThemeRegistry'
+import React, { createContext, ReactNode, useEffect, useRef, useState } from 'react'
+import { DefaultThemeRegistry, Theme, ThemeRegistry } from '../../themes/ThemeRegistry'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+
+import { lightTheme, darkTheme } from '../../themes/default';
 
 interface ThemeContextProps {
   theme: string,
@@ -21,8 +23,8 @@ export const ThemeContext = createContext<ThemeContextProps>({
 })
 
 export interface ThemeProviderProps {
-  theme?: any
-  darkMode?: boolean
+  theme: string
+  darkMode: boolean
   registry?: ThemeRegistry
   children: ReactNode
   setTheme?: (theme: any) => void,
@@ -30,30 +32,27 @@ export interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({ theme, darkMode, registry, children, setTheme, setDarkMode }: ThemeProviderProps): JSX.Element => {
-  const themeRef = useRef<string>('default')
-  const darkModeRef = useRef<boolean>()
+  const [themeState, setThemeState] = useState<Theme>()
   const registryRef = useRef<ThemeRegistry>()
-  if (theme !== undefined) {
-    themeRef.current = theme
-  }
-  if (darkMode !== undefined) {
-    darkModeRef.current = darkMode
-  }
+
   if (registry !== undefined) {
     registryRef.current = registry
   } else if (registryRef.current === undefined) {
     registryRef.current = new DefaultThemeRegistry()
   }
 
-  const handleSetTheme = (theme: any) => {
-    themeRef.current = theme
+  useEffect(() => {
+    setThemeState(registryRef.current?.getTheme(theme, darkMode))
+  }, [theme, darkMode])
+
+  const handleSetTheme = (theme: object) => {
+    setThemeState(theme)
     if (setTheme) {
       setTheme(theme)
     }
   }
 
   const handleSetDarkMode = (mode: boolean) => {
-    darkModeRef.current = mode
     if (setDarkMode) {
       setDarkMode(mode)
     }
@@ -61,14 +60,14 @@ export const ThemeProvider = ({ theme, darkMode, registry, children, setTheme, s
 
   return (
     <ThemeContext.Provider value={{
-      theme: themeRef.current,
-      darkMode: darkModeRef.current,
+      theme: theme,
+      darkMode: darkMode,
       registry: registryRef.current,
       setTheme: handleSetTheme,
       setDarkMode: handleSetDarkMode,
       setRegistry: (registry: ThemeRegistry) => { registryRef.current = registry },
     }} >
-      <StyledThemeProvider theme={theme}>
+      <StyledThemeProvider theme={themeState ?? lightTheme}>
         {children}
       </StyledThemeProvider>
     </ThemeContext.Provider>

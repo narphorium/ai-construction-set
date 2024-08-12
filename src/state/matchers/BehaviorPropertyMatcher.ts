@@ -1,6 +1,6 @@
-import { Behavior } from "../behaviors";
+import { Behavior } from "../../types/behaviors";
 import { BlockRegistry } from "../BlockRegistry";
-import { Block } from "../blocks";
+import { Block } from "../../types/blocks";
 import { BlockMatcher } from "./BlockMatcher";
 
 export class BehaviorPropertyMatcher<T extends Behavior> implements BlockMatcher {
