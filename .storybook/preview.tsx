@@ -1,11 +1,13 @@
-
 import { DocsContainer } from '@storybook/blocks';
-import React, { ComponentType } from "react";
+import React from "react";
 import { createGlobalStyle } from 'styled-components';
 import { DefaultThemeRegistry } from '../src/themes/ThemeRegistry';
 import { BlockRegistryProvider, BlockRendererProvider, BlockStoreProvider, DocumentProvider, ThemeProvider } from '../src/state/context';
 import { useStorybookDarkMode } from '../src/hooks/useStorybookDarkMode';
 import { DefaultBlockRenderer } from '../src/components/DefaultBlockRenderer';
+import { createDocument } from '../src/types';
+import { createBlockStore } from '../src/state/BlockStore';
+import { DefaultBlockRegistry } from '../src/state/BlockRegistry';
 
 const GlobalStyles = createGlobalStyle`
     html,
@@ -14,18 +16,21 @@ const GlobalStyles = createGlobalStyle`
     }
     `
 
+const blockRegistry = new DefaultBlockRegistry()
 const themeRegistry = new DefaultThemeRegistry()
 const renderer = new DefaultBlockRenderer()
 
 const ExampleContainer = ({ children, context, ...props }) => {
   const [theme, setTheme] = React.useState('default')
   const [darkMode, setDarkMode] = useStorybookDarkMode(context)
+  const blockStore = createBlockStore()
+  const [document, setDocument] = React.useState(createDocument('storybook-document'))
 
   return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
-    <BlockRegistryProvider>
-      <BlockStoreProvider>
+    <BlockRegistryProvider registry={blockRegistry}>
+      <BlockStoreProvider store={blockStore}>
         <BlockRendererProvider renderer={renderer}>
-          <DocumentProvider>
+          <DocumentProvider document={document}>
             <GlobalStyles />
             <DocsContainer context={context} {...props}>{children}</DocsContainer>
           </DocumentProvider>
@@ -35,29 +40,22 @@ const ExampleContainer = ({ children, context, ...props }) => {
   </ThemeProvider>;
 };
 
-const withBackground = (Component: ComponentType<any>) => {
-  return (props: any) => {
-    return (
-      <>
-        <GlobalStyles />
-        <Component {...props} />
-      </>
-    )
-  }
-}
-
 const StoryDecorator = (Story, context) => {
   const [theme, setTheme] = React.useState('default')
   const [darkMode, setDarkMode] = useStorybookDarkMode(context)
+  const blockStore = React.useMemo(() => createBlockStore(), [])
+  const [document] = React.useState(() => createDocument('storybook-document'))
 
-  const StoryWithBackground = withBackground(Story)
+  console.log('StoryDecorator rendered')
+
   return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
-    <BlockRegistryProvider>
-      <BlockStoreProvider>
+    <BlockRegistryProvider registry={blockRegistry}>
+      <BlockStoreProvider store={blockStore}>
         <BlockRendererProvider renderer={renderer}>
-          <DocumentProvider>
-            <StoryWithBackground />
-          </DocumentProvider>
+          <DocumentProvider document={document}>
+            <GlobalStyles />
+            <Story />
+        </DocumentProvider>
         </BlockRendererProvider>
       </BlockStoreProvider>
     </BlockRegistryProvider>
