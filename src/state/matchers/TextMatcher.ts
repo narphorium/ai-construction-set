@@ -3,6 +3,7 @@ import { Block } from "../../types/blocks";
 import { BlockMatcher } from "./BlockMatcher";
 
 export class TextMatcher<T extends Block> implements BlockMatcher {
+  private type = "aics:matcher:text"
   constructor(private property: keyof T, private text: string) { }
 
   match(registry: BlockRegistry, block: Block): boolean {

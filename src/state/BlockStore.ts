@@ -1,4 +1,3 @@
-import * as uuid from 'uuid'
 import { type StoreApi, createStore } from 'zustand/vanilla'
 import { Block, BlockID, BlockProps } from './../types/blocks'
 import { Behavior, BehaviorProps } from './../types/behaviors'
@@ -9,17 +8,21 @@ import { BlockSelector, ChildSelector } from './selectors'
 import { AddChildBlock, BlockMutation, DeleteBlock, UpdateBehavior, UpdateBlock } from './mutations/BlockMutation'
 import { AddRootBlock, DeleteDocument, UpdateDocument } from './mutations/DocumentMutation'
 import { AddBlock, AddDocument } from './mutations/BlockStoreMutation'
-import { BlockStoreState } from './BlockStoreState'
 
+export interface BlockStoreState {
+  documents: Map<string, Document>
+  blocks: Map<string, Block>
+}
 
 export interface BlockStoreActions {
-  applyBlockMutation: (mutation: BlockMutation, block: BlockID) => void
+  // General
+  applyBlockMutations: (mutations: BlockMutation[]) => void
 
   // Documents
-  addDocument: (document: Document) => string
+  addDocument: (document: Document) => DocumentID
   getDocument: (uuid: DocumentID) => Document | undefined
   updateDocument: (uuid: DocumentID, updates: Partial<Document> | ((state: DocumentProps) => Partial<DocumentProps>)) => void
-  addRootBlock: <T extends Block>(block: T, document: DocumentID) => string
+  addRootBlock: <T extends Block>(block: T, document: DocumentID) => BlockID
   deleteDocument: (uuid: DocumentID) => void
 
   // Blocks
@@ -43,11 +46,6 @@ export type BlockStore = BlockStoreState & BlockStoreActions
 export const defaultInitState: BlockStoreState = {
   documents: new Map<string, Document>(),
   blocks: new Map<string, Block>(),
-  children: new Map<string, string[]>()
-}
-
-export const getGUID = (): string => {
-  return uuid.v4()
 }
 
 // Type guard functions
@@ -102,17 +100,11 @@ export const createBlockStore = (
     },
 
     addDocument(document: Document) {
-      if (document.uuid === '') {
-        document.uuid = getGUID()
-      }
       set((state) => new AddDocument(document).apply(state))
       return document.uuid
     },
 
     addBlock: (block: Block): string => {
-      if (block.uuid === '') {
-        block.uuid = getGUID()
-      }
       set((state) => new AddBlock(block).apply(state))
       return block.uuid
     },
@@ -123,7 +115,7 @@ export const createBlockStore = (
     },
 
     addChildBlock: <T extends Block>(block: T, parent: BlockID): string => {
-      set((state) => new AddChildBlock(block).apply(state, parent))
+      set((state) => new AddChildBlock(block, parent).apply(state))
       return block.uuid
     },
 
@@ -149,7 +141,7 @@ export const createBlockStore = (
           }
           updates = updates(state)
         }
-        return new UpdateBlock<T>(updates).apply(state, block)
+        return new UpdateBlock<T>(updates, block).apply(state)
       })
     },
 
@@ -162,7 +154,7 @@ export const createBlockStore = (
           }
           updates = updates(state)
         }
-        return new UpdateBehavior<T>(updates).apply(state, block)
+        return new UpdateBehavior<T>(updates, block).apply(state)
       })
     },
 
@@ -171,7 +163,7 @@ export const createBlockStore = (
     },
 
     deleteBlock: (block: BlockID) => {
-      set((state) => new DeleteBlock().apply(state, block))
+      set((state) => new DeleteBlock(block).apply(state))
     },
 
     findBlock: (root: Block | Document, selector: BlockQuery, registry: BlockRegistry) => {
@@ -183,8 +175,10 @@ export const createBlockStore = (
       return findBlocks(get(), root, selector, registry)
     },
 
-    applyBlockMutation: (mutation: BlockMutation, block: BlockID) => {
-      set((state) => mutation.apply(state, block))
+    applyBlockMutations: (mutations: BlockMutation[]) => {
+      set((state: BlockStoreState) => {
+        return mutations.reduce((acc, mutation) => mutation.apply(acc), state)
+      })
     },
   })) as StoreApi<BlockStore>
 }

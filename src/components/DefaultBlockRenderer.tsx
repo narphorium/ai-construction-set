@@ -21,14 +21,14 @@ export class DefaultBlockRenderer implements BlockRenderer {
   parentByBlock: Map<Block, Block> = new Map<Block, Block>()
 
   constructor() {
-    this.registerHandler('aics:code', this.renderCode as BlockRenderHandler)
-    this.registerHandler('aics:paragraph', this.renderParagraph as BlockRenderHandler)
-    this.registerHandler('aics:section', this.renderSection as BlockRenderHandler)
-    this.registerHandler('aics:span', this.renderSpan as BlockRenderHandler)
+    this.registerHandler('aics:code', this.renderCode.bind(this) as BlockRenderHandler)
+    this.registerHandler('aics:paragraph', this.renderParagraph.bind(this) as BlockRenderHandler)
+    this.registerHandler('aics:section', this.renderSection.bind(this) as BlockRenderHandler)
+    this.registerHandler('aics:span', this.renderSpan.bind(this) as BlockRenderHandler)
 
-    this.registerHandler('aics:list', this.renderList as BlockRenderHandler)
-    this.registerHandler('aics:tree', this.renderTree as BlockRenderHandler)
-    this.registerHandler('aics:table', this.renderTable as BlockRenderHandler)
+    this.registerHandler('aics:list', this.renderList.bind(this) as BlockRenderHandler)
+    this.registerHandler('aics:tree', this.renderTree.bind(this) as BlockRenderHandler)
+    this.registerHandler('aics:table', this.renderTable.bind(this) as BlockRenderHandler)
   }
 
   registerHandler(blockType: string, builder: BlockRenderHandler): void {

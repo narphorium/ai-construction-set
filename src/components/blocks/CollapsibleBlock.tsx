@@ -14,6 +14,7 @@ export interface CollapsibleBlockProps extends SelectableComponentProps, Collaps
 }
 
 export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock({ className, block, setCollapsed, onTransitionEnd }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
+
   const blockStore = useBlockStore()
   const children = blockStore.getChildBlocks(block.uuid)
   const inner = useRef<HTMLDivElement>(null)
@@ -80,6 +81,16 @@ CollapsibleBlockComponent.displayName = 'CollapsibleBlock'
 
 export const CollapsibleBlock = styled(CollapsibleBlockComponent)`
 position: relative;
+display: ${themedVariant('blockDisplay')};
+font-family: ${themedVariant('fontFamily')};
+font-weight: ${themedVariant('fontWeight')};
+border-width: 1px;
+border-style: solid;
+border-radius: 4px;
+margin: 4px 0;
+color: ${themedVariant('textColor')};
+background-color: ${themedVariant('contentBackgroundColor')};
+border-color: ${themedVariant('borderColor')};
 
   &.collapsed {
     > .aics-collapsible-block-inner {

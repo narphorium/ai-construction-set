@@ -1,3 +1,4 @@
+import * as uuid from 'uuid'
 import { BehaviorActions, BehaviorGetter, BehaviorProps, BehaviorSetter, createCollapsibleActions, createPageableActions, createSelectableActions } from "./../types/behaviors"
 import { BlockActions, BlockGetter, BlockProps, BlockSetter, createCheckboxActions, createCodeActions, createParagraphActions, createSectionActions, createSpanActions } from "./../types/blocks"
 import { createListActions, createTableRowActions, createTableActions, createTreeActions } from "../types/layouts"
@@ -27,10 +28,15 @@ export interface BehaviorSpec<P extends BehaviorProps, A extends BehaviorActions
 export class BlockRegistry {
   blocksByType: { [key: string]: any }
   behaviorsByType: { [key: string]: any }
+  private currentSession: Session | null = null
 
   constructor() {
     this.blocksByType = {}
     this.behaviorsByType = {}
+  }
+
+  generateUUID(): string {
+    return uuid.v4()
   }
 
   registerBlock<P extends BlockProps, A extends BlockActions>(spec: BlockSpec<P, A>): void {
@@ -41,10 +47,21 @@ export class BlockRegistry {
     this.behaviorsByType[spec.name] = spec
   }
 
-  createBlock<P extends BlockProps>(blockType: string, props: Partial<any> = {}): P {
+  createBlock<P extends BlockProps>(blockType: string, parent?: BlockProps, props: Partial<any> = {}): P {
     const blockSpec = this.blocksByType[blockType]
     if (blockSpec === undefined) {
       throw new Error(`Block type ${blockType} not registered`)
+    }
+
+    // Generate a UUID if one is not provided
+    if (props.uuid === '' || props.uuid === undefined) {
+      props.uuid = this.generateUUID()
+    }
+
+    // Set the parent if provided
+    if (parent !== undefined) {
+      props.parent = parent.uuid
+      parent.children.push(props.uuid)
     }
 
     let block = blockSpec.builder(props as Partial<P>)
@@ -53,8 +70,13 @@ export class BlockRegistry {
       if (behaviorSpec === undefined) {
         throw new Error(`Behavior type ${behaviorType} not registered`)
       }
-      block &= behaviorSpec.builder(props)
+      block = { ...block, ...behaviorSpec.builder(props) }
     })
+
+    if (this.currentSession) {
+      this.currentSession.addBlock(block)
+    }
+
     return block
   }
 
@@ -79,6 +101,35 @@ export class BlockRegistry {
   hasBehavior(blockType: string, behaviorType: string): boolean {
     const blockSpec = this.blocksByType[blockType]
     return blockSpec !== undefined && behaviorType in blockSpec.behaviors
+  }
+
+  session(): Session {
+    if (this.currentSession === null) {
+      this.currentSession = new Session(this)
+    }
+    return this.currentSession
+  }
+
+  closeSession(): void {
+    this.currentSession = null
+  }
+}
+
+class Session {
+  private blocks: BlockProps[] = []
+
+  constructor(private blockRegistry: BlockRegistry) { }
+
+  addBlock(block: BlockProps): void {
+    this.blocks.push(block)
+  }
+
+  getBlocks(): BlockProps[] {
+    return this.blocks
+  }
+
+  close(): void {
+    this.blockRegistry.closeSession()
   }
 }
 

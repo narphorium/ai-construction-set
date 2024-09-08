@@ -1,4 +1,4 @@
-import { BlockStoreState } from "../BlockStoreState"
+import { BlockStoreState } from "../BlockStore"
 import { Document, DocumentID } from "../../types/Document"
 import { Block } from "../../types/blocks"
 import { AddBlock } from "./BlockStoreMutation"
@@ -8,6 +8,8 @@ export interface DocumentMutation {
 }
 
 export class AddRootBlock implements DocumentMutation {
+  private type = "aics:mutation:add-root-block"
+
   constructor(private block: Block) { }
 
   apply(state: BlockStoreState, document: string): BlockStoreState {
@@ -22,6 +24,8 @@ export class AddRootBlock implements DocumentMutation {
 }
 
 export class UpdateDocument implements DocumentMutation {
+  private type = "aics:mutation:update-document"
+
   constructor(private updates: Partial<Document>) { }
 
   apply(state: BlockStoreState, uuid: DocumentID): BlockStoreState {
@@ -37,6 +41,8 @@ export class UpdateDocument implements DocumentMutation {
 }
 
 export class DeleteDocument implements DocumentMutation {
+  private type = "aics:mutation:delete-document"
+
   apply(state: BlockStoreState, uuid: string): BlockStoreState {
     const document = state.documents.get(uuid)
     if (document === undefined) {

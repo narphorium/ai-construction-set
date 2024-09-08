@@ -1,6 +1,6 @@
 import { ContentBlock } from '../../components/blocks/ContentBlock'
-import { ListInSection, NamedSectionsContent, PlainContent } from '../storyContent'
-import { PaddedBlockStoryTemplate } from '../BlockStoryTemplate'
+import { ListInSection, NamedSectionsContent, PlainContent, WrapInSection } from '../storyContent'
+import { BlockStoryTemplate } from '../BlockStoryTemplate'
 
 export default {
   component: ContentBlock,
@@ -8,42 +8,37 @@ export default {
   tags: ['autodocs'],
 }
 
-export const Default = PaddedBlockStoryTemplate.bind({});
+export const Default = BlockStoryTemplate.bind({});
 Default.args = {
   builder: PlainContent,
 }
 
-export const Selected = PaddedBlockStoryTemplate.bind({});
+export const Selected = BlockStoryTemplate.bind({});
 Selected.args = {
-  builder: PlainContent,
-  selected: true,
+  builder: WrapInSection((registry, parent) => PlainContent(registry), true),
 }
 
-export const Sections = PaddedBlockStoryTemplate.bind({});
+export const Sections = BlockStoryTemplate.bind({});
 Sections.args = {
-  builder: NamedSectionsContent
+  builder: WrapInSection((registry, parent) => NamedSectionsContent(registry))
 }
 
-export const List = PaddedBlockStoryTemplate.bind({});
+export const List = BlockStoryTemplate.bind({});
 List.args = {
-  builder: ListInSection
+  builder: WrapInSection((registry, parent) => ListInSection(registry))
 }
 
-export const Blue = PaddedBlockStoryTemplate.bind({});
+export const Blue = BlockStoryTemplate.bind({});
 Blue.args = {
-  builder: PlainContent,
-  theme: 'blue',
+  builder: WrapInSection((registry, parent) => PlainContent(registry), false, 'blue')
 }
 
-export const BlueSelected = PaddedBlockStoryTemplate.bind({});
+export const BlueSelected = BlockStoryTemplate.bind({});
 BlueSelected.args = {
-  builder: PlainContent,
-  theme: 'blue',
-  selected: true,
+  builder: WrapInSection((registry, parent) => PlainContent(registry), true, 'blue')
 }
 
-export const BlueSections = PaddedBlockStoryTemplate.bind({});
+export const BlueSections = BlockStoryTemplate.bind({});
 BlueSections.args = {
-  builder: NamedSectionsContent,
-  theme: 'blue',
+  builder: WrapInSection((registry, parent) => NamedSectionsContent(registry), false, 'blue')
 }

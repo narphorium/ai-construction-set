@@ -4,6 +4,7 @@ export interface BlockProps {
   uuid: BlockID
   type: string
   classNames: Set<string>
+  children: BlockID[]
   parent?: string
   iteration?: number
   variant?: string
@@ -15,6 +16,7 @@ export const createBlock = (props: Partial<BlockProps> = {}): BlockProps => {
     uuid: '',
     type: 'aics:unknown',
     classNames: new Set(),
+    children: [],
     ...props,
   } as Block
 }

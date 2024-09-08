@@ -1,20 +1,23 @@
-import { BlockStoreState } from "../BlockStoreState"
+import { BlockStoreState } from "../BlockStore"
 import { Document } from "../../types/Document"
 import { Block, BlockID } from "../../types/blocks"
 
 export const addChild = (state: BlockStoreState, parent: BlockID, uuid: BlockID): BlockStoreState => {
-  const children = state.children.get(parent) || []
-  children.push(uuid)
-  return { ...state, children: new Map(state.children.set(parent, children)) }
+  const parentBlock = state.blocks.get(parent)
+  if (parentBlock === undefined) {
+    return state
+  }
+  const newParentBlock = { ...parentBlock, children: [...parentBlock.children, uuid] }
+  return { ...state, blocks: new Map(state.blocks.set(parent, newParentBlock)) }
 }
 
 export const deleteChild = (state: BlockStoreState, parent: BlockID, uuid: BlockID) => {
-  const children = state.children.get(parent)
-  if (children !== undefined) {
-    const newChildren = children.filter((child) => child !== uuid)
-    state = { ...state, children: new Map(state.children.set(parent, newChildren)) }
+  const parentBlock = state.blocks.get(parent)
+  if (parentBlock === undefined) {
+    return state
   }
-  return state
+  const newParentBlock = { ...parentBlock, children: parentBlock.children.filter((child) => child !== uuid) }
+  return { ...state, blocks: new Map(state.blocks.set(parent, newParentBlock)) }
 }
 
 export interface BlockStoreMutation {
@@ -22,6 +25,7 @@ export interface BlockStoreMutation {
 }
 
 export class AddDocument implements BlockStoreMutation {
+  private type = "aics:mutation:add-document" 
 
   constructor(private document: Document) { }
 
@@ -33,6 +37,8 @@ export class AddDocument implements BlockStoreMutation {
 }
 
 export class AddBlock<T extends Block> implements BlockStoreMutation {
+  private type = "aics:mutation:add-block" 
+
   constructor(private block: T) { }
 
   apply(state: BlockStoreState): BlockStoreState {

@@ -18,6 +18,8 @@ export type Matchable = BlockMatcher | BlockSelector
 
 export class BlockQuery {
 
+  private type = "aics:query"
+
   constructor(private matchers: Matchable[] = []) { }
 
   getMatchers() {

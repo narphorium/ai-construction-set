@@ -1,5 +1,5 @@
 import { BlockID } from "../../types/blocks";
-import { BlockStoreState } from "../BlockStoreState";
+import { BlockStoreState } from "../BlockStore";
 import { BlockSelector } from "./BlockSelector";
 import { ParentSelector } from "./ParentSelector";
 
@@ -10,10 +10,7 @@ export class SiblingSelector implements BlockSelector {
     if (parentBlock === undefined) {
       return [];
     }
-    const siblings = state.children.get(parentBlock.uuid);
-    if (siblings === undefined) {
-      return [];
-    }
+    const siblings = parentBlock.children.filter(child => child !== root);
     return siblings;
   }
 }

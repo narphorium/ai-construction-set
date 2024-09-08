@@ -3,9 +3,11 @@ import { Block } from "../../types/blocks";
 import { BlockMatcher } from "./BlockMatcher";
 
 export class TypeMatcher implements BlockMatcher {
-  constructor(private type: string) { }
+  private type = "aics:matcher:type"
+
+  constructor(private blockType: string) { }
 
   match(registry: BlockRegistry, block: Block): boolean {
-    return block.type === this.type;
+    return block.type === this.blockType;
   }
 }

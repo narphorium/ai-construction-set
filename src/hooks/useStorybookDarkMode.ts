@@ -10,10 +10,9 @@ export const useStorybookDarkMode = (context: any): [boolean, (value: boolean) =
     } else if (context.globals !== undefined) {
       globals = context.globals
     }
-    if (globals.theme === 'dark') {
-      setDarkMode(true)
-    } else {
-      setDarkMode(false)
+    const globalTheme = globals.theme === 'dark'
+    if (globalTheme !== darkMode) {
+      setDarkMode(globalTheme)
     }
   }, [context])
 

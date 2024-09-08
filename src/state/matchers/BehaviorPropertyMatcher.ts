@@ -4,6 +4,8 @@ import { Block } from "../../types/blocks";
 import { BlockMatcher } from "./BlockMatcher";
 
 export class BehaviorPropertyMatcher<T extends Behavior> implements BlockMatcher {
+  private type = "aics:matcher:behavior-property" 
+
   constructor(private property: keyof T, private value: any) { }
 
   match(registry: BlockRegistry, block: Block): boolean {

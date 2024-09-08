@@ -1,48 +1,20 @@
 import React from 'react'
-import { type Block, Section } from '../types/blocks'
+import { type Block } from '../types/blocks'
 import { BlockLayout } from '../components/layouts/BlockLayout'
-import { useBlockRegistry, useBlockStore } from '../hooks'
-import { useDocument } from '../hooks/useDocument'
+import { useStoryContent } from '../hooks/useStoryContent'
+import { BlockRegistry } from '../state/BlockRegistry'
 
 interface BlockStoryProps<T extends Block> {
-  builder: () => T
+  builder: (registry: BlockRegistry) => T
   theme?: string
   selected?: boolean
 }
 
-export const BlockStoryTemplate = <T extends Block>(args: BlockStoryProps<T>): JSX.Element => {
-  const blockStore = useBlockStore()
-  const document = useDocument()
-
-  const block = args.builder()
-  if (args.theme !== undefined) {
-    block.theme = args.theme
-  }
-  blockStore.addRootBlock(block, document.uuid)
+export const BlockStoryTemplate = <T extends Block>({ builder, theme, selected }: BlockStoryProps<T>): JSX.Element => {
+  const createAndPersistContent = useStoryContent(builder)
+  const block = React.useMemo(() => createAndPersistContent(), [createAndPersistContent]);
 
   return (
-    <BlockLayout blocks={[block]} />
-  )
-}
-
-export const PaddedBlockStoryTemplate = <T extends Block>(args: BlockStoryProps<T>): JSX.Element => {
-  const blockStore = useBlockStore()
-  const registry = useBlockRegistry()
-  const document = useDocument()
-
-  const content = registry.createBlock<Section>('aics:section')
-  if (args.theme !== undefined) {
-    content.theme = args.theme
-  }
-  if (args.selected !== undefined) {
-    content.selected = args.selected
-  }
-  blockStore.addRootBlock(content, document.uuid)
-
-  const block = args.builder()
-  blockStore.addChildBlock(block, content.uuid)
-
-  return (
-    <BlockLayout blocks={[content]} />
+    <BlockLayout blocks={block ? [block] : []} />
   )
 }

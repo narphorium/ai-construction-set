@@ -1,5 +1,5 @@
 import { BlockID } from "../../types/blocks";
-import { BlockStoreState } from "../BlockStoreState";
+import { BlockStoreState } from "../BlockStore";
 import { BlockSelector } from "./BlockSelector";
 import { SiblingSelector } from "./SiblingSelector";
 

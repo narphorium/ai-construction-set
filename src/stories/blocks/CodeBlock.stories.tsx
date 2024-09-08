@@ -1,6 +1,6 @@
 import { CodeBlock } from '../../components/blocks/CodeBlock'
 import { SimplePythonCode } from '../storyContent'
-import { PaddedBlockStoryTemplate } from '../BlockStoryTemplate';
+import { BlockStoryTemplate } from '../BlockStoryTemplate';
 
 export default {
   component: CodeBlock,
@@ -8,12 +8,12 @@ export default {
   tags: ['autodocs'],
 };
 
-export const Default = PaddedBlockStoryTemplate.bind({})
+export const Default = BlockStoryTemplate.bind({})
 Default.args = {
   builder: SimplePythonCode,
 };
 
-export const Blue = PaddedBlockStoryTemplate.bind({})
+export const Blue = BlockStoryTemplate.bind({})
 Blue.args = {
   builder: SimplePythonCode,
   theme: 'blue',

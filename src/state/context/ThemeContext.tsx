@@ -32,7 +32,7 @@ export interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({ theme, darkMode, registry, children, setTheme, setDarkMode }: ThemeProviderProps): JSX.Element => {
-  const [themeState, setThemeState] = useState<Theme>()
+  const [themeState, setThemeState] = useState<Theme>(lightTheme)
   const registryRef = useRef<ThemeRegistry>()
 
   if (registry !== undefined) {
@@ -42,7 +42,7 @@ export const ThemeProvider = ({ theme, darkMode, registry, children, setTheme, s
   }
 
   useEffect(() => {
-    setThemeState(registryRef.current?.getTheme(theme, darkMode))
+    setThemeState(registryRef.current?.getTheme(theme, darkMode) ?? lightTheme)
   }, [theme, darkMode])
 
   const handleSetTheme = (theme: object) => {
@@ -67,7 +67,7 @@ export const ThemeProvider = ({ theme, darkMode, registry, children, setTheme, s
       setDarkMode: handleSetDarkMode,
       setRegistry: (registry: ThemeRegistry) => { registryRef.current = registry },
     }} >
-      <StyledThemeProvider theme={themeState ?? lightTheme}>
+      <StyledThemeProvider theme={themeState}>
         {children}
       </StyledThemeProvider>
     </ThemeContext.Provider>

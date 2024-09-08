@@ -7,9 +7,9 @@ export interface DocumentProps {
   blocks: string[]
 }
 
-export const createDocument = (): DocumentProps => {
+export const createDocument = (uuid: DocumentID): DocumentProps => {
   return {
-    uuid: '',
+    uuid,
     title: '',
     blocks: []
   }

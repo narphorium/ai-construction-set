@@ -1,37 +1,39 @@
 import { Behavior } from "../../types/behaviors";
 import { Block, BlockID } from "../../types/blocks";
-import { BlockStoreState } from "../BlockStoreState";
+import { BlockStoreState } from "../BlockStore";
 import { AddBlock, addChild, deleteChild } from "./BlockStoreMutation";
 
 export interface BlockMutation {
-  apply: (state: BlockStoreState, block: BlockID) => BlockStoreState
+  apply: (state: BlockStoreState) => BlockStoreState
 }
 
 export class AddChildBlock implements BlockMutation {
-  constructor(private block: Block) { }
+  private type = "aics:mutation:add-child-block"
+  constructor(private block: Block, private parent: BlockID) { }
 
-  apply(state: BlockStoreState, uuid: BlockID): BlockStoreState {
-    state = addChild(state, uuid, this.block.uuid)
+  apply(state: BlockStoreState): BlockStoreState {
+    state = addChild(state, this.parent, this.block.uuid)
     state = new AddBlock(this.block).apply(state)
     return state
   }
 }
 
 export class UpdateBlock<T extends Block> implements BlockMutation {
-  constructor(private updates: Partial<T>) { }
+  private type = "aics:mutation:update-block"
+  constructor(private updates: Partial<T>, private parent: BlockID) { }
 
-  apply(state: BlockStoreState, uuid: BlockID): BlockStoreState {
-    const block = state.blocks.get(uuid)
+  apply(state: BlockStoreState): BlockStoreState {
+    const block = state.blocks.get(this.parent)
     if (block === undefined) {
       return state
     }
     const newBlock = { ...block, ...this.updates }
     const newBlocks = new Map(state.blocks)
-    newBlocks.set(uuid, newBlock)
+    newBlocks.set(this.parent, newBlock)
 
     if ('parent' in this.updates && this.updates.parent !== undefined) {
-      state = deleteChild(state, uuid, uuid)
-      state = addChild(state, this.updates.parent, uuid)
+      state = deleteChild(state, this.parent, this.parent)
+      state = addChild(state, this.updates.parent, this.parent)
     }
 
     return { ...state, blocks: newBlocks }
@@ -39,30 +41,33 @@ export class UpdateBlock<T extends Block> implements BlockMutation {
 }
 
 export class UpdateBehavior<T extends Behavior> implements BlockMutation {
-  constructor(private updates: Partial<T>) { }
-  apply(state: BlockStoreState, uuid: BlockID): BlockStoreState {
-    const block = state.blocks.get(uuid)
+  private type = "aics:mutation:update-behavior"
+  constructor(private updates: Partial<T>, private parent: BlockID) { }
+  apply(state: BlockStoreState): BlockStoreState {
+    const block = state.blocks.get(this.parent)
     if (block === undefined) {
       return state
     }
     const newBlock = { ...block, ...this.updates }
     const newBlocks = new Map(state.blocks)
-    newBlocks.set(uuid, newBlock)
+    newBlocks.set(this.parent, newBlock)
     return { ...state, blocks: newBlocks }
   }
 }
 
 export class DeleteBlock implements BlockMutation {
-  apply(state: BlockStoreState, uuid: BlockID): BlockStoreState {
-    const block = state.blocks.get(uuid)
+  private type = "aics:mutation:delete-block"
+  constructor(private parent: BlockID) { }
+  apply(state: BlockStoreState): BlockStoreState {
+    const block = state.blocks.get(this.parent)
     if (block === undefined) {
       return state
     }
     const newBlocks = new Map(state.blocks)
-    newBlocks.delete(uuid)
+    newBlocks.delete(this.parent)
 
     if (block.parent !== undefined) {
-      state = deleteChild(state, block.parent, uuid)
+      state = deleteChild(state, block.parent, this.parent)
     }
 
     return { ...state, blocks: newBlocks }
