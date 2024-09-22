@@ -8,7 +8,7 @@ export const createCollapsible = (props: Partial<CollapsibleProps> = {}): Collap
   return {
     ...createBehavior(props),
     name: '',
-    collapsed: true,
+    collapsed: false,
     ...props,
   } as CollapsibleProps
 }

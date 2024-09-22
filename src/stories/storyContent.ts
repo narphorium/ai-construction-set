@@ -4,33 +4,32 @@ import { BlockRegistry } from '../state/BlockRegistry'
 
 export const PlainParagraph = (registry: BlockRegistry, text = 'Test Span', parent?: Block): Paragraph => {
   const paragraph: Paragraph = registry.createBlock('aics:paragraph', parent)
-  const span = registry.createBlock('aics:span', paragraph, { content: text })
+  registry.createBlock('aics:span', paragraph, { content: text })
   return paragraph
 }
 
 export const PlainContent = (registry: BlockRegistry, text = 'Test Span', parent?: Block): Section => {
   const section: Section = registry.createBlock('aics:section', parent)
-  const paragraph = PlainParagraph(registry, text, section)
-  registry.createBlock('aics:paragraph', paragraph)
+  PlainParagraph(registry, text, section)
   return section
 }
 
-export const NamedSectionsContent = (registry: BlockRegistry): Section => {
-  const section: Section = registry.createBlock('aics:section')
-  const section1 = registry.createBlock('aics:section', section)
-  registry.createBlock('aics:span', section1, { content: 'Test Section: ', variant: 'label' })
-  registry.createBlock('aics:span', section1, { content: 'Test Span', selected: true })
+export const NamedSectionsContent = (registry: BlockRegistry, parent?: Block, selected?: boolean, theme?: string): Section => {
+  const section: Section = registry.createBlock('aics:section', parent, { collapsible: false, selected, theme })
+  const paragraph1 = registry.createBlock('aics:paragraph', section)
+  registry.createBlock('aics:span', paragraph1, { content: 'Test Section: ', variant: 'label' })
+  registry.createBlock('aics:span', paragraph1, { content: 'Test Span', selected: true })
 
-  const section2 = registry.createBlock('aics:section', section, { selected: true })
-  registry.createBlock('aics:span', section2, { content: 'Test Section: ', variant: 'label' })
-  registry.createBlock('aics:span', section2, { content: 'Test Span' })
+  const paragraph2 = registry.createBlock('aics:paragraph', section, { selected: true })
+  registry.createBlock('aics:span', paragraph2, { content: 'Test Section: ', variant: 'label' })
+  registry.createBlock('aics:span', paragraph2, { content: 'Test Span' })
 
   return section
 }
 
 export const PlainListItem = (registry: BlockRegistry, list: List, name: string, icon?: string): Section => {
-  const item: Section = registry.createBlock('aics:section', list, { name, icon })
-  PlainParagraph(registry)
+  const item: Section = registry.createBlock('aics:section', list, { summary: name, icon, collapsible: true, collapsed: true })
+  PlainParagraph(registry, 'Test Span', item)
   return item
 }
 
@@ -169,8 +168,8 @@ const TableCell = (registry: BlockRegistry, row: TableRow, value: string, dataty
   return cell
 }
 
-export const SimpleTable = (registry: BlockRegistry): Table => {
-  const table: Table = registry.createBlock('aics:table')
+export const SimpleTable = (registry: BlockRegistry, parent?: Block): Table => {
+  const table: Table = registry.createBlock('aics:table', parent)
   const row1 = registry.createBlock<TableRow>('aics:tableRow', table)
   TableHeader(registry, row1, 'Text Property', 'text')
   TableCell(registry, row1, 'Hello World', 'text')
@@ -193,5 +192,13 @@ export const WrapInSection = (builder: Builder, selected?: boolean, theme?: stri
     const section: Section = registry.createBlock('aics:section', parent, { selected, theme })
     builder(registry, section)
     return section
+  }
+}
+
+export const WrapInTheme = (builder: Builder, theme: string): Builder => {
+  return (registry: BlockRegistry, parent?: Block): Block => {
+    const block = builder(registry, parent)
+    block.theme = theme
+    return block
   }
 }

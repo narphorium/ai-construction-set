@@ -272,14 +272,11 @@ export const lightTheme = {
   collapsibleFontWeight: {
     default: 'inherit'
   },
-  collapsiblePadding: {
-    default: '4px 16px'
-  },
   collapsibleIcon: {
     default: ''
   },
   collapsibleTitlePadding: {
-    default: '0 0 0 22px'
+    default: '0 0 0 24px'
   },
   blockDisplay: {
     default: 'block',

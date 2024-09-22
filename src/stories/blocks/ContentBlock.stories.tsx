@@ -1,5 +1,5 @@
 import { ContentBlock } from '../../components/blocks/ContentBlock'
-import { ListInSection, NamedSectionsContent, PlainContent, WrapInSection } from '../storyContent'
+import { ListInSection, NamedSectionsContent, PlainContent, PlainParagraph, WrapInSection } from '../storyContent'
 import { BlockStoryTemplate } from '../BlockStoryTemplate'
 
 export default {
@@ -15,30 +15,30 @@ Default.args = {
 
 export const Selected = BlockStoryTemplate.bind({});
 Selected.args = {
-  builder: WrapInSection((registry, parent) => PlainContent(registry), true),
+  builder: WrapInSection((registry, parent) => PlainParagraph(registry, 'Test Span', parent), true),
 }
 
 export const Sections = BlockStoryTemplate.bind({});
 Sections.args = {
-  builder: WrapInSection((registry, parent) => NamedSectionsContent(registry))
+  builder: NamedSectionsContent
 }
 
 export const List = BlockStoryTemplate.bind({});
 List.args = {
-  builder: WrapInSection((registry, parent) => ListInSection(registry))
+  builder: ListInSection
 }
 
 export const Blue = BlockStoryTemplate.bind({});
 Blue.args = {
-  builder: WrapInSection((registry, parent) => PlainContent(registry), false, 'blue')
+  builder: WrapInSection((registry, parent) => PlainParagraph(registry, 'Test Span', parent), false, 'blue')
 }
 
 export const BlueSelected = BlockStoryTemplate.bind({});
 BlueSelected.args = {
-  builder: WrapInSection((registry, parent) => PlainContent(registry), true, 'blue')
+  builder: WrapInSection((registry, parent) => PlainParagraph(registry, 'Test Span', parent), true, 'blue')
 }
 
 export const BlueSections = BlockStoryTemplate.bind({});
 BlueSections.args = {
-  builder: WrapInSection((registry, parent) => NamedSectionsContent(registry), false, 'blue')
+  builder: (registry, parent) => NamedSectionsContent(registry, parent, false, 'blue')
 }

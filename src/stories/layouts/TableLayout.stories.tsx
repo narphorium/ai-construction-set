@@ -1,5 +1,5 @@
 import { TableLayout } from '../../components/layouts'
-import { SimpleTable } from '../storyContent'
+import { SimpleTable, WrapInSection } from '../storyContent'
 import { BlockStoryTemplate } from '../BlockStoryTemplate'
 
 export default {
@@ -10,18 +10,16 @@ export default {
 
 export const Default = BlockStoryTemplate.bind({})
 Default.args = {
-  builder: SimpleTable,
+  builder: WrapInSection((registry, parent) => SimpleTable(registry, parent)),
 }
 
 export const Selected = BlockStoryTemplate.bind({})
 Selected.args = {
-  builder: SimpleTable,
-  selected: true,
+  builder: WrapInSection((registry, parent) => SimpleTable(registry, parent), true),
 }
 
 export const Blue = BlockStoryTemplate.bind({})
 Blue.args = {
-  builder: SimpleTable,
-  theme: 'blue',
+    builder: WrapInSection((registry, parent) => SimpleTable(registry, parent), false, 'blue'),
 }
 

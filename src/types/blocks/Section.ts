@@ -5,6 +5,7 @@ import { Block, BlockActions, createBlock } from './Block'
 export interface SectionProps extends Block, Selectable, Collapsible {
   summary?: string
   icon?: string
+  collapsible?: boolean
 }
 
 export const createSection = (props: Partial<SectionProps> = {}): SectionProps => {
@@ -12,6 +13,7 @@ export const createSection = (props: Partial<SectionProps> = {}): SectionProps =
     ...createBlock(props as Partial<Block>),
     ...createSelectable(props as Partial<Selectable>),
     ...createCollapsible(props as Partial<Collapsible>),
+    collapsible: false,
     ...props,
     type: 'aics:section'
   } as SectionProps

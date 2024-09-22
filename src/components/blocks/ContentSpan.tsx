@@ -41,6 +41,7 @@ const backgroundImage = (props: any): string | undefined => {
 }
 
 export const ContentSpan = styled(ContentSpanComponent)`
+  display: inline-block;
   color: ${themedVariant('spanTextColor')};
   background-color: ${themedVariant('spanBackgroundColor')};
   border-radius: ${themedVariant('spanBorderRadius')};

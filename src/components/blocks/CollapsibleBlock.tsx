@@ -39,21 +39,23 @@ export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock({ 
   //   }
   // })
 
-  useEffect(() => {
-    updateInner()
-  }, [])
+  // useEffect(() => {
+  //   updateInner()
+  // }, [])
+
+  console.log('CollapsibleBlock render')
 
   useEffect(() => {
-    console.log('CollapsibleBlock useEffect', block.collapsed)
     updateInner()
   }, [block.collapsed, updateInner, setCollapsed])
 
   const blockClasses = useClasses([
     'aics-collapsible-block',
+    () => block.collapsible ? ['aics-collapsible'] : [],
     className,
     block.classNames,
     () => block.icon !== undefined ? ['has-icon'] : []
-  ], [className, block.classNames, block.icon])
+  ], [className, block.classNames, block.icon, block.collapsible])
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     block.toggleCollapsed()
@@ -92,6 +94,10 @@ color: ${themedVariant('textColor')};
 background-color: ${themedVariant('contentBackgroundColor')};
 border-color: ${themedVariant('borderColor')};
 
+&.ancestor-selected {
+  background-color: transparent;
+}
+
   &.collapsed {
     > .aics-collapsible-block-inner {
       margin-top: 0;
@@ -99,6 +105,7 @@ border-color: ${themedVariant('borderColor')};
     }
 
     > .aics-collapsible-block-header > .aics-collapsible-block-control ::before {
+      transition: all 0.2s;  
       transform: rotate(0deg);
     }
 
@@ -108,6 +115,7 @@ border-color: ${themedVariant('borderColor')};
   }
 
   & > .aics-collapsible-block-header {
+    display: none;
     position: relative;
     font-size: ${themedVariant('fontSize')};
 
@@ -117,9 +125,13 @@ border-color: ${themedVariant('borderColor')};
     }
   }
 
-  & .aics-collapsible-block-control {
+  &.aics-collapsible > .aics-collapsible-block-header {
+    display: block;
+  }
+
+  & > .aics-collapsible-block-header> .aics-collapsible-block-control {
     position: absolute;
-    top: 0;
+    top: 3px;
     left: 4px;
     background-color: transparent;
     border: none;
@@ -151,7 +163,7 @@ border-color: ${themedVariant('borderColor')};
 
   & .aics-collapsible-block-title {
     display: inline-block;
-    margin: 2px 0;
+    margin: 4px 0;
     padding: ${themedVariant('collapsibleTitlePadding')};
     color: ${themedVariant('collapsibleTextColor')};
     font-family: ${themedVariant('collapsibleFontFamily')};
@@ -163,8 +175,6 @@ border-color: ${themedVariant('borderColor')};
     :focus {
       outline: 0;
     }
-
-    
   }
 
   &.has-icon .aics-collapsible-block-title {
@@ -177,7 +187,6 @@ border-color: ${themedVariant('borderColor')};
 
   & .aics-collapsible-block-content {
     overflow: hidden;
-    margin: ${themedVariant('collapsiblePadding')};
     font-size: ${themedVariant('fontSize')};
   }
 

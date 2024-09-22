@@ -29,24 +29,17 @@ export const useStoryContent = <T extends Block>(
   }
 
   const createAndPersistContent = useCallback(() => {
-    console.log('Creating and persisting content')
     const session = registry.session()
     const block = buildContent(registry)
     session.close()
-
-    console.log('Story content', JSON.stringify(block, null, 2))
 
     const mutations: BlockMutation[] = []
     session.getBlocks().forEach((block) => {
       mutations.push(...getChildBlockMutations(block, undefined))
     })
-    console.log('Mutations', JSON.stringify(mutations, null, 2))
 
     store.applyBlockMutations(mutations)
-
     const persistedBlock = store.getBlock(block.uuid)
-    console.log('Persisted block', JSON.stringify(persistedBlock, null, 2))
-
     return persistedBlock
   }, [registry, buildContent, document])
 

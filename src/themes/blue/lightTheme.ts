@@ -6,7 +6,7 @@ export const lightTheme = extendTheme(defaultLightTheme, {
     default: '"Inter", Helvetica, Arial, sans-serif'
   },
   fontWeight: {
-    default: 300
+    default: 400
   },
   contentBackgroundColor: {
     default: {

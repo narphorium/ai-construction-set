@@ -3,6 +3,8 @@ import React, { forwardRef, type ComponentClass, type ComponentPropsWithoutRef, 
 import { BehaviorComponentProps } from './Base'
 import { Selectable } from '../../types/behaviors'
 import { useClasses } from '../../hooks/useClasses'
+import { BlockQuery } from '../../state/matchers'
+import { useBlockRegistry, useBlockStore } from '../../hooks'
 
 export interface SelectableComponentProps extends BehaviorComponentProps<Selectable> {
   setSelected?: (selected: boolean) => void
@@ -24,12 +26,17 @@ export function withSelectable<P extends SelectableComponentProps>(
   Component: ComponentType<P>
 ): any {
   const WithSelectable = forwardRef(function (props, ref): JSX.Element {
+    const blockStore = useBlockStore()
+    const blockRegistry = useBlockRegistry()
     const selectableProps = props as P
+
+    const ancestorSelected = new BlockQuery().ancestors().hasBehaviorProperty<Selectable>('selected', true)
 
     const selectableClasses = useClasses([
       selectableProps.className,
-      () => selectableProps.block.selected ? ['selected'] : []
-    ], [selectableProps.className, selectableProps.block.selected])
+      () => selectableProps.block.selected ? ['selected'] : [],
+      () => blockStore.findBlocks(selectableProps.block, ancestorSelected, blockRegistry).length > 0 ? ['ancestor-selected'] : []
+    ], [selectableProps.className, selectableProps.block.selected, ancestorSelected])
 
     const handleSetSelected = (s: boolean): void => {
       // Update block state

@@ -1,5 +1,5 @@
 import { AccordionLayout } from '../../components/layouts';
-import { IconList, NestedList, SelectedList, SimpleList, SingleItemList } from '../storyContent';
+import { IconList, NestedList, SelectedList, SimpleList, SingleItemList, WrapInTheme } from '../storyContent';
 import { BlockStoryTemplate } from '../BlockStoryTemplate';
 
 export default {
@@ -36,6 +36,5 @@ Nested.args = {
 
 export const Blue = BlockStoryTemplate.bind({});
 Blue.args = {
-  builder: NestedList,
-  theme: 'blue',
+  builder: WrapInTheme(NestedList, 'blue')
 };

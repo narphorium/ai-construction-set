@@ -1,9 +1,8 @@
 import React, { forwardRef, type ForwardedRef } from 'react'
 import { styled } from 'styled-components'
-import { useBlockRegistry, useBlockStore, useClasses } from '../../hooks'
+import { useBlockRegistry, useBlockRenderer, useBlockStore, useClasses } from '../../hooks'
 import { type BlockComponentProps } from '../blocks/Base'
 import { themedVariant } from '../../themes'
-import { CollapsibleBlock } from '../blocks/CollapsibleBlock'
 import { BlockQuery } from '../../state/matchers'
 import { List } from '../../types/layouts'
 import { Selectable } from '../../types/behaviors'
@@ -19,44 +18,30 @@ export interface AccordionLayoutProps extends BlockComponentProps<List> {
 }
 
 export const AccordionLayoutComponent = forwardRef(function AccordionLayout({ className, block }: AccordionLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  // return <div ref={ref} className={getClasses('aics-list', className, block.classNames)} key={block.uuid}>
-  //       <BlockLayout blockIds={block.children} parent={block} />
-  //   </div>
-
   const blockStore = useBlockStore()
   const children = blockStore.getChildBlocks(block.uuid)
 
-  // const isFollowingSiblingSelected = (list: List, item: Block): boolean => {
-  //   const index = children.indexOf(item)
-  //   if (index < 0) {
-  //     return false
-  //   }
-  //   for (let i = index + 1; i < children.length; i++) {
-  //     if (selectedVisitor.run(children[i].uuid).length > 0) {
-  //       return true
-  //     }
-  //   }
-  //   return false
-  // }
+  const layoutClasses = useClasses([
+    'aics-accordion-layout',
+    className,
+    block.classNames
+  ], [className, block.classNames])
 
-  // const getItemClasses = (list: List, node: any): string => {
-  //   return getClasses('aics-list-item', node.classNames, className,
-  //     () => registry.hasBehavior(node.type, 'aics:selectable') && (node as Selectable).selected ? ['selected'] : [],
-  //     () => blockStore.findBlock(isFollowingSiblingSelected.execute(blockStore, registry, node).length > 0 ? ['before-selected'] : []
-  //     )
-  // }
-
-  return <>
+  return <div ref={ref} className={layoutClasses} key={block.uuid}>
     {children.map((childBlock) => {
-      return <AccordionItemComponent block={childBlock as Section} />
+      return <AccordionLayoutItem block={childBlock as Section} />
     })}
-  </>
+  </div>
 })
 
 AccordionLayoutComponent.displayName = 'AccordionLayout'
 
 export const AccordionLayout = styled(AccordionLayoutComponent)`
 margin: 4px 0;
+
+.aics-collapsible-block-inner > div > & {
+  margin: 8px;
+}
 `
 
 export interface AccordionItemProps extends SelectableComponentProps, CollapsibleComponentProps {
@@ -66,9 +51,10 @@ export interface AccordionItemProps extends SelectableComponentProps, Collapsibl
 export const AccordionItemComponent = forwardRef(function ListItem({ className, block, setSelected, setCollapsed }: AccordionItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
   const blockStore = useBlockStore()
   const registry = useBlockRegistry()
+  const renderer = useBlockRenderer()
 
   const itemClass = useClasses([
-    'aics-list-item',
+    'aics-accordion-item',
     className,
     block.classNames,
     () => block.selected ? ['selected'] : [],
@@ -76,11 +62,7 @@ export const AccordionItemComponent = forwardRef(function ListItem({ className, 
   ], [className, block])
 
   return <div className={itemClass} key={block.uuid}>
-    <CollapsibleBlock
-      ref={ref}
-      block={block}
-      setSelected={setSelected}
-      setCollapsed={setCollapsed} />
+    {renderer.render(block)}
   </div>
 })
 
@@ -105,15 +87,16 @@ export const AccordionLayoutItem = styled(AccordionItemComponent)`
     border-color: ${(props) => themedVariant('borderColor', props.block.variant, true)};
   }
 
-  & .aics-paragraph:first-child,
-  & .aics-list:first-child,
-  & .aics-collapsible-block:first-child {
+  .aics-collapsible-block {
+    margin: 0;
+    border: 0;
+  }
+
+  &:first-child > .aics-collapsible-block {
       margin-top: 0;
   }
 
-  & .aics-paragraph:last-child,
-  & .aics-list:first-child,
-  & .aics-collapsible-block:first-child {
+  &:last-child > .aics-collapsible-block {
       margin-bottom: 0;
   }
 
