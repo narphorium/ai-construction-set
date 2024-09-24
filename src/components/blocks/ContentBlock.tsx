@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { type Section } from '../../types/blocks'
 import { themedVariant } from '../../themes/theme'
 import { BlockLayout } from '../layouts/BlockLayout'
-import { useBlockStore } from '../../hooks/useBlockStore'
+import { useBlockStoreActions } from '../../hooks/useBlockStore'
 import { useClasses } from '../../hooks/useClasses'
 import { SelectableComponentProps } from '../behaviors'
 import { Selectable } from '../../types/behaviors'
@@ -14,7 +14,7 @@ export interface ContentBlockProps extends SelectableComponentProps {
 }
 
 export const ContentBlockComponent = forwardRef(function ContentBlock({ className, block, onClick }: ContentBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const children = blockStore.getChildBlocks(block.uuid)
 
   const contentClasses = useClasses([

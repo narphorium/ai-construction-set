@@ -4,7 +4,7 @@ import { BehaviorComponentProps } from './Base'
 import { Selectable } from '../../types/behaviors'
 import { useClasses } from '../../hooks/useClasses'
 import { BlockQuery } from '../../state/matchers'
-import { useBlockRegistry, useBlockStore } from '../../hooks'
+import { useBlockRegistry, useBlockStoreActions } from '../../hooks'
 
 export interface SelectableComponentProps extends BehaviorComponentProps<Selectable> {
   setSelected?: (selected: boolean) => void
@@ -26,7 +26,7 @@ export function withSelectable<P extends SelectableComponentProps>(
   Component: ComponentType<P>
 ): any {
   const WithSelectable = forwardRef(function (props, ref): JSX.Element {
-    const blockStore = useBlockStore()
+    const blockStore = useBlockStoreActions()
     const blockRegistry = useBlockRegistry()
     const selectableProps = props as P
 

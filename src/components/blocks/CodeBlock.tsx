@@ -5,7 +5,7 @@ import React, { forwardRef, type ForwardedRef, type MouseEvent } from 'react'
 import { styled, useTheme } from 'styled-components'
 import { codeTheme } from '../../themes/code'
 import { themedVariant } from '../../themes/theme'
-import { useBlockStore } from '../../hooks/useBlockStore'
+import { useBlockStoreActions } from '../../hooks/useBlockStore'
 import { useClasses } from '../../hooks/useClasses'
 import { SelectableComponentProps } from '../behaviors'
 import { Selectable } from '../../types/behaviors'
@@ -19,7 +19,7 @@ export interface CodeBlockProps extends SelectableComponentProps {
 }
 
 const CodeBlockComponent = forwardRef(function CodeBlock({ className, block, extensions, onClick, onChange }: CodeBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const theme = useTheme()
   const children = blockStore.getChildBlocks(block.uuid)
 

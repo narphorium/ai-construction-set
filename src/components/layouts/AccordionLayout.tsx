@@ -1,6 +1,6 @@
 import React, { forwardRef, type ForwardedRef } from 'react'
 import { styled } from 'styled-components'
-import { useBlockRegistry, useBlockRenderer, useBlockStore, useClasses } from '../../hooks'
+import { useBlockRegistry, useBlockRenderer, useBlockStoreActions, useClasses } from '../../hooks'
 import { type BlockComponentProps } from '../blocks/Base'
 import { themedVariant } from '../../themes'
 import { BlockQuery } from '../../state/matchers'
@@ -18,7 +18,7 @@ export interface AccordionLayoutProps extends BlockComponentProps<List> {
 }
 
 export const AccordionLayoutComponent = forwardRef(function AccordionLayout({ className, block }: AccordionLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const children = blockStore.getChildBlocks(block.uuid)
 
   const layoutClasses = useClasses([
@@ -49,7 +49,7 @@ export interface AccordionItemProps extends SelectableComponentProps, Collapsibl
 }
 
 export const AccordionItemComponent = forwardRef(function ListItem({ className, block, setSelected, setCollapsed }: AccordionItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const registry = useBlockRegistry()
   const renderer = useBlockRenderer()
 

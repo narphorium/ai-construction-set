@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useBlockStore, useBlockRegistry } from '../hooks'
+import { useBlockStoreActions, useBlockRegistry } from '../hooks'
 import { Block, BlockID } from '../types/blocks'
 import { BlockRegistry } from '../state/BlockRegistry'
 import { useDocument } from './useDocument'
@@ -11,7 +11,7 @@ import { AddBlock, AddChildBlock, BlockMutation } from '../state/mutations'
 export const useStoryContent = <T extends Block>(
   buildContent: (registry: BlockRegistry) => T
 ) => {
-  const store = useBlockStore()
+  const store = useBlockStoreActions()
   const registry = useBlockRegistry()
   const document = useDocument()
 

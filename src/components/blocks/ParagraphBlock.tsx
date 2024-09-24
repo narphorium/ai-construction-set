@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback, type ForwardedRef, type MouseEvent } from 'react'
 import { styled } from 'styled-components'
 import { themedVariant } from '../../themes/theme'
-import { useBlockStore } from '../../hooks/useBlockStore'
+import { useBlockStoreActions } from '../../hooks/useBlockStore'
 import { useClasses } from '../../hooks/useClasses'
 import { SelectableComponentProps } from '../behaviors'
 import { Paragraph } from '../../types/blocks'
@@ -14,7 +14,7 @@ export interface ParagraphBlockProps extends SelectableComponentProps {
 }
 
 const ParagraphBlockComponent = forwardRef(function ParagraphBlock({ className, block, onClick }: ParagraphBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const renderer = useBlockRenderer()
   const children = blockStore.getChildBlocks(block.uuid)
 

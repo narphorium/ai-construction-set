@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { themedIcon } from '../../themes/icons'
 import { themedVariant } from '../../themes/theme'
 import { useBlockRenderer } from '../../hooks/useBlockRenderer'
-import { useBlockStore } from '../../hooks/useBlockStore'
+import { useBlockStoreActions } from '../../hooks/useBlockStore'
 import { useClasses } from '../../hooks/useClasses'
 import { SelectableComponentProps } from '../behaviors'
 import { Selectable } from '../../types/behaviors'
@@ -16,7 +16,7 @@ export interface TableLayoutProps extends SelectableComponentProps {
 }
 
 export const TableLayoutComponent = forwardRef(function TableBlock({ className, block, onClick }: TableLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const children = blockStore.getChildBlocks<TableRow>(block.uuid)
 
   const tableClasses = useClasses([
@@ -122,7 +122,7 @@ export interface TableLayoutRowProps {
 }
 
 export const TableLayoutRowComponent = ({ className, block }: TableLayoutRowProps): JSX.Element => {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const children = blockStore.getChildBlocks(block.uuid)
 
   const rowClasses = useClasses([

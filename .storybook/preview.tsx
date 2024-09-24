@@ -46,8 +46,6 @@ const StoryDecorator = (Story, context) => {
   const blockStore = React.useMemo(() => createBlockStore(), [])
   const [document] = React.useState(() => createDocument('storybook-document'))
 
-  console.log('StoryDecorator rendered')
-
   return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
     <BlockRegistryProvider registry={blockRegistry}>
       <BlockStoreProvider store={blockStore}>

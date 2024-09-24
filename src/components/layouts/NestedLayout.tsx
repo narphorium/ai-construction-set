@@ -1,6 +1,6 @@
 import React, { forwardRef, type ForwardedRef } from 'react'
 import styled from 'styled-components'
-import { useBlockRegistry, useBlockRenderer, useBlockStore, useClasses } from '../../hooks'
+import { useBlockRegistry, useBlockRenderer, useBlockStoreActions, useClasses } from '../../hooks'
 import { themedVariant } from '../../themes/theme'
 import { Pagination } from '../fragments/Pagination'
 import { themedIcon } from '../../themes'
@@ -24,7 +24,7 @@ export interface NestedLayoutProps extends PaginatedComponentProps {
 }
 
 export const NestedLayoutComponent = forwardRef(function NestedLayout({ className, block, level, setPage }: NestedLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const registry = useBlockRegistry()
   const children = blockStore.getChildBlocks(block.uuid)
 

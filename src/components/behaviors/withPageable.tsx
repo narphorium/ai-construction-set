@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react'
-import { useBlockStore } from '../../hooks/useBlockStore'
+import { useBlockStoreActions } from '../../hooks/useBlockStore'
 import { useClasses } from '../../hooks/useClasses'
 import { BehaviorComponentProps } from './Base'
 import { Pageable } from '../../types/behaviors'
@@ -26,7 +26,7 @@ export function withPageable<P extends PaginatedComponentProps>(
 ): any {
   const WithPageable = forwardRef(function (props, ref): JSX.Element {
     const pageableProps = props as P
-    const store = useBlockStore()
+    const store = useBlockStoreActions()
     const children = store.getChildBlocks(pageableProps.block.uuid)
 
     useEffect(() => {

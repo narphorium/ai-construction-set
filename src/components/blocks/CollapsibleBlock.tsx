@@ -6,7 +6,7 @@ import { BlockLayout } from '../layouts/BlockLayout'
 import { CollapsibleComponentProps, SelectableComponentProps } from '../behaviors'
 import { Collapsible, Selectable } from '../../types/behaviors'
 import { Section } from '../../types/blocks'
-import { useBlockStore } from '../../hooks/useBlockStore'
+import { useBlockStoreActions } from '../../hooks/useBlockStore'
 import { useClasses } from '../../hooks/useClasses'
 
 export interface CollapsibleBlockProps extends SelectableComponentProps, CollapsibleComponentProps {
@@ -15,7 +15,7 @@ export interface CollapsibleBlockProps extends SelectableComponentProps, Collaps
 
 export const CollapsibleBlockComponent = forwardRef(function CollapsibleBlock({ className, block, setCollapsed, onTransitionEnd }: CollapsibleBlockProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
 
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const children = blockStore.getChildBlocks(block.uuid)
   const inner = useRef<HTMLDivElement>(null)
 
