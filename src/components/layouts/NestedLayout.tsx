@@ -233,7 +233,7 @@ export interface NestedLayoutItemProps {
 }
 
 export const NestedLayoutItemComponent = forwardRef(function NestedLayout({ className, block, list }: NestedLayoutItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStore()
+  const blockStore = useBlockStoreActions()
   const registry = useBlockRegistry()
   const renderer = useBlockRenderer()
 
