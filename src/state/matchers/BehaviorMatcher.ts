@@ -1,13 +1,16 @@
 import { BlockRegistry } from "../BlockRegistry";
 import { Block } from "../../types/blocks";
-import { BlockMatcher } from "./BlockMatcher";
+import { BlockStoreState } from "../BlockStore";
+import { BlockSelector } from "../selectors";
 
-export class BehaviorMatcher implements BlockMatcher {
-  private type = "aics:matcher:behavior"
+export class BehaviorMatcher extends BlockSelector {
+  private type = "aics:matcher.behavior"
   
-  constructor(private behavior: string) { }
+  constructor(protected registry: BlockRegistry, private behavior: string)   { 
+    super(registry)
+  }
 
-  match(registry: BlockRegistry, block: Block): boolean {
-    return registry.hasBehavior(block.type, this.behavior);
+  match(state: BlockStoreState, root: Block, block: Block): boolean {
+    return this.registry.hasBehavior(block.type, this.behavior);
   }
 }

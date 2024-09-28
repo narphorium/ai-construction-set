@@ -2,9 +2,9 @@ import { type StoreApi, createStore } from 'zustand/vanilla'
 import { Block, BlockID, BlockProps } from './../types/blocks'
 import { Behavior, BehaviorProps } from './../types/behaviors'
 import { DocumentID, DocumentProps, type Document } from '../types/Document'
-import { BlockMatcher, BlockQuery, Matchable } from './matchers'
+import { BlockQuery } from './matchers'
 import { BlockRegistry } from './BlockRegistry'
-import { BlockSelector, ChildSelector } from './selectors'
+import {ChildSelector } from './selectors'
 import { AddChildBlock, BlockMutation, DeleteBlock, UpdateBehavior, UpdateBlock } from './mutations/BlockMutation'
 import { AddRootBlock, DeleteDocument, UpdateDocument } from './mutations/DocumentMutation'
 import { AddBlock, AddDocument } from './mutations/BlockStoreMutation'
@@ -48,39 +48,40 @@ export const defaultInitState: BlockStoreState = {
   blocks: new Map<string, Block>(),
 }
 
-// Type guard functions
-function isBlockSelector(matcher: Matchable): matcher is BlockSelector {
-  return 'select' in matcher;
-}
-
-function isBlockMatcher(matcher: Matchable): matcher is BlockMatcher {
-  return 'match' in matcher;
-}
-
-const findBlocks = (state: BlockStoreState, root: Block | Document, query: BlockQuery, registry: BlockRegistry): Block[] => {
-  let matches: BlockID[] = [];
+const findBlocks = (state: BlockStoreState, root: Block | Document, query: BlockQuery): Block[] => {
+  let roots: Block[] = [];
   if (root instanceof Document) {
-    matches = matches.concat((root as Document).blocks);
+    (root as Document).blocks.forEach((blockId) => {
+      const block = state.blocks.get(blockId)
+      if (block !== undefined) {
+        roots.push(block)
+      }
+    })
   } else {
-    matches.push((root as Block).uuid);
+    roots.push(root as Block);
   }
 
-  query.getMatchers().forEach((matcher) => {
-    if (isBlockSelector(matcher)) {
-      matches = matches.reduce((acc, blockId) => acc.concat((matcher as BlockSelector).select(state, blockId)), [] as BlockID[]);
-    } else if (isBlockMatcher(matcher)) {
-      matches = matches.filter((blockId) => {
-        const block = state.blocks.get(blockId);
-        return block !== undefined && (matcher as BlockMatcher).match(registry, block)
+  let rootMatches: Block[] = [];
+  // Loop through each root block and apply all matchers
+  for (const block of roots) {
+    let matches: Block[] = [block];
+    // Apply all matchers to the current block
+    query.getMatchers().forEach((matcher) => {
+      let newMatches: Block[] = [];
+      // Add the results of the matcher to the new matches
+      matches.forEach((block) => {
+        newMatches = newMatches.concat(matcher.run(state, block));
       });
-    }
-  });
-
-  return matches.map((blockId) => state.blocks.get(blockId) as Block);
+      matches = newMatches;
+    });
+    rootMatches = rootMatches.concat(matches);
+  }
+  return rootMatches;
 }
 
 export const createBlockStore = (
-  initState: BlockStoreState = defaultInitState
+  initState: BlockStoreState = defaultInitState,
+  registry: BlockRegistry = new BlockRegistry()
 ): StoreApi<BlockStore> => {
   return createStore<BlockStore>()((set, get) => ({
     ...initState,
@@ -89,14 +90,18 @@ export const createBlockStore = (
       return get().documents.get(uuid)
     },
 
-    getChildBlockIds: (parent: Block) => new ChildSelector().select(get(), parent.uuid),
+    getChildBlockIds: (parent: Block) => new ChildSelector(registry).run(get(), parent),
 
     getBlock: <T extends Block>(uuid: BlockID) => get().blocks.get(uuid) as T | undefined,
 
     getBehavior: <T extends Behavior>(uuid: BlockID) => get().blocks.get(uuid) as T | undefined,
 
     getChildBlocks: <T extends Block>(parent: BlockID) => {
-      return new ChildSelector().select(get(), parent).map((uuid) => get().blocks.get(uuid) as T)
+      const parentBlock = get().blocks.get(parent)
+      if (parentBlock === undefined) {
+        return []
+      }
+      return new ChildSelector(registry).select(get(), parentBlock) as T[]
     },
 
     addDocument(document: Document) {
@@ -166,13 +171,13 @@ export const createBlockStore = (
       set((state) => new DeleteBlock(block).apply(state))
     },
 
-    findBlock: (root: Block | Document, selector: BlockQuery, registry: BlockRegistry) => {
-      const matches = findBlocks(get(), root, selector, registry)
+    findBlock: (root: Block | Document, selector: BlockQuery) => {
+      const matches = findBlocks(get(), root, selector)
       return matches.length > 0 ? matches[0] : undefined
     },
 
-    findBlocks(root: Block | Document, selector: BlockQuery, registry: BlockRegistry) {
-      return findBlocks(get(), root, selector, registry)
+    findBlocks(root: Block | Document, selector: BlockQuery) {
+      return findBlocks(get(), root, selector)
     },
 
     applyBlockMutations: (mutations: BlockMutation[]) => {

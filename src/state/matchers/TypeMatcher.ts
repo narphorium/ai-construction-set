@@ -1,13 +1,16 @@
 import { BlockRegistry } from "../BlockRegistry";
 import { Block } from "../../types/blocks";
-import { BlockMatcher } from "./BlockMatcher";
+import { BlockStoreState } from "../BlockStore";
+import { BlockSelector } from "../selectors";
 
-export class TypeMatcher implements BlockMatcher {
-  private type = "aics:matcher:type"
+export class TypeMatcher extends BlockSelector {
+  private type = "aics:matcher.type"
 
-  constructor(private blockType: string) { }
+  constructor(protected registry: BlockRegistry, private blockType: string) { 
+    super(registry)
+  }
 
-  match(registry: BlockRegistry, block: Block): boolean {
+  match(state: BlockStoreState, root: Block, block: Block): boolean {
     return block.type === this.blockType;
   }
 }

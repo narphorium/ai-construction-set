@@ -1,7 +1,8 @@
-import React, { type ReactNode, createContext, useRef } from 'react'
+import React, { type ReactNode, createContext, useContext, useRef } from 'react'
 import { type StoreApi } from 'zustand'
 
 import { createBlockStore, type BlockStore } from '../BlockStore'
+import { useBlockRegistry } from '../../hooks'
 
 export const BlockStoreContext = createContext(createBlockStore())
 
@@ -11,11 +12,15 @@ export interface BlockStoreProviderProps {
 }
 
 export const BlockStoreProvider = ({ store, children }: BlockStoreProviderProps): JSX.Element => {
+  const registry = useBlockRegistry()
+  if (registry === undefined) {
+    throw new Error('BlockRegistryContext is required')
+  }
   const storeRef = useRef<StoreApi<BlockStore>>()
   if (store !== undefined) {
     storeRef.current = store
   } else if (storeRef.current === undefined) {
-    storeRef.current = createBlockStore()
+    storeRef.current = createBlockStore(undefined, registry)
   }
 
   return (

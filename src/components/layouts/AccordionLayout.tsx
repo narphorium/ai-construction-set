@@ -9,10 +9,6 @@ import { Selectable } from '../../types/behaviors'
 import { CollapsibleComponentProps, SelectableComponentProps } from '../behaviors'
 import { Section } from '../../types/blocks'
 
-const isFollowingSiblingSelected = new BlockQuery()
-  .subsequentSiblings()
-  .hasBehaviorProperty<Selectable>('selected', true);
-
 export interface AccordionLayoutProps extends BlockComponentProps<List> {
   block: List
 }
@@ -52,6 +48,10 @@ export const AccordionItemComponent = forwardRef(function ListItem({ className, 
   const blockStore = useBlockStoreActions()
   const registry = useBlockRegistry()
   const renderer = useBlockRenderer()
+
+  const isFollowingSiblingSelected = new BlockQuery(registry  )
+    .subsequentSiblings()
+    .hasBehaviorProperty<Selectable>('selected', true);
 
   const itemClass = useClasses([
     'aics-accordion-item',

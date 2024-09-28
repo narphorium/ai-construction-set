@@ -23,7 +23,7 @@ const renderer = new DefaultBlockRenderer()
 const ExampleContainer = ({ children, context, ...props }) => {
   const [theme, setTheme] = React.useState('default')
   const [darkMode, setDarkMode] = useStorybookDarkMode(context)
-  const blockStore = createBlockStore()
+  const blockStore = createBlockStore(undefined, blockRegistry)
   const [document, setDocument] = React.useState(createDocument('storybook-document'))
 
   return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>

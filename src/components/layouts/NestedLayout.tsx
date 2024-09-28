@@ -10,14 +10,6 @@ import { List, Tree } from '../../types/layouts'
 import { Block } from '../../types/blocks'
 import { BlockQuery } from '../../state/matchers'
 
-const isFollowingSiblingSelected = new BlockQuery()
-  .subsequentSiblings()  // TODO: Is this supposed to be nextSibling()?
-  .hasBehaviorProperty<Selectable>('selected', true);
-
-const hasSelectedDescendant = new BlockQuery()
-  .descendants()
-  .hasBehaviorProperty<Selectable>('selected', true);
-
 export interface NestedLayoutProps extends PaginatedComponentProps {
   block: Tree & Pageable
   level: number
@@ -28,9 +20,14 @@ export const NestedLayoutComponent = forwardRef(function NestedLayout({ classNam
   const registry = useBlockRegistry()
   const children = blockStore.getChildBlocks(block.uuid)
 
+  const hasSelectedVisibleDescendant = new BlockQuery(registry)
+    .descendants()
+    .visible()
+    .hasBehaviorProperty<Selectable>('selected', true);
+
   const nestedLayoutClasses = useClasses([
     className,
-    () => blockStore.findBlocks(block, hasSelectedDescendant, registry).length > 0 ? ['selected'] : [],
+    () => blockStore.findBlocks(block, hasSelectedVisibleDescendant, registry).length > 0 ? ['selected'] : [],
     () => block.icon !== undefined ? ['has-icon'] : []
   ], [className, block])
 
@@ -237,11 +234,21 @@ export const NestedLayoutItemComponent = forwardRef(function NestedLayout({ clas
   const registry = useBlockRegistry()
   const renderer = useBlockRenderer()
 
+  const isFollowingSiblingSelected = new BlockQuery(registry)
+    .subsequentSiblings()
+    .hasBehaviorProperty<Selectable>('selected', true);
+
+
+  const hasSelectedVisibleDescendant = new BlockQuery(registry)
+    .descendants()
+    .visible()
+    .hasBehaviorProperty<Selectable>('selected', true);
+
   const itemClasses = useClasses([
     'aics-tree-node',
     block.classNames,
     className,
-    () => blockStore.findBlocks(block, hasSelectedDescendant, registry).length > 0 ? ['selected'] : [],
+    () => blockStore.findBlocks(block, hasSelectedVisibleDescendant, registry).length > 0 ? ['selected'] : [],
     () => !(block.type === 'aics:tree') ? ['aics-tree-leaf-node'] : [],
     () => blockStore.findBlocks(block, isFollowingSiblingSelected, registry).length > 0 ? ['before-selected'] : []
   ], [className, block])

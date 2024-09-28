@@ -1,17 +1,14 @@
-import { BlockID } from "../../types/blocks";
+import { Block } from "../../types/blocks";
 import { BlockStoreState } from "../BlockStore";
 import { BlockSelector } from "./BlockSelector";
+import { ChildSelector } from "./ChildSelector";
 import { ParentSelector } from "./ParentSelector";
 
-export class SubsequentSiblingSelector implements BlockSelector {
-  select(state: BlockStoreState, root: BlockID): BlockID[] {
-    const parent = new ParentSelector().select(state, root)[0];
-    const parentBlock = state.blocks.get(parent);
-    if (parentBlock === undefined) {
-      return [];
-    }
-    const siblings = parentBlock.children;
-    const index = siblings.findIndex((sibling) => sibling === root);
+export class SubsequentSiblingSelector extends BlockSelector {
+  select(state: BlockStoreState, root: Block): Block[] {
+    const parent = new ParentSelector(this.registry).run(state, root)[0];
+    const siblings = new ChildSelector(this.registry).run(state, parent);
+    const index = siblings.findIndex((sibling) => sibling.uuid === root.uuid);
     if (index === -1) {
       return [];
     }

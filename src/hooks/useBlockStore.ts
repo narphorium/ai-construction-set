@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { useStore } from 'zustand'
 import { BlockStoreActions, type BlockStore } from '../state/BlockStore'
 import { BlockStoreContext } from '../state/context/BlockStoreContext'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 
 export const useBlockStoreSelector = <Selected>(
   selector: (state: BlockStore) => Selected,

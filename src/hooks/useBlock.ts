@@ -3,7 +3,7 @@ import { BlockQuery } from "../state/matchers"
 import { useBlockRegistry } from "./useBlockRegistry"
 import { useBlockStoreSelector, useBlockStoreActions } from "./useBlockStore"
 import { useDocument } from "./useDocument"
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 
 export const useBlock = <P extends BlockProps, A extends BlockActions>(
   selector: BlockID | BlockQuery
