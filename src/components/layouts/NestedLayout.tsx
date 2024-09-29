@@ -41,24 +41,17 @@ export const NestedLayoutComponent = forwardRef(function NestedLayout({ classNam
     return filteredBlocks
   }
 
-  if (block.page !== undefined && block.numPages !== undefined && block.numPages > 1) {
-    return <div ref={ref} key={block.uuid} className={nestedLayoutClasses}>
-      <div className='aics-tree-control'><span></span></div>
-      <div className='aics-tree-title'>
-        <label className='aics-tree-page-label'>{block.name}</label>
-        <Pagination level={level} page={block.page} numPages={block.numPages} setPage={setPage} key={block.uuid} />
-      </div>
-      {filterBlocks(children).map((child) => {
-        return <NestedLayoutItemComponent block={child} list={block} />
-      })}
+  return <div ref={ref} key={block.uuid} className={nestedLayoutClasses}>
+    <div className='aics-tree-control'><span></span></div>
+    <div className='aics-tree-title'>
+      <label className='aics-tree-page-label'>{block.name}</label>
+      {block.numPages !== undefined && block.numPages > 1 && <Pagination level={level} page={block.page} numPages={block.numPages} setPage={setPage} key={block.uuid} />}
     </div>
-  } else {
-    return <div ref={ref} key={block.uuid} className={nestedLayoutClasses}>
-      {filterBlocks(children).map((child) => {
-        return <NestedLayoutItemComponent block={child} list={block} />
-      })}
-    </div>
-  }
+    {filterBlocks(children).map((child) => {
+      return <NestedLayoutItemComponent block={child} list={block} />
+    })}
+  </div>
+
 })
 
 NestedLayoutComponent.displayName = 'NestedLayout'

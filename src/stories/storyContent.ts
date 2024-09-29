@@ -85,7 +85,7 @@ export const NestedList = (registry: BlockRegistry): List => {
 }
 
 export const PlainTree = (registry: BlockRegistry): Tree => {
-  const tree: Tree = registry.createBlock('aics:tree')
+  const tree: Tree = registry.createBlock('aics:tree', undefined, { name: 'Tree' })
   PlainContent(registry, undefined, tree)
   SingleItemList(registry, tree)
   SimpleList(registry, tree)
