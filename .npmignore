@@ -1,0 +1,43 @@
+# Source files
+src/
+
+# TypeScript config
+tsconfig.json
+rollup.config.js
+
+# Test files
+test/
+*.spec.ts
+*.test.ts
+
+# Development config files
+.eslintrc.cjs
+.prettierrc
+.editorconfig
+
+# Git related
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.travis.yml
+.gitlab-ci.yml
+.github/
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/
+
+# IDE/Editor folders
+.vscode/
+
+# Storybook
+.storybook/
+storybook-static/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
