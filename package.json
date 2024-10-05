@@ -30,8 +30,8 @@
     "@codemirror/language": "^6.9.2",
     "@codemirror/state": "^6.2.1",
     "@uiw/react-codemirror": "^4.21.20",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-resize-detector": "^9.1.0",
     "react-svg": "^16.1.23",
     "styled-components": "^6.0.7",
@@ -39,20 +39,19 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@react-theming/storybook-addon": "^1.1.10",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-image": "^3.0.2",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.2",
-    "@storybook/addon-essentials": "^7.6.10",
-    "@storybook/addon-interactions": "^7.6.10",
+    "@storybook/addon-essentials": "^8.3.4",
+    "@storybook/addon-interactions": "^8.3.4",
     "@storybook/addon-links": "^7.6.10",
-    "@storybook/addon-mdx-gfm": "^7.6.10",
+    "@storybook/addon-mdx-gfm": "^8.3.4",
     "@storybook/addon-themes": "^7.6.10",
     "@storybook/jest": "^0.2.3",
-    "@storybook/react": "^7.6.10",
-    "@storybook/react-vite": "^7.6.10",
+    "@storybook/react": "^8.3.4",
+    "@storybook/react-vite": "^8.3.4",
     "@types/react": "^18.2.20",
     "@types/styled-theming": "^2.2.5",
     "@types/uuid": "^9.0.6",
@@ -75,10 +74,13 @@
     "rollup": "^3.28.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "storybook": "^7.6.10",
+    "storybook": "^8.3.4",
     "storybook-react-context": "^0.6.0",
     "tslib": "^2.6.1",
     "typescript": "^5.2.2",
     "vite": "^4.5.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.2"
   }
 }
