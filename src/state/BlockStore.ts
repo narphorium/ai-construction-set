@@ -5,9 +5,9 @@ import { DocumentID, DocumentProps, type Document } from '../types/Document'
 import { BlockQuery } from './matchers'
 import { BlockRegistry } from './BlockRegistry'
 import {ChildSelector } from './selectors'
-import { AddChildBlock, BlockMutation, DeleteBlock, UpdateBehavior, UpdateBlock } from './mutations/BlockMutation'
-import { AddRootBlock, DeleteDocument, UpdateDocument } from './mutations/DocumentMutation'
-import { AddBlock, AddDocument } from './mutations/BlockStoreMutation'
+import { AddChildBlock, BlockTransformation, DeleteBlock, UpdateBehavior, UpdateBlock } from './transformations/BlockTransformation'
+import { AddRootBlock, DeleteDocument, UpdateDocument } from './transformations/DocumentTransformation'
+import { AddBlock, AddDocument } from './transformations/BlockStoreTransformation'
 
 export interface BlockStoreState {
   documents: Map<string, Document>
@@ -16,7 +16,7 @@ export interface BlockStoreState {
 
 export interface BlockStoreActions {
   // General
-  applyBlockMutations: (mutations: BlockMutation[]) => void
+  applyBlockTransformations: (transformations: BlockTransformation[]) => void
 
   // Documents
   addDocument: (document: Document) => DocumentID
@@ -180,9 +180,9 @@ export const createBlockStore = (
       return findBlocks(get(), root, selector)
     },
 
-    applyBlockMutations: (mutations: BlockMutation[]) => {
+    applyBlockTransformations: (transformations: BlockTransformation[]) => {
       set((state: BlockStoreState) => {
-        return mutations.reduce((acc, mutation) => mutation.apply(acc), state)
+        return transformations.reduce((acc, transformation) => transformation.apply(acc), state)
       })
     },
   })) as StoreApi<BlockStore>

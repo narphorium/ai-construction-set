@@ -1,6 +1,6 @@
 {
   "name": "ai-construction-set",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A set of building blocks for building tools for thought powered by AI.",
   "type": "module",
   "module": "dist/index.mjs",

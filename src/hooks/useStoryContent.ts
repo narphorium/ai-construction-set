@@ -3,7 +3,7 @@ import { useBlockStoreActions, useBlockRegistry } from '../hooks'
 import { Block, BlockID } from '../types/blocks'
 import { BlockRegistry } from '../state/BlockRegistry'
 import { useDocument } from './useDocument'
-import { AddBlock, AddChildBlock, BlockMutation } from '../state/mutations'
+import { AddBlock, AddChildBlock, BlockTransformation } from '../state/transformations'
 
 /* This hook creates and persists a block and all its children.
  * It's used to create and persist the initial content of a story.
@@ -15,17 +15,17 @@ export const useStoryContent = <T extends Block>(
   const registry = useBlockRegistry()
   const document = useDocument()
 
-  const getChildBlockMutations = (block: Block, parent?: BlockID): BlockMutation[] => {
-    let mutations: BlockMutation[] = [
+  const getChildBlockTransformations = (block: Block, parent?: BlockID): BlockTransformation[] => {
+    let transformations: BlockTransformation[] = [
       parent ? new AddChildBlock(block, parent) : new AddBlock(block)
     ]
     for (const childID of block.children) {
       const child = store.getBlock(childID)
       if (child !== undefined) {
-        mutations = mutations.concat(getChildBlockMutations(child, block.uuid))
+        transformations = transformations.concat(getChildBlockTransformations(child, block.uuid))
       }
     }
-    return mutations
+    return transformations
   }
 
   const createAndPersistContent = useCallback(() => {
@@ -33,12 +33,12 @@ export const useStoryContent = <T extends Block>(
     const block = buildContent(registry)
     session.close()
 
-    const mutations: BlockMutation[] = []
+    const transformations: BlockTransformation[] = []
     session.getBlocks().forEach((block) => {
-      mutations.push(...getChildBlockMutations(block, undefined))
+      transformations.push(...getChildBlockTransformations(block, undefined))
     })
 
-    store.applyBlockMutations(mutations)
+    store.applyBlockTransformations(transformations)
     const persistedBlock = store.getBlock(block.uuid)
     return persistedBlock
   }, [registry, buildContent, document])

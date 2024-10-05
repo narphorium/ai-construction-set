@@ -36,11 +36,11 @@ Behaviors add cross-cutting concerns like selectable blocks or collapsible block
 
 You can create your own behaviors and layer them onto existing block types by registering them using the `BlockRegistry`.
 
-### Mutations
+### Transformations
 
-Mutations are declarative changes to blocks which can be chained together into transactions. This makes them useful for things like undo/redo functionality.
+Transformations are declarative changes to blocks which can be chained together into transactions. This makes them useful for things like undo/redo functionality.
 
-Mutations are applied to the `BlockStore` which is responsible for maintaining the state of the app.
+Transformations are applied to the `BlockStore` which is responsible for maintaining the state of the app.
 
 ### Selectors
 

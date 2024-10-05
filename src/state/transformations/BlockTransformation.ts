@@ -1,14 +1,14 @@
 import { Behavior } from "../../types/behaviors";
 import { Block, BlockID } from "../../types/blocks";
 import { BlockStoreState } from "../BlockStore";
-import { AddBlock, addChild, deleteChild } from "./BlockStoreMutation";
+import { AddBlock, addChild, deleteChild } from "./BlockStoreTransformation";
 
-export interface BlockMutation {
+export interface BlockTransformation {
   apply: (state: BlockStoreState) => BlockStoreState
 }
 
-export class AddChildBlock implements BlockMutation {
-  private type = "aics:mutation:add-child-block"
+export class AddChildBlock implements BlockTransformation {
+  private type = "aics:transformation:add-child-block"
   constructor(private block: Block, private parent: BlockID) { }
 
   apply(state: BlockStoreState): BlockStoreState {
@@ -18,8 +18,8 @@ export class AddChildBlock implements BlockMutation {
   }
 }
 
-export class UpdateBlock<T extends Block> implements BlockMutation {
-  private type = "aics:mutation:update-block"
+export class UpdateBlock<T extends Block> implements BlockTransformation {
+  private type = "aics:transformation:update-block"
   constructor(private updates: Partial<T>, private parent: BlockID) { }
 
   apply(state: BlockStoreState): BlockStoreState {
@@ -40,8 +40,8 @@ export class UpdateBlock<T extends Block> implements BlockMutation {
   }
 }
 
-export class UpdateBehavior<T extends Behavior> implements BlockMutation {
-  private type = "aics:mutation:update-behavior"
+export class UpdateBehavior<T extends Behavior> implements BlockTransformation {
+  private type = "aics:transformation:update-behavior"
   constructor(private updates: Partial<T>, private parent: BlockID) { }
   apply(state: BlockStoreState): BlockStoreState {
     const block = state.blocks.get(this.parent)
@@ -55,8 +55,8 @@ export class UpdateBehavior<T extends Behavior> implements BlockMutation {
   }
 }
 
-export class DeleteBlock implements BlockMutation {
-  private type = "aics:mutation:delete-block"
+export class DeleteBlock implements BlockTransformation {
+  private type = "aics:transformation:delete-block"
   constructor(private parent: BlockID) { }
   apply(state: BlockStoreState): BlockStoreState {
     const block = state.blocks.get(this.parent)

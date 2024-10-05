@@ -25,7 +25,7 @@ export const useBlockStoreActions = (): BlockStoreActions => {
   }
 
   return useStore(blockStoreContext, state => ({
-    applyBlockMutations: state.applyBlockMutations,
+    applyBlockTransformations: state.applyBlockTransformations,
     addDocument: state.addDocument,
     getDocument: state.getDocument,
     updateDocument: state.updateDocument,

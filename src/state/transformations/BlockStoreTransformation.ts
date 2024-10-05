@@ -20,12 +20,12 @@ export const deleteChild = (state: BlockStoreState, parent: BlockID, uuid: Block
   return { ...state, blocks: new Map(state.blocks.set(parent, newParentBlock)) }
 }
 
-export interface BlockStoreMutation {
+export interface BlockStoreTransformation {
   apply: (state: BlockStoreState) => BlockStoreState
 }
 
-export class AddDocument implements BlockStoreMutation {
-  private type = "aics:mutation:add-document" 
+export class AddDocument implements BlockStoreTransformation {
+  private type = "aics::add-document" 
 
   constructor(private document: Document) { }
 
@@ -36,8 +36,8 @@ export class AddDocument implements BlockStoreMutation {
   }
 }
 
-export class AddBlock<T extends Block> implements BlockStoreMutation {
-  private type = "aics:mutation:add-block" 
+export class AddBlock<T extends Block> implements BlockStoreTransformation {
+  private type = "aics:transformation:add-block" 
 
   constructor(private block: T) { }
 
