@@ -3,15 +3,16 @@
   "version": "0.0.7",
   "description": "A set of building blocks for building tools for thought powered by AI.",
   "type": "module",
+  "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
   "jsx": "react-jsx",
   "scripts": {
-    "build:clean": "rimraf dist",
-    "build": "rollup -c --bundleConfigAsCjs",
+    "clean": "rimraf dist",
+    "build": "npm run clean && rollup -c --bundleConfigAsCjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -82,5 +83,32 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./components": {
+      "import": "./dist/components/index.mjs",
+      "require": "./dist/components/index.js",
+      "types": "./dist/types/components/index.d.ts"
+    },
+    "./hooks": {
+      "import": "./dist/hooks/index.mjs",
+      "require": "./dist/hooks/index.js",
+      "types": "./dist/types/hooks/index.d.ts"
+    },
+    "./state": {
+      "import": "./dist/state/index.mjs",
+      "require": "./dist/state/index.js",
+      "types": "./dist/types/state/index.d.ts"
+    },
+    "./themes": {
+      "import": "./dist/themes/index.mjs",
+      "require": "./dist/themes/index.js",
+      "types": "./dist/types/themes/index.d.ts"
+    }
   }
 }

@@ -11,15 +11,17 @@
             "ESNext"
         ],
         "declaration": true,
-        "declarationDir": "dist/types",
+        "declarationDir": "./dist/types",
         "sourceMap": true,
-        "outDir": "dist",
+        "outDir": "./dist",
         "moduleResolution": "node",
-        "emitDeclarationOnly": false,
+        "emitDeclarationOnly": true,
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
-        "noEmit": false
+        "noEmit": false,
+        "rootDir": "./src",
+        "composite": true
     },
     "include": [
         "src/**/*"

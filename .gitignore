@@ -127,3 +127,4 @@ out
 .DS_Store
 
 dist/
+.rollup.cache/
