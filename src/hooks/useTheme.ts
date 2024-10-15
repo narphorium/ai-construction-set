@@ -1,21 +1,22 @@
 import { useContext } from 'react'
 import { ThemeRegistry } from '../themes/ThemeRegistry'
-import { ThemeContext } from '../state/context';
+import { ThemeContext } from '../state/context/ThemeContext';
+import { useDarkMode } from './useDarkMode';
 
 
-export const useTheme = (name?: string): [any, any] => {
-  const { theme, darkMode, registry } = useContext(ThemeContext)
+export const useTheme = (name?: string): any => {
+  const themeRegistry = useThemeRegistry()
+  const [darkMode, setDarkMode] = useDarkMode()
 
-  if (theme === undefined || darkMode === undefined || registry === undefined) {
+  if (themeRegistry === undefined) {
     throw new Error('useTheme must be used within ThemeProvider')
   }
 
   if (name === undefined) {
-    name = theme
+    return undefined
   }
 
-  let [lightTheme, darkTheme] = registry.getTheme(name)
-  return darkMode === true ? darkTheme : lightTheme
+  return themeRegistry.getTheme(name, darkMode)
 }
 
 export const useThemeRegistry = (): ThemeRegistry => {

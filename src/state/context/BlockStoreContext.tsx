@@ -2,7 +2,7 @@ import React, { type ReactNode, createContext, useContext, useRef } from 'react'
 import { type StoreApi } from 'zustand'
 
 import { createBlockStore, type BlockStore } from '../BlockStore'
-import { useBlockRegistry } from '../../hooks'
+import { useBlockRegistry } from '../../hooks/useBlockRegistry'
 
 export const BlockStoreContext = createContext(createBlockStore())
 

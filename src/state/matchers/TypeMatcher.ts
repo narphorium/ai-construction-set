@@ -1,7 +1,7 @@
 import { BlockRegistry } from "../BlockRegistry";
-import { Block } from "../../types/blocks";
+import { Block } from "../../types/blocks/Block";
 import { BlockStoreState } from "../BlockStore";
-import { BlockSelector } from "../selectors";
+import { BlockSelector } from "../selectors/BlockSelector";
 
 export class TypeMatcher extends BlockSelector {
   private type = "aics:matcher.type"

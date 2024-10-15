@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useRef } from 'react'
 import { createDocument, Document } from '../../types'
+import * as uuid from 'uuid'
 
 interface DocumentContextProps {
   document: Document | undefined
@@ -21,7 +22,7 @@ export const DocumentProvider = ({ document, children }: DocumentContextProvider
   if (document !== undefined) {
     documentRef.current = document
   } else if (documentRef.current === undefined) {
-    documentRef.current = createDocument()
+    documentRef.current = createDocument(uuid.v4())
   }
 
   return (

@@ -1,6 +1,6 @@
 import { BlockRegistry } from "../BlockRegistry";
-import { Block } from "../../types/blocks";
-import { BlockSelector } from "../selectors";
+import { Block } from "../../types/blocks/Block";
+import { BlockSelector } from "../selectors/BlockSelector";
 import { BlockStoreState } from "../BlockStore";
 
 export class TextMatcher<T extends Block> extends BlockSelector {

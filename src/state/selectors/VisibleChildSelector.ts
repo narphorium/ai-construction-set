@@ -1,7 +1,7 @@
-import { Pageable } from "../../types/behaviors";
-import { Block } from "../../types/blocks";
+import { Pageable } from "../../types/behaviors/Pageable";
+import { Block } from "../../types/blocks/Block";
 import { BlockStoreState } from "../BlockStore";
-import { BlockPropertyMatcher } from "../matchers";
+import { BlockPropertyMatcher } from "../matchers/BlockPropertyMatcher";
 import { BehaviorPropertyMatcher } from "../matchers/BehaviorPropertyMatcher";
 import { ChildSelector } from "./ChildSelector";
 

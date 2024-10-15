@@ -1,4 +1,4 @@
-import { BlockActions, BlockID, BlockProps } from "../types/blocks"
+import { BlockActions, BlockID, BlockProps } from "../types/blocks/Block"
 import { BlockQuery } from "../state/matchers"
 import { useBlockRegistry } from "./useBlockRegistry"
 import { useBlockStoreSelector, useBlockStoreActions } from "./useBlockStore"
