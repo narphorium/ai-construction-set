@@ -53,7 +53,7 @@ const StoryDecorator = (Story, context) => {
           <DocumentProvider document={document}>
             <GlobalStyles />
             <Story />
-        </DocumentProvider>
+          </DocumentProvider>
         </BlockRendererProvider>
       </BlockStoreProvider>
     </BlockRegistryProvider>

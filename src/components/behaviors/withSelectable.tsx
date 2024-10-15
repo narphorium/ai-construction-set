@@ -30,7 +30,7 @@ export function withSelectable<P extends SelectableComponentProps>(
     const blockRegistry = useBlockRegistry()
     const selectableProps = props as P
 
-    const ancestorSelected = new BlockQuery().ancestors().hasBehaviorProperty<Selectable>('selected', true)
+    const ancestorSelected = new BlockQuery(blockRegistry).ancestors().hasBehaviorProperty<Selectable>('selected', true)
 
     const selectableClasses = useClasses([
       selectableProps.className,
