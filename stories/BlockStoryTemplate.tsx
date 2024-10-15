@@ -1,10 +1,10 @@
 import React from 'react'
-import { type Block } from '../types/blocks'
-import { BlockLayout } from '../components/layouts/BlockLayout'
-import { useStoryContent } from '../hooks/useStoryContent'
-import { BlockRegistry } from '../state/BlockRegistry'
+import { type Block } from '../src/types/blocks'
+import { BlockLayout } from '../src/components/layouts/BlockLayout'
+import { useStoryContent } from '../src/hooks/useStoryContent'
+import { BlockRegistry } from '../src/state/BlockRegistry'
 
-interface BlockStoryProps<T extends Block> {
+export interface BlockStoryProps<T extends Block> {
   builder: (registry: BlockRegistry) => T
   theme?: string
   selected?: boolean

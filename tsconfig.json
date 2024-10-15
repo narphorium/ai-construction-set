@@ -20,16 +20,21 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
         "noEmit": false,
-        "rootDir": "./src",
-        "composite": true
+        "rootDir": "./",
+        "composite": true,
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["src/*"]
+        }
     },
     "include": [
-        "src/**/*"
+        ".storybook/**/*",
+        "src/**/*",
+        "stories/**/*",
     ],
     "exclude": [
         "dist",
         "node_modules",
         "src/**/*.test.tsx",
-        "src/**/*.stories.tsx"
     ]
 }

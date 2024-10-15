@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { themedIcon } from '../themes'
+import { themedIcon } from '../src/themes'
 
 export interface IconProps {
   name: string

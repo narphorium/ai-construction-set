@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pagination } from '../../components/fragments/Pagination';
+import { Pagination } from '../../src/components/fragments/Pagination';
 
 export default {
   component: Pagination,
@@ -20,17 +20,7 @@ const Template = (args: any) => {
 
 
 
-export const Default = Template.bind({});
-Default.args = {
-  page: 1,
-  numPages: 10,
-  showEnds: true,
-};
+export const Default = () => <Template page={1} numPages={10} showEnds={true} />
 
-export const Compact = Template.bind({});
-Compact.args = {
-  page: 1,
-  numPages: 10,
-  showEnds: false,
-};
+export const Compact = () => <Template page={1} numPages={10} showEnds={false} />
 

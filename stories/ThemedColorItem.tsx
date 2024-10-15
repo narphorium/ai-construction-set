@@ -1,7 +1,7 @@
 import { ColorItem } from '@storybook/blocks'
 import React from 'react'
 import { useTheme } from 'styled-components'
-import { getColors } from '../themes/theme'
+import { getColors } from '../src/themes/theme'
 
 export const ThemedColorItem = ({ name }: { name: string }): JSX.Element => {
   const theme = useTheme()
