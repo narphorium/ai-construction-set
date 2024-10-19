@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { useBlockStoreActions, useBlockRegistry } from '../hooks'
 import { Block, BlockID } from '../types/blocks'
-import { BlockRegistry } from '../state/BlockRegistry'
+import { BlockRegistry } from '../core/BlockRegistry'
 import { useDocument } from './useDocument'
-import { AddBlock, AddChildBlock, BlockTransformation } from '../state/transformations'
+import { AddBlock, AddChildBlock, BlockTransformation } from '../transformations'
 
 /* This hook creates and persists a block and all its children.
  * It's used to create and persist the initial content of a story.

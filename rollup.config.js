@@ -81,16 +81,24 @@ export default [
     cjs: 'dist/components/index.js',
     esm: 'dist/components/index.mjs'
   }),
+  createConfig('src/context/index.ts', {
+    cjs: 'dist/context/index.js',
+    esm: 'dist/context/index.mjs'
+  }),
   createConfig('src/hooks/index.ts', {
     cjs: 'dist/hooks/index.js',
     esm: 'dist/hooks/index.mjs'
   }),
-  createConfig('src/state/index.ts', {
-    cjs: 'dist/state/index.js',
-    esm: 'dist/state/index.mjs'
+  createConfig('src/selectors/index.ts', {
+    cjs: 'dist/selectors/index.js',
+    esm: 'dist/selectors/index.mjs'
   }),
   createConfig('src/themes/index.ts', {
     cjs: 'dist/themes/index.js',
     esm: 'dist/themes/index.mjs'
+  }),
+  createConfig('src/transformations/index.ts', {
+    cjs: 'dist/transformations/index.js',
+    esm: 'dist/transformations/index.mjs'
   }),
 ];

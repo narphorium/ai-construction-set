@@ -8,7 +8,7 @@ import { PaginatedComponentProps } from '../behaviors'
 import { Pageable, Selectable } from '../../types/behaviors'
 import { List, Tree } from '../../types/layouts'
 import { Block } from '../../types/blocks'
-import { BlockQuery } from '../../state/matchers'
+import { BlockQuery } from '../..'
 
 export interface NestedLayoutProps extends PaginatedComponentProps {
   block: Tree & Pageable

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { ThemeRegistry } from '../themes/ThemeRegistry'
-import { ThemeContext } from '../state/context/ThemeContext';
+import { ThemeContext } from '../context/ThemeContext';
 import { useDarkMode } from './useDarkMode';
 
 

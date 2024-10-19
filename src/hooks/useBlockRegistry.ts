@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { type BlockRegistry } from '../state/BlockRegistry'
-import { BlockRegistryContext } from '../state/context/BlockRegistryContext'
+import { type BlockRegistry } from '../core/BlockRegistry'
+import { BlockRegistryContext } from '../context/BlockRegistryContext'
 
 
 export const useBlockRegistry = (): BlockRegistry => {

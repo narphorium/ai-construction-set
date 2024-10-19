@@ -1,5 +1,5 @@
 import React, { forwardRef, useState, type ComponentType, type ForwardRefExoticComponent, type PropsWithoutRef, type RefAttributes } from 'react'
-import { ThemeProvider } from '../../state/context/ThemeContext'
+import { ThemeProvider } from '../../context/ThemeContext'
 import { BlockComponentProps } from '../blocks/Base'
 import { useDarkMode } from '../../hooks'
 

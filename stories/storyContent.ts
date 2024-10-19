@@ -1,6 +1,6 @@
 import { type Section, type Code, type Paragraph, Span, Block } from '../src/types/blocks'
 import { type List, type Tree, type Table, TableRow } from '../src/types/layouts'
-import { BlockRegistry } from '../src/state/BlockRegistry'
+import { BlockRegistry } from '../src/core/BlockRegistry'
 
 export const PlainParagraph = (registry: BlockRegistry, text = 'Test Span', parent?: Block): Paragraph => {
   const paragraph: Paragraph = registry.createBlock('aics:paragraph', parent)

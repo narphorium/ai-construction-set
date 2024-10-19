@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { type BlockRenderer } from '../components/BlockRenderer'
-import { BlockRendererContext } from '../state/context/BlockRendererContext'
+import { type BlockRenderer } from '../core/BlockRenderer'
+import { BlockRendererContext } from '../context/BlockRendererContext'
 
 export const useBlockRenderer = (): BlockRenderer => {
   const { renderer } = useContext(BlockRendererContext)

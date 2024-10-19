@@ -2,11 +2,11 @@ import { DocsContainer } from '@storybook/blocks';
 import React from "react";
 import { createGlobalStyle } from 'styled-components';
 import { DefaultThemeRegistry } from '../src/themes/ThemeRegistry';
-import { BlockRegistryProvider, BlockRendererProvider, BlockStoreProvider, DocumentProvider, ThemeProvider } from '../src/state/context';
-import { DefaultBlockRenderer } from '../src/components/DefaultBlockRenderer';
+import { BlockRegistryProvider, BlockRendererProvider, BlockStoreProvider, DocumentProvider, ThemeProvider } from '../src/context';
+import { DefaultBlockRenderer } from '../src/core/DefaultBlockRenderer';
 import { createDocument } from '../src/types';
-import { createBlockStore } from '../src/state/BlockStore';
-import { DefaultBlockRegistry } from '../src/state/BlockRegistry';
+import { createBlockStore } from '../src/core/BlockStore';
+import { DefaultBlockRegistry } from '../src/core/BlockRegistry';
 import { useGlobals } from 'storybook/internal/preview-api';
 
 const GlobalStyles = createGlobalStyle`

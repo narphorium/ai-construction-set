@@ -3,7 +3,7 @@ import React, { forwardRef, type ComponentClass, type ComponentPropsWithoutRef, 
 import { BehaviorComponentProps } from './Base'
 import { Selectable } from '../../types/behaviors'
 import { useClasses } from '../../hooks/useClasses'
-import { BlockQuery } from '../../state/matchers'
+import { BlockQuery } from '../..'
 import { useBlockRegistry, useBlockStoreActions } from '../../hooks'
 
 export interface SelectableComponentProps extends BehaviorComponentProps<Selectable> {
