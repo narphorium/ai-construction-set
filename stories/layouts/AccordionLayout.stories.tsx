@@ -1,23 +1,28 @@
-import { AccordionLayout } from '../../src/components/layouts';
-import { IconList, NestedList, SelectedList, SimpleList, SingleItemList, WrapInTheme } from '../storyContent';
-import { BlockStoryTemplate } from '../BlockStoryTemplate';
-import React from 'react';
+import React from "react";
+import { AccordionLayout } from "../../src/components/layouts";
+import { BlockStoryTemplate } from "../BlockStoryTemplate";
+import {
+  highlightedList,
+  IconList,
+  NestedList,
+  SimpleList,
+  SingleItemList,
+} from "../storyContent";
 
 export default {
   component: AccordionLayout,
-  title: 'Layouts/AccordionLayout',
-  tags: ['autodocs'],
+  title: "Layouts/AccordionLayout",
+  tags: ["autodocs"],
 };
 
+export const Default = () => <BlockStoryTemplate builder={SimpleList} />;
 
-export const Default = () => <BlockStoryTemplate builder={SimpleList} />
+export const Single = () => <BlockStoryTemplate builder={SingleItemList} />;
 
-export const Single = () => <BlockStoryTemplate builder={SingleItemList} />
+export const Icons = () => <BlockStoryTemplate builder={IconList} />;
 
-export const Icons = () => <BlockStoryTemplate builder={IconList} />
+export const Nested = () => <BlockStoryTemplate builder={NestedList} />;
 
-export const Nested = () => <BlockStoryTemplate builder={NestedList} />
-
-export const Selected = () => <BlockStoryTemplate builder={SelectedList} />
-
-export const Blue = () => <BlockStoryTemplate builder={WrapInTheme(NestedList, 'blue')} />
+export const Highlighted = () => (
+  <BlockStoryTemplate builder={highlightedList} />
+);

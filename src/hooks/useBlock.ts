@@ -1,37 +1,40 @@
-import { BlockActions, BlockID, BlockProps } from "../types/blocks/Block"
-import { BlockQuery } from "../core/BlockQuery"
-import { useBlockRegistry } from "./useBlockRegistry"
-import { useBlockStoreSelector, useBlockStoreActions } from "./useBlockStore"
-import { useDocument } from "./useDocument"
-import { shallow } from 'zustand/shallow'
+import { shallow } from "zustand/shallow";
+import { BlockQuery } from "../core/BlockQuery";
+import { BlockActions, BlockID, BlockProps } from "../types/blocks/Block";
+import { useBlockRegistry } from "./useBlockRegistry";
+import { useBlockStoreActions, useBlockStoreSelector } from "./useBlockStore";
+import { useDocument } from "./useDocument";
 
 export const useBlock = <P extends BlockProps, A extends BlockActions>(
-  selector: BlockID | BlockQuery
-): (P & A) => {
-  const registry = useBlockRegistry()
-  const document = useDocument()
-  const actions = useBlockStoreActions()
+  selector: BlockID | BlockQuery,
+): P & A => {
+  const registry = useBlockRegistry();
+  const document = useDocument();
+  const actions = useBlockStoreActions();
 
-  const block = typeof selector === 'string'
-    ? useBlockStoreSelector(state => state.getBlock<P>(selector as BlockID), shallow)
-    : document
-      ? useBlockStoreSelector(state => {
-          const matches = state.findBlocks(document, selector, registry)
-          return matches.length === 1 ? matches[0] as P : undefined
-        }, shallow)
-      : undefined
+  const block =
+    typeof selector === "string"
+      ? useBlockStoreSelector(
+          (state) => state.getBlock<P>(selector as BlockID),
+          shallow,
+        )
+      : document
+        ? useBlockStoreSelector((state) => {
+            const matches = state.findBlocks(document, selector, registry);
+            return matches.length === 1 ? (matches[0] as P) : undefined;
+          }, shallow)
+        : undefined;
 
   if (!block) {
-    throw new Error('Block not found or multiple blocks found')
+    throw new Error("Block not found or multiple blocks found");
   }
 
-  const get = () => block
+  const get = () => block;
   const set = (updates: Partial<P>) => {
-    actions.updateBlock(block.uuid, updates)
-  }
+    actions.updateBlock(block.uuid, updates);
+  };
 
-  const blockActions = registry.createBlockActions<P, A>(get, set)
+  const blockActions = registry.createBlockActions<P, A>(get, set);
 
-  return { ...block, ...blockActions }
-}
-
+  return { ...block, ...blockActions };
+};

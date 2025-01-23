@@ -1,22 +1,34 @@
-import { BlockGetter, BlockSetter } from './Block'
-import { createSelectable, SelectableProps } from "../behaviors"
-import { BlockActions, BlockProps, createBlock } from "./Block"
+import { createHighlightable, HighlightableProps } from "../behaviors";
+import {
+  BlockActions,
+  BlockGetter,
+  BlockProps,
+  BlockSetter,
+  createBlock,
+} from "./Block";
 
-export interface ParagraphProps extends BlockProps, SelectableProps { }
+export const ParagraphType = "aics:block.paragraph";
 
-export const createParagraph = (props: Partial<ParagraphProps> = {}): ParagraphProps => {
+export interface ParagraphProps extends BlockProps, HighlightableProps {}
+
+export const createParagraph = (
+  props: Partial<ParagraphProps> = {},
+): ParagraphProps => {
   return {
     ...createBlock(props as Partial<BlockProps>),
-    ...createSelectable(props as Partial<SelectableProps>),
+    ...createHighlightable(props as Partial<HighlightableProps>),
     ...props,
-    type: 'aics:paragraph',
-  } as ParagraphProps
-}
+    type: ParagraphType,
+  } as ParagraphProps;
+};
 
-export interface ParagraphActions extends BlockActions { }
+export interface ParagraphActions extends BlockActions {}
 
-export const createParagraphActions = (get: BlockGetter<ParagraphProps>, set: BlockSetter<ParagraphProps>): ParagraphActions => {
-  return {}
-}
+export const createParagraphActions = (
+  get: BlockGetter<ParagraphProps>,
+  set: BlockSetter<ParagraphProps>,
+): ParagraphActions => {
+  return {};
+};
 
-export type Paragraph = ParagraphProps & ParagraphActions
+export type Paragraph = ParagraphProps & ParagraphActions;

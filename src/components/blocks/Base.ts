@@ -1,8 +1,9 @@
-import { Block } from "../../types/blocks"
+export interface LeafBlockComponentProps {
+  key: string;
+  theme?: string;
+  className?: string;
+}
 
-
-export interface BlockComponentProps<T extends Block> {
-  block: T
-  theme?: string
-  className?: string | string[]
+export interface BlockComponentProps extends LeafBlockComponentProps {
+  children?: React.ReactNode;
 }

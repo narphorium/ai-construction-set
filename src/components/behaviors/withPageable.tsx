@@ -1,69 +1,105 @@
-import React, { forwardRef, useEffect, type ComponentClass, type ComponentPropsWithoutRef, type ComponentType, type ForwardRefExoticComponent, type FunctionComponent, type Ref } from 'react'
-import { useBlockStoreActions } from '../../hooks/useBlockStore'
-import { useClasses } from '../../hooks/useClasses'
-import { BehaviorComponentProps } from './Base'
-import { Pageable } from '../../types/behaviors'
-import { Block } from '../../types/blocks'
+import { cva } from "class-variance-authority";
+import React, {
+  forwardRef,
+  useEffect,
+  type ComponentClass,
+  type ComponentPropsWithoutRef,
+  type ComponentType,
+  type ForwardRefExoticComponent,
+  type FunctionComponent,
+  type Ref,
+} from "react";
+import { Pageable } from "../../types/behaviors";
+import { Block } from "../../types/blocks";
+import { BehaviorComponentProps } from "./Base";
 
-export interface PaginatedComponentProps extends BehaviorComponentProps<Pageable> {
-  setPage?: (page: number) => void
+const pageableVariants = cva("", {
+  variants: {
+    hasMultiplePages: {
+      true: "aics-paginated",
+      false: "",
+    },
+  },
+});
+
+export interface PaginatedComponentProps extends BehaviorComponentProps {
+  page: number;
+  numPages: number;
+  gotoPage?: (page: number) => void;
+  setNumPages?: (numPages: number) => void;
 }
 
-export function withPageable<P extends PaginatedComponentProps, C extends ComponentClass<P>>(
-  Component: C & ComponentType<P>
-): ForwardRefExoticComponent<Omit<ComponentPropsWithoutRef<C> & { ref?: Ref<InstanceType<C>> }, keyof PaginatedComponentProps>>
+export function withPageable<
+  P extends PaginatedComponentProps,
+  C extends ComponentClass<P>,
+>(
+  Component: C & ComponentType<P>,
+): ForwardRefExoticComponent<
+  Omit<
+    ComponentPropsWithoutRef<C> & { ref?: Ref<InstanceType<C>> },
+    keyof PaginatedComponentProps
+  >
+>;
 
-export function withPageable<P extends PaginatedComponentProps & { ref?: Ref<any> }>(
-  Component: ForwardRefExoticComponent<P>
-): ForwardRefExoticComponent<Omit<P, keyof PaginatedComponentProps>>
+export function withPageable<
+  P extends PaginatedComponentProps & { ref?: Ref<any> },
+>(
+  Component: ForwardRefExoticComponent<P>,
+): ForwardRefExoticComponent<Omit<P, keyof PaginatedComponentProps>>;
 
 export function withPageable<P extends PaginatedComponentProps>(
-  Component: FunctionComponent<P>
-): ForwardRefExoticComponent<Omit<P, keyof PaginatedComponentProps>>
+  Component: FunctionComponent<P>,
+): ForwardRefExoticComponent<Omit<P, keyof PaginatedComponentProps>>;
 
 export function withPageable<P extends PaginatedComponentProps>(
-  Component: ComponentType<P>
+  Component: ComponentType<P>,
 ): any {
   const WithPageable = forwardRef(function (props, ref): JSX.Element {
-    const pageableProps = props as P
-    const store = useBlockStoreActions()
-    const children = store.getChildBlocks(pageableProps.block.uuid)
+    const pageableProps = props as P;
 
     useEffect(() => {
-      let numPages = 1
-      children.forEach((block: Block) => {
-        if (block !== undefined) {
-          if (block.iteration === undefined) {
-            block.iteration = 1
-          } else if (block.iteration > numPages) {
-            numPages = block.iteration
-          }
-        }
-      })
+      let numPages = 1;
+      if (pageableProps != null && pageableProps.children != null) {
+        React.Children.forEach(
+          pageableProps.children,
+          (child: React.ReactNode) => {
+            if (React.isValidElement(child)) {
+              const block = child.props as Block;
+              if (block.iteration && block.iteration > numPages) {
+                numPages = block.iteration;
+              }
+            }
+          },
+        );
+      }
 
-      pageableProps.block.setNumPages(numPages)
-    }, [children])
+      pageableProps.setNumPages?.(numPages);
+    }, [pageableProps.children]);
 
-    const pageableClasses = useClasses([
-      pageableProps.className,
-      () => pageableProps.block.numPages !== undefined && pageableProps.block.numPages > 1 ? ['aics-paginated'] : []
-    ], [pageableProps.className, pageableProps.block.numPages])
+    const pageableClasses = pageableVariants({
+      hasMultiplePages:
+        pageableProps.numPages !== undefined && pageableProps.numPages > 1,
+      className: pageableProps.className,
+    });
 
     const setPage = (p: number): void => {
-      pageableProps.block.gotoPage(p)
-    }
+      pageableProps.gotoPage?.(p);
+    };
 
-    return <Component
-      {...pageableProps}
-      ref={ref}
-      page={pageableProps.block.page}
-      setPage={setPage}
-      classNames={pageableClasses} />
-  })
+    return (
+      <Component
+        {...pageableProps}
+        ref={ref}
+        page={pageableProps.page}
+        gotoPage={setPage}
+        classNames={pageableClasses}
+      />
+    );
+  });
 
-  const componentName = Component.displayName ?? Component.name ?? 'Component'
-  WithPageable.displayName = `withPageable(${componentName})`
-  return WithPageable
+  const componentName = Component.displayName ?? Component.name ?? "Component";
+  WithPageable.displayName = `withPageable(${componentName})`;
+  return WithPageable;
 }
 
-export default withPageable
+export default withPageable;

@@ -1,59 +1,90 @@
-import { Behavior, BehaviorActions, BehaviorGetter, BehaviorSetter, createBehavior } from "./Behavior"
+import {
+  Behavior,
+  BehaviorActions,
+  BehaviorGetter,
+  BehaviorSetter,
+  createBehavior,
+} from "./Behavior";
+
+export const PageableType = "aics:behavior.pageable";
 
 export interface PageableProps extends Behavior {
-  page: number
-  numPages: number
+  page: number;
+  numPages: number;
 }
 
-export const createPageable = (props: Partial<PageableProps> = {}): PageableProps => {
+export const createPageable = (
+  props: Partial<PageableProps> = {},
+): PageableProps => {
   return {
     ...createBehavior(props),
     page: 1,
     numPages: 1,
     ...props,
-  } as Pageable
-}
+  } as Pageable;
+};
 
 export interface PageableActions extends BehaviorActions {
-  gotoPage: (page: number) => void
-  gotoStart: () => void
-  gotoEnd: () => void
-  gotoNext: () => void
-  gotoPrevious: () => void
-  setNumPages: (numPages: number) => void
+  gotoPage: (page: number) => void;
+  gotoStart: () => void;
+  gotoEnd: () => void;
+  gotoNext: () => void;
+  gotoPrevious: () => void;
+  setNumPages: (numPages: number) => void;
 }
 
 const gotoPage = (page: number) => {
   return (state: PageableProps): Partial<PageableProps> => {
-    if (state.page !== undefined && state.numPages !== undefined && page >= 1 && page <= state.numPages && page !== state.page) {
-      return { page }
+    if (
+      state.page !== undefined &&
+      state.numPages !== undefined &&
+      page >= 1 &&
+      page <= state.numPages &&
+      page !== state.page
+    ) {
+      return { page };
     }
-    return {}
-  }
-}
+    return {};
+  };
+};
 
 const gotoEnd = (state: PageableProps): Partial<PageableProps> => {
-  if (state.page !== undefined && state.numPages !== undefined && state.page !== state.numPages) {
-    return { page: state.numPages }
+  if (
+    state.page !== undefined &&
+    state.numPages !== undefined &&
+    state.page !== state.numPages
+  ) {
+    return { page: state.numPages };
   }
-  return {}
-}
+  return {};
+};
 
 const gotoNext = (state: PageableProps): Partial<PageableProps> => {
-  if (state.page !== undefined && state.numPages !== undefined && state.page + 1 < state.numPages) {
-    return { page: state.page + 1 }
+  if (
+    state.page !== undefined &&
+    state.numPages !== undefined &&
+    state.page + 1 < state.numPages
+  ) {
+    return { page: state.page + 1 };
   }
-  return {}
-}
+  return {};
+};
 
 const gotoPrevious = (state: PageableProps): Partial<PageableProps> => {
-  if (state.page !== undefined && state.numPages !== undefined && state.page - 1 >= 1) {
-    return { page: state.page - 1 }
+  if (
+    state.page !== undefined &&
+    state.numPages !== undefined &&
+    state.page - 1 >= 1
+  ) {
+    return { page: state.page - 1 };
   }
-  return {}
-}
+  return {};
+};
 
-export const createPageableActions = (get: BehaviorGetter<PageableProps>, set: BehaviorSetter<PageableProps>): PageableActions => {
+export const createPageableActions = (
+  get: BehaviorGetter<PageableProps>,
+  set: BehaviorSetter<PageableProps>,
+): PageableActions => {
   return {
     // FIXME: Cleanup the API here
     gotoPage: (page: number) => set(gotoPage(page)(get())),
@@ -62,7 +93,7 @@ export const createPageableActions = (get: BehaviorGetter<PageableProps>, set: B
     gotoNext: () => set(gotoNext(get())),
     gotoPrevious: () => set(gotoPrevious(get())),
     setNumPages: (numPages: number) => set({ numPages }),
-  }
-}
+  };
+};
 
-export type Pageable = PageableProps & PageableActions
+export type Pageable = PageableProps & PageableActions;

@@ -1,117 +1,114 @@
-import React, { forwardRef, type ForwardedRef } from 'react'
-import { styled } from 'styled-components'
-import { useBlockRegistry, useBlockRenderer, useBlockStoreActions, useClasses } from '../../hooks'
-import { type BlockComponentProps } from '../blocks/Base'
-import { themedVariant } from '../../themes'
-import { BlockQuery } from '../..'
-import { List } from '../../types/layouts'
-import { Selectable } from '../../types/behaviors'
-import { CollapsibleComponentProps, SelectableComponentProps } from '../behaviors'
-import { Section } from '../../types/blocks'
+import {
+  CollapsibleComponentProps,
+  HighlightableComponentProps,
+} from "@/components/behaviors";
+import { cn } from "@/styles";
+import { cva } from "class-variance-authority";
+import React, { forwardRef, type ForwardedRef } from "react";
+import { SymbolCodepoints } from "react-material-symbols";
+import { type BlockComponentProps } from "../blocks/Base";
+import { CollapsibleSection } from "../blocks/CollapsibleSection";
 
-export interface AccordionLayoutProps extends BlockComponentProps<List> {
-  block: List
+const accordionLayoutStyles = cva(["aics-accordion-layout", "my-1"], {
+  variants: {
+    nested: {
+      true: "mx-2",
+      false: "",
+    },
+  },
+  defaultVariants: {
+    nested: false,
+  },
+});
+
+const accordionItemStyles = cva(
+  [
+    "relative",
+    "aics-accordion-item",
+    "py-1",
+    "m-0",
+    "border",
+    "border-[1px]",
+    "rounded-none",
+    "first:rounded-t-sm",
+    "last:rounded-b-sm",
+    "-mt-[1px]",
+  ],
+  {
+    variants: {
+      highlighted: {
+        true: "z-10 border-highlight-border bg-highlight-card text-highlight-foreground",
+        false: "border-border bg-card text-card-foreground",
+      },
+    },
+    defaultVariants: {
+      highlighted: false,
+    },
+  },
+);
+
+export interface AccordionLayoutProps extends BlockComponentProps {}
+
+export const AccordionLayout = forwardRef(function AccordionLayout(
+  { key, className, children }: AccordionLayoutProps,
+  ref: ForwardedRef<HTMLDivElement>,
+): JSX.Element {
+  const layoutClasses = cn(accordionLayoutStyles(), className);
+
+  return (
+    <div ref={ref} className={layoutClasses} key={key}>
+      {children}
+    </div>
+  );
+});
+
+export interface AccordionLayoutItemProps
+  extends BlockComponentProps,
+    HighlightableComponentProps,
+    CollapsibleComponentProps {
+  summary?: string;
+  icon?: SymbolCodepoints;
 }
 
-export const AccordionLayoutComponent = forwardRef(function AccordionLayout({ className, block }: AccordionLayoutProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStoreActions()
-  const children = blockStore.getChildBlocks(block.uuid)
-
-  const layoutClasses = useClasses([
-    'aics-accordion-layout',
+export const AccordionLayoutItem = forwardRef(function AccordionLayoutItem(
+  {
+    key,
     className,
-    block.classNames
-  ], [className, block.classNames])
+    children,
+    highlighted,
+    collapsed,
+    setCollapsed,
+    summary,
+    icon,
+  }: AccordionLayoutItemProps,
+  ref: ForwardedRef<HTMLDivElement>,
+): JSX.Element {
+  // const isFollowingSiblingSelected = new BlockQuery(registry)
+  //   .subsequentSiblings()
+  //   .hasBehaviorProperty<Selectable>("selected", true);
 
-  return <div ref={ref} className={layoutClasses} key={block.uuid}>
-    {children.map((childBlock) => {
-      return <AccordionLayoutItem block={childBlock as Section} />
-    })}
-  </div>
-})
+  // const beforeSelected =
+  //   blockStore.findBlocks(block, isFollowingSiblingSelected, registry).length >
+  //   0;
 
-AccordionLayoutComponent.displayName = 'AccordionLayout'
-
-export const AccordionLayout = styled(AccordionLayoutComponent)`
-margin: 4px 0;
-
-.aics-collapsible-block-inner > div > & {
-  margin: 8px;
-}
-`
-
-export interface AccordionItemProps extends SelectableComponentProps, CollapsibleComponentProps {
-  block: Section
-}
-
-export const AccordionItemComponent = forwardRef(function ListItem({ className, block, setSelected, setCollapsed }: AccordionItemProps, ref: ForwardedRef<HTMLDivElement>): JSX.Element {
-  const blockStore = useBlockStoreActions()
-  const registry = useBlockRegistry()
-  const renderer = useBlockRenderer()
-
-  const isFollowingSiblingSelected = new BlockQuery(registry  )
-    .subsequentSiblings()
-    .hasBehaviorProperty<Selectable>('selected', true);
-
-  const itemClass = useClasses([
-    'aics-accordion-item',
+  const itemClasses = cn(
+    accordionItemStyles({
+      highlighted,
+    }),
     className,
-    block.classNames,
-    () => block.selected ? ['selected'] : [],
-    () => blockStore.findBlocks(block, isFollowingSiblingSelected, registry).length > 0 ? ['before-selected'] : []
-  ], [className, block])
+  );
 
-  return <div className={itemClass} key={block.uuid}>
-    {renderer.render(block)}
-  </div>
-})
-
-AccordionItemComponent.displayName = 'ListItemLayout'
-
-export const AccordionLayoutItem = styled(AccordionItemComponent)`
-  padding: 4px 0;
-  margin: 0;
-  color: ${themedVariant('textColor')};
-  background-color: ${themedVariant('contentBackgroundColor')};
-  border-style: solid;
-  border-color: ${themedVariant('borderColor')};
-  border-top-width: 0;
-  border-bottom-width: 1px;
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-radius: 0;
-
-  .selected & {
-    color: ${(props) => themedVariant('textColor', props.block.variant, true)};
-    background-color: ${(props) => themedVariant('contentBackgroundColor', props.block.variant, true)};
-    border-color: ${(props) => themedVariant('borderColor', props.block.variant, true)};
-  }
-
-  .aics-collapsible-block {
-    margin: 0;
-    border: 0;
-  }
-
-  &:first-child > .aics-collapsible-block {
-      margin-top: 0;
-  }
-
-  &:last-child > .aics-collapsible-block {
-      margin-bottom: 0;
-  }
-
-  &:first-child {
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
-      border-top-width: 1px;
-  }
-
-  &:last-child {
-      border-bottom-right-radius: 4px;
-      border-bottom-left-radius: 4px;
-  }
-
-  &.before-selected {
-    border-bottom-color: ${themedVariant('borderColor', null, true)};
-  }
-`
+  return (
+    <div className={itemClasses} key={key}>
+      <CollapsibleSection
+        key={`${key}-section`}
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+        summary={summary}
+        icon={icon}
+      >
+        {children}
+      </CollapsibleSection>
+    </div>
+  );
+});

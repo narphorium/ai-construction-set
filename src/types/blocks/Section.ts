@@ -1,28 +1,45 @@
-import { Collapsible, createCollapsible, createSelectable, Selectable } from '../behaviors'
-import { BlockGetter, BlockSetter } from './Block'
-import { Block, BlockActions, createBlock } from './Block'
+import {
+  Collapsible,
+  createCollapsible,
+  createHighlightable,
+  Highlightable,
+} from "../behaviors";
+import {
+  Block,
+  BlockActions,
+  BlockGetter,
+  BlockSetter,
+  createBlock,
+} from "./Block";
 
-export interface SectionProps extends Block, Selectable, Collapsible {
-  summary?: string
-  icon?: string
-  collapsible?: boolean
+export const SectionType = "aics:block.section";
+
+export interface SectionProps extends Block, Highlightable, Collapsible {
+  summary?: string;
+  icon?: string;
+  collapsible?: boolean;
 }
 
-export const createSection = (props: Partial<SectionProps> = {}): SectionProps => {
+export const createSection = (
+  props: Partial<SectionProps> = {},
+): SectionProps => {
   return {
     ...createBlock(props as Partial<Block>),
-    ...createSelectable(props as Partial<Selectable>),
+    ...createHighlightable(props as Partial<Highlightable>),
     ...createCollapsible(props as Partial<Collapsible>),
     collapsible: false,
     ...props,
-    type: 'aics:section'
-  } as SectionProps
-}
+    type: SectionType,
+  } as SectionProps;
+};
 
-export interface SectionActions extends BlockActions { }
+export interface SectionActions extends BlockActions {}
 
-export const createSectionActions = (get: BlockGetter<SectionProps>, set: BlockSetter<SectionProps>): SectionActions => {
-  return {}
-}
+export const createSectionActions = (
+  get: BlockGetter<SectionProps>,
+  set: BlockSetter<SectionProps>,
+): SectionActions => {
+  return {};
+};
 
-export type Section = SectionProps & SectionActions
+export type Section = SectionProps & SectionActions;

@@ -1,29 +1,41 @@
-import { BehaviorActions, BehaviorGetter, BehaviorProps, BehaviorSetter, createBehavior } from "./Behavior"
+import {
+  BehaviorActions,
+  BehaviorGetter,
+  BehaviorProps,
+  BehaviorSetter,
+  createBehavior,
+} from "./Behavior";
+
+export const CollapsibleType = "aics:behavior.collapsible";
 
 export interface CollapsibleProps extends BehaviorProps {
-  collapsed: boolean
+  collapsed: boolean;
 }
 
-export const createCollapsible = (props: Partial<CollapsibleProps> = {}): CollapsibleProps => {
+export const createCollapsible = (
+  props: Partial<CollapsibleProps> = {},
+): CollapsibleProps => {
   return {
     ...createBehavior(props),
-    name: '',
+    name: "",
     collapsed: false,
     ...props,
-  } as CollapsibleProps
-}
-
+  } as CollapsibleProps;
+};
 
 export interface CollapsibleActions extends BehaviorActions {
-  setCollapsed: (collapsed: boolean) => void
-  toggleCollapsed: () => void
+  setCollapsed: (collapsed: boolean) => void;
+  toggleCollapsed: () => void;
 }
 
-export const createCollapsibleActions = (get: BehaviorGetter<CollapsibleProps>, set: BehaviorSetter<CollapsibleProps>): CollapsibleActions => {
+export const createCollapsibleActions = (
+  get: BehaviorGetter<CollapsibleProps>,
+  set: BehaviorSetter<CollapsibleProps>,
+): CollapsibleActions => {
   return {
     setCollapsed: (collapsed: boolean) => set({ collapsed }),
     toggleCollapsed: () => set({ collapsed: !get().collapsed }),
-  }
-}
+  };
+};
 
-export type Collapsible = CollapsibleProps & CollapsibleActions
+export type Collapsible = CollapsibleProps & CollapsibleActions;

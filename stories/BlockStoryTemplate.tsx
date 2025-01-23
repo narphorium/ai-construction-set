@@ -1,20 +1,26 @@
-import React from 'react'
-import { type Block } from '../src/types/blocks'
-import { BlockLayout } from '../src/components/layouts/BlockLayout'
-import { useStoryContent } from '../src/hooks/useStoryContent'
-import { BlockRegistry } from '../src/core/BlockRegistry'
+import React from "react";
+import { BlockRegistry } from "../src/core/BlockRegistry";
+import { useBlockRenderer } from "../src/hooks/useBlockRenderer";
+import { useStoryContent } from "../src/hooks/useStoryContent";
+import { type Block } from "../src/types/blocks";
 
 export interface BlockStoryProps<T extends Block> {
-  builder: (registry: BlockRegistry) => T
-  theme?: string
-  selected?: boolean
+  builder: (registry: BlockRegistry) => T;
+  theme?: string;
+  highlighted?: boolean;
 }
 
-export const BlockStoryTemplate = <T extends Block>({ builder, theme, selected }: BlockStoryProps<T>): JSX.Element => {
-  const createAndPersistContent = useStoryContent(builder)
-  const block = React.useMemo(() => createAndPersistContent(), [createAndPersistContent]);
+export const BlockStoryTemplate = <T extends Block>({
+  builder,
+  theme,
+  highlighted,
+}: BlockStoryProps<T>): JSX.Element => {
+  const createAndPersistContent = useStoryContent(builder);
+  const block = React.useMemo(
+    () => createAndPersistContent(),
+    [createAndPersistContent],
+  );
+  const renderer = useBlockRenderer();
 
-  return (
-    <BlockLayout blocks={block ? [block] : []} />
-  )
-}
+  return <>{block && renderer.render(block)}</>;
+};

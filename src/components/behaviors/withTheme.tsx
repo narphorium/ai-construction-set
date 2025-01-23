@@ -1,24 +1,33 @@
-import React, { forwardRef, useState, type ComponentType, type ForwardRefExoticComponent, type PropsWithoutRef, type RefAttributes } from 'react'
-import { ThemeProvider } from '../../context/ThemeContext'
-import { BlockComponentProps } from '../blocks/Base'
-import { useDarkMode } from '../../hooks'
+import { cn } from "@/styles";
+import React, {
+  forwardRef,
+  useState,
+  type ComponentType,
+  type ForwardRefExoticComponent,
+  type PropsWithoutRef,
+  type RefAttributes,
+} from "react";
+import { useDarkMode } from "../../hooks";
+import { BlockComponentProps } from "../blocks/Base";
 
-export const withTheme = <TProps extends BlockComponentProps<any>>(
+export const withTheme = <TProps extends BlockComponentProps>(
   Component: ComponentType<TProps>,
-  params: { theme: string }
+  params: { theme: string },
 ): ForwardRefExoticComponent<PropsWithoutRef<TProps> & RefAttributes<any>> => {
   const WithTheme = forwardRef(function (props: TProps, ref): JSX.Element {
-    const [theme, setTheme] = useState(params.theme)
-    const [darkMode, setDarkMode] = useDarkMode()
+    const [theme, setTheme] = useState(params.theme);
+    const [darkMode, setDarkMode] = useDarkMode();
 
-    return <ThemeProvider theme={theme} darkMode={darkMode} setTheme={(theme: string) => setTheme(theme)}>
+    return (
       <Component
         {...props}
-        ref={ref} />
-    </ThemeProvider>
-  })
+        className={cn(props.className, `aics-${theme}-theme`)}
+        ref={ref}
+      />
+    );
+  });
 
-  const componentName = Component.displayName ?? Component.name ?? 'Component'
-  WithTheme.displayName = `withTheme(${componentName})`
-  return WithTheme
-}
+  const componentName = Component.displayName ?? Component.name ?? "Component";
+  WithTheme.displayName = `withTheme(${componentName})`;
+  return WithTheme;
+};

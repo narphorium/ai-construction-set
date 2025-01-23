@@ -1,11 +1,11 @@
-import { BlockGetter, BlockSetter } from './Block'
-import { BlockActions } from "./Block"
-import { createParagraph, ParagraphProps } from "./Paragraph"
+import { BlockActions, BlockGetter, BlockSetter } from "./Block";
+import { createParagraph, ParagraphProps } from "./Paragraph";
 
+export const CodeType = "aics:block.code";
 
 export interface CodeProps extends ParagraphProps {
-  language?: string
-  editable: false
+  language?: string;
+  editable: false;
 }
 
 export const createCode = (props: Partial<CodeProps> = {}): CodeProps => {
@@ -13,14 +13,17 @@ export const createCode = (props: Partial<CodeProps> = {}): CodeProps => {
     ...createParagraph(props as Partial<ParagraphProps>),
     editable: false,
     ...props,
-    type: 'aics:code',
-  } as Code
-}
+    type: CodeType,
+  } as CodeProps;
+};
 
-export interface CodeActions extends BlockActions { }
+export interface CodeActions extends BlockActions {}
 
-export const createCodeActions = (get: BlockGetter<CodeProps>, set: BlockSetter<CodeProps>): CodeActions => {
-  return {}
-}
+export const createCodeActions = (
+  get: BlockGetter<CodeProps>,
+  set: BlockSetter<CodeProps>,
+): CodeActions => {
+  return {};
+};
 
-export type Code = CodeProps & CodeActions
+export type Code = CodeProps & CodeActions;

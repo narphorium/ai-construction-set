@@ -32,7 +32,7 @@ Layouts are special types of blocks which provide useful abstractions for groupi
 
 ### Behaviors
 
-Behaviors add cross-cutting concerns like selectable blocks or collapsible blocks. By layering behaviors on top of blocks, we can create complex interactions with minimal effort.
+Behaviors add cross-cutting concerns like highlightable blocks or collapsible blocks. By layering behaviors on top of blocks, we can create complex interactions with minimal effort.
 
 You can create your own behaviors and layer them onto existing block types by registering them using the `BlockRegistry`.
 

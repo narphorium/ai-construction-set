@@ -1,77 +1,104 @@
-import { DocsContainer } from '@storybook/blocks';
-import React from "react";
-import { createGlobalStyle } from 'styled-components';
-import { DefaultThemeRegistry } from '../src/themes/ThemeRegistry';
-import { BlockRegistryProvider, BlockRendererProvider, BlockStoreProvider, DocumentProvider, ThemeProvider } from '../src/context';
-import { DefaultBlockRenderer } from '../src/core/DefaultBlockRenderer';
-import { createDocument } from '../src/types';
-import { createBlockStore } from '../src/core/BlockStore';
-import { DefaultBlockRegistry } from '../src/core/BlockRegistry';
-import { useGlobals } from 'storybook/internal/preview-api';
+import { DocsContainer } from "@storybook/blocks";
+import React, { useState } from "react";
+import "react-material-symbols/rounded";
+import { createGlobalStyle } from "styled-components";
+import {
+  BlockRegistryProvider,
+  BlockRendererProvider,
+  BlockStoreProvider,
+  DocumentProvider,
+} from "../src/context";
+import { StorybookThemeProvider } from "../src/context/StorybookThemeProvider";
+import { BlockRenderer } from "../src/core";
+import { DefaultBlockRegistry } from "../src/core/BlockRegistry";
+import { createBlockStore } from "../src/core/BlockStore";
+import { DefaultBlockRenderer } from "../src/core/DefaultBlockRenderer";
+import { useStorybookDarkMode } from "../src/hooks/useStorybookDarkMode";
+import "../src/styles/default-theme.css";
+import "../src/styles/index.css";
+import { createDocument } from "../src/types";
 
 const GlobalStyles = createGlobalStyle`
-    html,
+    body,
     .sbdocs-preview .docs-story {
-      background-color: ${(props) => props.theme.backgroundColor} !important;
+      background-color: hsl(var(--background)) !important;
     }
-    `
+    `;
 
-const blockRegistry = new DefaultBlockRegistry()
-const themeRegistry = new DefaultThemeRegistry()
-const renderer = new DefaultBlockRenderer()
+const blockRegistry = new DefaultBlockRegistry();
 
-const ExampleContainer = ({ children, context, ...props }: { children: React.ReactNode, context: any }) => {
-  const [theme, setTheme] = React.useState('default')
-  const [darkMode, setDarkMode] = React.useState(false)
-  const blockStore = createBlockStore(undefined, blockRegistry)
-  const [document, setDocument] = React.useState(createDocument('storybook-document'))
+const ExampleContainer = ({
+  children,
+  context,
+  ...props
+}: {
+  children: React.ReactNode;
+  context: any;
+}) => {
+  // const { darkMode, setDarkMode } = useStorybookDarkMode();
+  const [darkMode, setDarkMode] = useState(false);
+  const theme = "default";
+  const blockStore = createBlockStore(undefined, blockRegistry);
+  const renderer: BlockRenderer = new DefaultBlockRenderer(
+    blockRegistry,
+    blockStore,
+  );
+  const [document, setDocument] = React.useState(
+    createDocument("storybook-document"),
+  );
 
-  return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
-    <BlockRegistryProvider registry={blockRegistry}>
-      <BlockStoreProvider store={blockStore}>
-        <BlockRendererProvider renderer={renderer}>
-          <DocumentProvider document={document}>
-            <GlobalStyles />
-            <DocsContainer context={context} {...props}>{children}</DocsContainer>
-          </DocumentProvider>
-        </BlockRendererProvider>
-      </BlockStoreProvider>
-    </BlockRegistryProvider>
-  </ThemeProvider>;
+  return (
+    <StorybookThemeProvider theme={theme} darkMode={darkMode}>
+      <BlockRegistryProvider registry={blockRegistry}>
+        <BlockStoreProvider store={blockStore}>
+          <BlockRendererProvider renderer={renderer}>
+            <DocumentProvider document={document}>
+              <GlobalStyles />
+              <DocsContainer context={context} {...props}>
+                {children}
+              </DocsContainer>
+            </DocumentProvider>
+          </BlockRendererProvider>
+        </BlockStoreProvider>
+      </BlockRegistryProvider>
+    </StorybookThemeProvider>
+  );
 };
 
 const StoryDecorator = (Story: any, context: any) => {
-  const [{ theme: themeName }] = useGlobals();
-  const [theme, setTheme] = React.useState('default')
-  const [darkMode, setDarkMode] = React.useState(themeName === 'dark')
-  const blockStore = React.useMemo(() => createBlockStore(), [])
-  const [document] = React.useState(() => createDocument('storybook-document'))
+  const { darkMode, setDarkMode } = useStorybookDarkMode();
+  const theme = "default";
+  const blockStore = React.useMemo(() => createBlockStore(), []);
+  const renderer = new DefaultBlockRenderer(blockRegistry, blockStore);
+  const [document] = React.useState(() => createDocument("storybook-document"));
 
-  return <ThemeProvider theme={theme} darkMode={darkMode} registry={themeRegistry} setTheme={setTheme} setDarkMode={setDarkMode}>
-    <BlockRegistryProvider registry={blockRegistry}>
-      <BlockStoreProvider store={blockStore}>
-        <BlockRendererProvider renderer={renderer}>
-          <DocumentProvider document={document}>
-            <GlobalStyles />
-            <Story />
-          </DocumentProvider>
-        </BlockRendererProvider>
-      </BlockStoreProvider>
-    </BlockRegistryProvider>
-  </ThemeProvider>;
+  return (
+    <StorybookThemeProvider theme={theme} darkMode={darkMode}>
+      <BlockRegistryProvider registry={blockRegistry}>
+        <BlockStoreProvider store={blockStore}>
+          <BlockRendererProvider renderer={renderer}>
+            <DocumentProvider document={document}>
+              <GlobalStyles />
+              <Story />
+            </DocumentProvider>
+          </BlockRendererProvider>
+        </BlockStoreProvider>
+      </BlockRegistryProvider>
+    </StorybookThemeProvider>
+  );
 };
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
   globalTypes: {
     theme: {
-      description: 'Global setting for dark mode',
-      defaultValue: 'light',
+      description: "Global setting for dark mode",
+      defaultValue: "light",
       toolbar: {
-        title: 'Theme',
+        title: "Theme",
         items: [
-          { value: 'light', icon: 'sun', title: 'Light (default)' },
-          { value: 'dark', icon: 'moon', title: 'Dark' }
+          { value: "light", icon: "sun", title: "Light (default)" },
+          { value: "dark", icon: "moon", title: "Dark" },
         ],
         dynamicTitle: true,
       },
@@ -90,9 +117,7 @@ const preview = {
       container: ExampleContainer,
     },
   },
-  decorators: [
-    StoryDecorator
-  ],
+  decorators: [StoryDecorator],
 };
 
 export default preview;
