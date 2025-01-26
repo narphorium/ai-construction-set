@@ -1,6 +1,6 @@
 {
   "name": "ai-construction-set",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A set of building blocks for building tools for thought powered by AI.",
   "type": "module",
   "main": "dist/index.js",
@@ -119,9 +119,9 @@
       "types": "./dist/types/selectors/index.d.ts"
     },
     "./themes": {
-      "import": "./dist/themes/index.mjs",
-      "require": "./dist/themes/index.js",
-      "types": "./dist/types/themes/index.d.ts"
+      "import": "./dist/styles/index.mjs",
+      "require": "./dist/styles/index.js",
+      "types": "./dist/types/styles/index.d.ts"
     },
     "./transformations": {
       "import": "./dist/transformations/index.mjs",
