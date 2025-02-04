@@ -1,5 +1,5 @@
+import { Pagination } from "@/components/fragments/index.js";
 import React, { useState } from "react";
-import { Pagination } from "../../src/components/fragments/Pagination";
 
 export default {
   component: Pagination,

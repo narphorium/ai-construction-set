@@ -1,13 +1,13 @@
+import { AccordionLayout } from "@/components/layouts/index.js";
 import React from "react";
-import { AccordionLayout } from "../../src/components/layouts";
-import { BlockStoryTemplate } from "../BlockStoryTemplate";
+import { BlockStoryTemplate } from "../BlockStoryTemplate.js";
 import {
   highlightedList,
   IconList,
   NestedList,
   SimpleList,
   SingleItemList,
-} from "../storyContent";
+} from "../storyContent.js";
 
 export default {
   component: AccordionLayout,

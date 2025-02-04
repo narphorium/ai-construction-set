@@ -1,7 +1,7 @@
+import { type LeafBlockComponentProps } from "@/components/blocks/Base.js";
+import { cn } from "@/styles/index.js";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
-import { cn } from "../../styles";
-import { LeafBlockComponentProps } from "./Base";
 
 const buttonVariants = cva(
   "bg-button h-6 w-6 border-0 align-middle text-secondary-foreground transition-colors focus:outline-none disabled:text-secondary-foreground/50",

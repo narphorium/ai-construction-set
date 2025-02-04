@@ -1,8 +1,8 @@
-import { BehaviorComponentProps } from "@/components/behaviors/Base";
-import { BlockComponentProps } from "@/components/blocks/Base";
-import { Behavior } from "@/types/behaviors/Behavior";
+import { BehaviorComponentProps } from "@/components/behaviors/Base.js";
+import { BlockComponentProps } from "@/components/blocks/Base.js";
+import { Behavior } from "@/types/behaviors/Behavior.js";
+import { Block } from "@/types/blocks/Block.js";
 import { ForwardRefExoticComponent } from "react";
-import { Block } from "../types/blocks/Block";
 
 export type BehaviorRenderHandler<
   T extends Behavior,

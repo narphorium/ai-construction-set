@@ -1,13 +1,15 @@
-import { useContext } from 'react'
-import { type BlockRenderer } from '../core/BlockRenderer'
-import { BlockRendererContext } from '../context/BlockRendererContext'
+import { BlockRendererContext } from "@/context/BlockRendererContext.js";
+import { type BlockRenderer } from "@/core/BlockRenderer.js";
+import { useContext } from "react";
 
 export const useBlockRenderer = (): BlockRenderer => {
-  const { renderer } = useContext(BlockRendererContext)
+  const { renderer } = useContext(BlockRendererContext);
 
   if (renderer === undefined) {
-    throw new Error('useBlockRenderer must be used within BlockRendererProvider')
+    throw new Error(
+      "useBlockRenderer must be used within BlockRendererProvider",
+    );
   }
 
-  return renderer
-}
+  return renderer;
+};

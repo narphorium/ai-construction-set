@@ -1,8 +1,8 @@
-import { HighlightableComponentProps } from "@/components/behaviors";
+import { HighlightableComponentProps } from "@/components/behaviors/index.js";
+import { type BlockComponentProps } from "@/components/blocks/Base.js";
+import { cn } from "@/styles/index.js";
 import { cva } from "class-variance-authority";
 import React, { forwardRef, type ForwardedRef } from "react";
-import { cn } from "../../styles";
-import { BlockComponentProps } from "./Base";
 
 const cardStyles = cva(
   ["aics-card", "relative", "border", "rounded", "m-1", "transition-all"],

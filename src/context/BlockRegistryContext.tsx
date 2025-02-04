@@ -1,4 +1,7 @@
-import { DefaultBlockRegistry, type BlockRegistry } from "@/core/BlockRegistry";
+import {
+  DefaultBlockRegistry,
+  type BlockRegistry,
+} from "@/core/BlockRegistry.js";
 import React, { createContext, useRef, type ReactNode } from "react";
 
 interface BlockRegistryContextProps {

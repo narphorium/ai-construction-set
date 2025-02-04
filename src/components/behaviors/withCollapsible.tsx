@@ -1,5 +1,4 @@
-import { useBlock } from "@/hooks";
-import { cn } from "@/styles";
+import { cn } from "@/styles/index.js";
 import { cva } from "class-variance-authority";
 import React, {
   forwardRef,
@@ -11,8 +10,7 @@ import React, {
   type FunctionComponent,
   type Ref,
 } from "react";
-import { Collapsible, CollapsibleActions } from "../../types/behaviors";
-import { BehaviorComponentProps } from "./Base";
+import { BehaviorComponentProps } from "./Base.js";
 
 const collapsibleVariants = cva("", {
   variants: {

@@ -3,6 +3,8 @@
   "compilerOptions": {
     "composite": false,
     "declaration": false,
-    "declarationDir": null
+    "declarationDir": null,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   }
 }

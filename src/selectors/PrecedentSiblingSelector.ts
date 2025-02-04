@@ -1,8 +1,8 @@
-import { Block } from "../types/blocks";
-import { BlockStoreState } from "../core/BlockStore";
-import { BlockSelector } from "./BlockSelector";
-import { ChildSelector } from "./ChildSelector";
-import { ParentSelector } from "./ParentSelector";
+import { BlockStoreState } from "@/core/BlockStore.js";
+import { Block } from "@/types/blocks/Block.js";
+import { BlockSelector } from "./BlockSelector.js";
+import { ChildSelector } from "./ChildSelector.js";
+import { ParentSelector } from "./ParentSelector.js";
 
 export class PrecedentSiblingSelector extends BlockSelector {
   select(state: BlockStoreState, root: Block): Block[] {

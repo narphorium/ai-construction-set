@@ -1,48 +1,44 @@
-import { useBlock } from "@/hooks";
-import React, { type ForwardRefExoticComponent } from "react";
-import { SymbolCodepoints } from "react-material-symbols";
-import { StoreApi } from "zustand";
-import { BehaviorComponentProps } from "../components/behaviors/Base";
+import { BehaviorComponentProps } from "@/components/behaviors/Base.js";
 import {
   CollapsibleComponentProps,
   withCollapsible,
-} from "../components/behaviors/withCollapsible";
+} from "@/components/behaviors/withCollapsible.js";
 import {
   HighlightableComponentProps,
   withHighlightable,
-} from "../components/behaviors/withHighlightable";
+} from "@/components/behaviors/withHighlightable.js";
 import {
   PaginatedComponentProps,
   withPageable,
-} from "../components/behaviors/withPageable";
-import { withRef } from "../components/behaviors/withRef";
-import { withTheme } from "../components/behaviors/withTheme";
-import { type BlockComponentProps } from "../components/blocks/Base";
-import { Card as CardBlock, CardProps } from "../components/blocks/Card";
-import { CodeBlock, CodeBlockProps } from "../components/blocks/CodeBlock";
+} from "@/components/behaviors/withPageable.js";
+import { withRef } from "@/components/behaviors/withRef.js";
+import { withTheme } from "@/components/behaviors/withTheme.js";
+import { type BlockComponentProps } from "@/components/blocks/Base.js";
+import { Card as CardBlock, CardProps } from "@/components/blocks/Card.js";
+import { CodeBlock, CodeBlockProps } from "@/components/blocks/CodeBlock.js";
 import {
   CollapsibleSection,
   CollapsibleSectionProps,
-} from "../components/blocks/CollapsibleSection";
+} from "@/components/blocks/CollapsibleSection.js";
 import {
   ContentSpan,
   ContentSpanProps,
-} from "../components/blocks/ContentSpan";
-import { LabelBlock, LabelBlockProps } from "../components/blocks/LabelBlock";
+} from "@/components/blocks/ContentSpan.js";
+import { LabelBlock, LabelBlockProps } from "@/components/blocks/LabelBlock.js";
 import {
   ParagraphBlock,
   ParagraphBlockProps,
-} from "../components/blocks/ParagraphBlock";
+} from "@/components/blocks/ParagraphBlock.js";
 import {
   AccordionLayout,
   AccordionLayoutItem,
   AccordionLayoutItemProps,
   AccordionLayoutProps,
-} from "../components/layouts/AccordionLayout";
+} from "@/components/layouts/AccordionLayout.js";
 import {
   NestedLayout,
   NestedLayoutProps,
-} from "../components/layouts/NestedLayout";
+} from "@/components/layouts/NestedLayout.js";
 import {
   TableLayout,
   TableLayoutCell,
@@ -50,16 +46,25 @@ import {
   TableLayoutProps,
   TableLayoutRow,
   TableLayoutRowProps,
-} from "../components/layouts/TableLayout";
+} from "@/components/layouts/TableLayout.js";
+import {
+  BehaviorRenderHandler,
+  BlockRenderer,
+  BlockRenderHandler,
+} from "@/core/BlockRenderer.js";
+import { BlockStore } from "@/core/BlockStore.js";
+import { useBlock } from "@/hooks/useBlock.js";
+import { Behavior } from "@/types/behaviors/Behavior.js";
 import {
   Collapsible,
+  CollapsibleProps,
   CollapsibleType,
   Highlightable,
   HighlightableType,
   Pageable,
   PageableType,
-} from "../types";
-import { Behavior } from "../types/behaviors/Behavior";
+} from "@/types/behaviors/index.js";
+import { Card, CardType } from "@/types/blocks/Card.js";
 import {
   Block,
   Code,
@@ -70,9 +75,8 @@ import {
   SectionType,
   Span,
   SpanType,
-} from "../types/blocks";
-import { Card, CardType } from "../types/blocks/Card";
-import { Label, LabelType } from "../types/blocks/Label";
+} from "@/types/blocks/index.js";
+import { Label, LabelType } from "@/types/blocks/Label.js";
 import {
   List,
   ListItem,
@@ -86,14 +90,11 @@ import {
   TableType,
   Tree,
   TreeType,
-} from "../types/layouts";
-import { BlockRegistry } from "./BlockRegistry";
-import {
-  BehaviorRenderHandler,
-  BlockRenderer,
-  BlockRenderHandler,
-} from "./BlockRenderer";
-import { BlockStore } from "./BlockStore";
+} from "@/types/layouts/index.js";
+import React, { type ForwardRefExoticComponent } from "react";
+import { SymbolCodepoints } from "react-material-symbols";
+import { StoreApi } from "zustand";
+import { BlockRegistry } from "./BlockRegistry.js";
 
 export class DefaultBlockRenderer implements BlockRenderer {
   blockComponents = new Map<

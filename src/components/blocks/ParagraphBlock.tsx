@@ -1,4 +1,6 @@
-import { cn } from "@/styles";
+import { type HighlightableComponentProps } from "@/components/behaviors/index.js";
+import { type BlockComponentProps } from "@/components/blocks/Base.js";
+import { cn } from "@/styles/index.js";
 import { cva, type VariantProps } from "class-variance-authority";
 import {
   forwardRef,
@@ -7,8 +9,6 @@ import {
   type ForwardedRef,
   type MouseEvent,
 } from "react";
-import { HighlightableComponentProps } from "../behaviors";
-import { BlockComponentProps } from "./Base";
 
 const paragraphStyles = cva("aics-paragraph font-default mx-4 my-2 text-sm", {
   variants: {

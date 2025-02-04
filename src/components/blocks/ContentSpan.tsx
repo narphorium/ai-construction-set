@@ -1,6 +1,6 @@
-import { HighlightableComponentProps } from "@/components/behaviors";
-import { BlockComponentProps } from "@/components/blocks/Base";
-import { cn } from "@/styles";
+import { HighlightableComponentProps } from "@/components/behaviors/index.js";
+import { type BlockComponentProps } from "@/components/blocks/Base.js";
+import { cn } from "@/styles/index.js";
 import { cva } from "class-variance-authority";
 import React, { forwardRef, type ForwardedRef, type MouseEvent } from "react";
 

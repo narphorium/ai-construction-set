@@ -1,14 +1,15 @@
-import { useContext } from 'react'
-import { type BlockRegistry } from '../core/BlockRegistry'
-import { BlockRegistryContext } from '../context/BlockRegistryContext'
-
+import { BlockRegistryContext } from "@/context/BlockRegistryContext.js";
+import { type BlockRegistry } from "@/core/BlockRegistry.js";
+import { useContext } from "react";
 
 export const useBlockRegistry = (): BlockRegistry => {
-  const { registry } = useContext(BlockRegistryContext)
+  const { registry } = useContext(BlockRegistryContext);
 
   if (registry === undefined) {
-    throw new Error('useBlockRegistry must be used within BlockRegistryProvider')
+    throw new Error(
+      "useBlockRegistry must be used within BlockRegistryProvider",
+    );
   }
 
-  return registry
-}
+  return registry;
+};

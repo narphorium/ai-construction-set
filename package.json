@@ -1,11 +1,11 @@
 {
   "name": "ai-construction-set",
-  "version": "0.0.8",
+  "version": "0.0.12",
   "description": "A set of building blocks for building tools for thought powered by AI.",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/src/index.d.ts",
   "files": [
     "dist/**/*"
   ],
@@ -39,8 +39,6 @@
     "react-material-symbols": "^4.4.0",
     "react-resize-detector": "^9.1.0",
     "react-svg": "^16.1.23",
-    "styled-components": "^6.0.7",
-    "styled-theming": "^2.2.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss": "^3.4.16",
     "tailwindcss-animate": "^1.0.7",
@@ -96,37 +94,37 @@
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types/src/index.d.ts"
     },
     "./components": {
       "import": "./dist/components/index.mjs",
       "require": "./dist/components/index.js",
-      "types": "./dist/types/components/index.d.ts"
+      "types": "./dist/types/src/components/index.d.ts"
     },
     "./context": {
       "import": "./dist/context/index.mjs",
       "require": "./dist/context/index.js",
-      "types": "./dist/types/context/index.d.ts"
+      "types": "./dist/types/src/context/index.d.ts"
     },
     "./hooks": {
       "import": "./dist/hooks/index.mjs",
       "require": "./dist/hooks/index.js",
-      "types": "./dist/types/hooks/index.d.ts"
+      "types": "./dist/types/src/hooks/index.d.ts"
     },
     "./selectors": {
       "import": "./dist/selectors/index.mjs",
       "require": "./dist/selectors/index.js",
-      "types": "./dist/types/selectors/index.d.ts"
+      "types": "./dist/types/src/selectors/index.d.ts"
     },
     "./themes": {
       "import": "./dist/styles/index.mjs",
       "require": "./dist/styles/index.js",
-      "types": "./dist/types/styles/index.d.ts"
+      "types": "./dist/types/src/styles/index.d.ts"
     },
     "./transformations": {
       "import": "./dist/transformations/index.mjs",
       "require": "./dist/transformations/index.js",
-      "types": "./dist/types/transformations/index.d.ts"
+      "types": "./dist/types/src/transformations/index.d.ts"
     }
   }
 }

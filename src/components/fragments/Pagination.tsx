@@ -1,6 +1,6 @@
-import { Button, ButtonSize } from "@/components/blocks/Button";
-import { ButtonGroup } from "@/components/layouts/ButtonGroup";
-import { cn } from "@/styles";
+import { Button, ButtonSize } from "@/components/blocks/Button.js";
+import { ButtonGroup } from "@/components/layouts/ButtonGroup.js";
+import { cn } from "@/styles/index.js";
 import React from "react";
 import { MaterialSymbol, MaterialSymbolWeight } from "react-material-symbols";
 

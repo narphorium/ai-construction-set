@@ -3,9 +3,14 @@ import {
   createPageable,
   HighlightableProps,
   PageableProps,
-} from "../behaviors";
-import { BlockActions, BlockProps, createBlock } from "../blocks";
-import { BlockGetter, BlockSetter } from "../blocks/Block";
+} from "../behaviors/index.js";
+import {
+  BlockActions,
+  BlockGetter,
+  BlockProps,
+  BlockSetter,
+  createBlock,
+} from "../blocks/Block.js";
 
 export const TableType = "aics:layout.table";
 export const TableRowType = "aics:block.table-row";

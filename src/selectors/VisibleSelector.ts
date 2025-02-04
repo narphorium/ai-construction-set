@@ -1,17 +1,24 @@
-import { Block } from "../types/blocks";
-import { BlockStoreState } from "../core/BlockStore";
-import { BlockSelector } from "./BlockSelector";
-import { VisibleChildSelector } from "./VisibleChildSelector";
+import { BlockStoreState } from "@/core/BlockStore.js";
+import { Block } from "@/types/blocks/Block.js";
+import { BlockSelector } from "./BlockSelector.js";
+import { VisibleChildSelector } from "./VisibleChildSelector.js";
 
 export class VisibleSelector extends BlockSelector {
   select(state: BlockStoreState, root: Block): Block[] {
-    const parent = root.parent != undefined ? state.blocks.get(root.parent) : undefined
+    const parent =
+      root.parent != undefined ? state.blocks.get(root.parent) : undefined;
     if (parent != undefined) {
       // Recursively, check if any ancestor is visible
-      const visibleParents = new VisibleChildSelector(this.registry).select(state, parent)
+      const visibleParents = new VisibleChildSelector(this.registry).select(
+        state,
+        parent,
+      );
       if (visibleParents.length > 0) {
-        const visibleChildren = new VisibleChildSelector(this.registry).select(state, parent)
-        return visibleChildren
+        const visibleChildren = new VisibleChildSelector(this.registry).select(
+          state,
+          parent,
+        );
+        return visibleChildren;
       }
     }
     return [];

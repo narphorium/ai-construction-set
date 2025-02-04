@@ -4,7 +4,7 @@ import {
   BehaviorGetter,
   BehaviorSetter,
   createBehavior,
-} from "./Behavior";
+} from "./Behavior.js";
 
 export const HighlightableType = "aics:behavior.highlightable";
 

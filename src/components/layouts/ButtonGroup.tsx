@@ -1,5 +1,5 @@
+import { cn } from "@/styles/index.js";
 import React from "react";
-import { cn } from "../../styles";
 
 interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;

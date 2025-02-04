@@ -1,4 +1,4 @@
-import { createDocument, type Document } from "@/types";
+import { createDocument, type Document } from "@/types/index.js";
 import React, { createContext, type ReactNode, useRef } from "react";
 import * as uuid from "uuid";
 

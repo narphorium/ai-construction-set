@@ -1,13 +1,13 @@
 import {
   CollapsibleComponentProps,
   HighlightableComponentProps,
-} from "@/components/behaviors";
-import { cn } from "@/styles";
+} from "@/components/behaviors/index.js";
+import { type BlockComponentProps } from "@/components/blocks/Base.js";
+import { CollapsibleSection } from "@/components/blocks/CollapsibleSection.js";
+import { cn } from "@/styles/index.js";
 import { cva } from "class-variance-authority";
 import React, { forwardRef, type ForwardedRef } from "react";
 import { SymbolCodepoints } from "react-material-symbols";
-import { type BlockComponentProps } from "../blocks/Base";
-import { CollapsibleSection } from "../blocks/CollapsibleSection";
 
 const accordionLayoutStyles = cva(["aics-accordion-layout", "my-1"], {
   variants: {

@@ -1,4 +1,4 @@
-import { cn } from "@/styles";
+import { cn } from "@/styles/index.js";
 import { cva } from "class-variance-authority";
 import React, {
   forwardRef,
@@ -11,7 +11,7 @@ import React, {
   type FunctionComponent,
   type Ref,
 } from "react";
-import { BehaviorComponentProps } from "./Base";
+import { BehaviorComponentProps } from "./Base.js";
 
 const highlightableVariants = cva("", {
   variants: {

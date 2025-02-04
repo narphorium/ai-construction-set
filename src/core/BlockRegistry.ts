@@ -1,4 +1,3 @@
-import * as uuid from "uuid";
 import {
   BehaviorActions,
   BehaviorGetter,
@@ -13,7 +12,12 @@ import {
   createPageableActions,
   HighlightableType,
   PageableType,
-} from "../types/behaviors";
+} from "@/types/behaviors/index.js";
+import {
+  CardType,
+  createCard,
+  createCardActions,
+} from "@/types/blocks/Card.js";
 import {
   BlockActions,
   BlockGetter,
@@ -34,13 +38,12 @@ import {
   ParagraphType,
   SectionType,
   SpanType,
-} from "../types/blocks";
-import { CardType, createCard, createCardActions } from "../types/blocks/Card";
+} from "@/types/blocks/index.js";
 import {
   createLabel,
   createLabelActions,
   LabelType,
-} from "../types/blocks/Label";
+} from "@/types/blocks/Label.js";
 import {
   createList,
   createListActions,
@@ -60,7 +63,8 @@ import {
   TableRowType,
   TableType,
   TreeType,
-} from "../types/layouts";
+} from "@/types/layouts/index.js";
+import * as uuid from "uuid";
 
 export type BlockBuilder<P extends BlockProps> = (props: Partial<P>) => P;
 export type BlockActionsBuilder<

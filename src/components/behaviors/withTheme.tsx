@@ -1,4 +1,6 @@
-import { cn } from "@/styles";
+import { type BlockComponentProps } from "@/components/blocks/Base.js";
+import { useDarkMode } from "@/hooks/index.js";
+import { cn } from "@/styles/index.js";
 import React, {
   forwardRef,
   useState,
@@ -7,8 +9,6 @@ import React, {
   type PropsWithoutRef,
   type RefAttributes,
 } from "react";
-import { useDarkMode } from "../../hooks";
-import { BlockComponentProps } from "../blocks/Base";
 
 export const withTheme = <TProps extends BlockComponentProps>(
   Component: ComponentType<TProps>,
@@ -16,7 +16,6 @@ export const withTheme = <TProps extends BlockComponentProps>(
 ): ForwardRefExoticComponent<PropsWithoutRef<TProps> & RefAttributes<any>> => {
   const WithTheme = forwardRef(function (props: TProps, ref): JSX.Element {
     const [theme, setTheme] = useState(params.theme);
-    const [darkMode, setDarkMode] = useDarkMode();
 
     return (
       <Component

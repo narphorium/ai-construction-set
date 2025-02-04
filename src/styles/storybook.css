@@ -1,0 +1,4 @@
+body,
+.sbdocs-preview .docs-story {
+  background-color: hsl(var(--background)) !important;
+}

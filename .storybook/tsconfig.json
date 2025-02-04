@@ -5,25 +5,24 @@
     "skipLibCheck": true,
     "jsx": "react",
     "target": "ESnext",
-    "module": "NodeNext",
+    "module": "ESNext",
     "lib": ["DOM", "ESNext"],
     "declaration": true,
     "declarationDir": "./dist",
     "sourceMap": true,
     "outDir": "./dist",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "node",
     "emitDeclarationOnly": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "noEmit": false,
-    "rootDir": "./src",
+    "rootDir": ".storybook",
     "composite": true,
-    "baseUrl": "./src",
+    "baseUrl": ".storybook",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["../src/*"]
     }
   },
-  "include": ["src/**/*", "stories/**/*"],
-  "exclude": ["dist", "node_modules", "src/**/*.test.tsx"]
+  "include": ["../stories/**/*"]
 }

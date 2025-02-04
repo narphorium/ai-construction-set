@@ -1,10 +1,13 @@
-import { Block } from "../types/blocks";
-import { BlockRegistry } from "../core/BlockRegistry";
-import { BlockStoreState } from "../core/BlockStore";
-import { BlockSelector } from "./BlockSelector";
+import { BlockRegistry } from "@/core/BlockRegistry.js";
+import { BlockStoreState } from "@/core/BlockStore.js";
+import { Block } from "@/types/blocks/Block.js";
+import { BlockSelector } from "./BlockSelector.js";
 
 export class RecursiveBlockSelector extends BlockSelector {
-  constructor(protected registry: BlockRegistry, private selector: BlockSelector) {
+  constructor(
+    protected registry: BlockRegistry,
+    private selector: BlockSelector,
+  ) {
     super(registry);
   }
 

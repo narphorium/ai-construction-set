@@ -5,14 +5,14 @@ import {
   HighlightableProps,
   PageableActions,
   PageableProps,
-} from "../behaviors";
+} from "../behaviors/index.js";
 import {
   BlockActions,
   BlockGetter,
   BlockProps,
   BlockSetter,
   createBlock,
-} from "../blocks";
+} from "../blocks/Block.js";
 
 export const TreeType = "aics:layout.tree";
 

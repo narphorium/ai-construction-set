@@ -1,5 +1,10 @@
-import { BlockGetter, BlockSetter } from "@/index";
-import { createSpan, createSpanActions, SpanActions, SpanProps } from "./Span";
+import { BlockGetter, BlockSetter } from "./Block.js";
+import {
+  createSpan,
+  createSpanActions,
+  SpanActions,
+  SpanProps,
+} from "./Span.js";
 
 export const LabelType = "aics:block.label";
 

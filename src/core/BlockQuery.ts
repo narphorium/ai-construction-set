@@ -1,22 +1,22 @@
+import { BehaviorMatcher } from "@/selectors/BehaviorMatcher.js";
+import { BehaviorPropertyMatcher } from "@/selectors/BehaviorPropertyMatcher.js";
+import { BlockPropertyMatcher } from "@/selectors/BlockPropertyMatcher.js";
+import { BlockSelector } from "@/selectors/BlockSelector.js";
+import { ChildSelector } from "@/selectors/ChildSelector.js";
+import { DescendantSelector } from "@/selectors/DescendantSelector.js";
 import {
   AncestorSelector,
   SiblingSelector,
   VisibleSelector,
-} from "../selectors";
-import { BehaviorMatcher } from "../selectors/BehaviorMatcher";
-import { BehaviorPropertyMatcher } from "../selectors/BehaviorPropertyMatcher";
-import { BlockPropertyMatcher } from "../selectors/BlockPropertyMatcher";
-import { BlockSelector } from "../selectors/BlockSelector";
-import { ChildSelector } from "../selectors/ChildSelector";
-import { DescendantSelector } from "../selectors/DescendantSelector";
-import { ParentSelector } from "../selectors/ParentSelector";
-import { PrecedentSiblingSelector } from "../selectors/PrecedentSiblingSelector";
-import { SubsequentSiblingSelector } from "../selectors/SubsequentSiblingSelector";
-import { TextMatcher } from "../selectors/TextMatcher";
-import { TypeMatcher } from "../selectors/TypeMatcher";
-import { Behavior } from "../types/behaviors/Behavior";
-import { Block } from "../types/blocks/Block";
-import { BlockRegistry } from "./BlockRegistry";
+} from "@/selectors/index.js";
+import { ParentSelector } from "@/selectors/ParentSelector.js";
+import { PrecedentSiblingSelector } from "@/selectors/PrecedentSiblingSelector.js";
+import { SubsequentSiblingSelector } from "@/selectors/SubsequentSiblingSelector.js";
+import { TextMatcher } from "@/selectors/TextMatcher.js";
+import { TypeMatcher } from "@/selectors/TypeMatcher.js";
+import { Behavior } from "@/types/behaviors/Behavior.js";
+import { Block } from "@/types/blocks/Block.js";
+import { BlockRegistry } from "./BlockRegistry.js";
 
 export const QueryType = "aics:query";
 

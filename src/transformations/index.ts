@@ -1,3 +1,3 @@
-export * from './BlockTransformation'
-export * from './BlockStoreTransformation'
-export * from './DocumentTransformation'
+export * from "./BlockStoreTransformation.js";
+export * from "./BlockTransformation.js";
+export * from "./DocumentTransformation.js";

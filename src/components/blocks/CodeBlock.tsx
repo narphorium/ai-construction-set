@@ -1,11 +1,15 @@
-import { HighlightableComponentProps } from "@/components/behaviors";
-import { Span } from "@/types/blocks";
+import { HighlightableComponentProps } from "@/components/behaviors/index.js";
+import { type BlockComponentProps } from "@/components/blocks/Base.js";
+import { cn } from "@/styles/index.js";
+import { Span } from "@/types/blocks/index.js";
 import { python } from "@codemirror/lang-python";
 import { type ViewUpdate } from "@codemirror/view";
-import CodeMirror, { type Extension } from "@uiw/react-codemirror";
+import * as ReactCodeMirrorImport from "@uiw/react-codemirror";
 import React, { forwardRef, type ForwardedRef, type MouseEvent } from "react";
-import { cn } from "../../styles";
-import { BlockComponentProps } from "./Base";
+
+// Cast the default export to a React functional component type.
+const ReactCodeMirror =
+  ReactCodeMirrorImport.default as unknown as React.FC<any>;
 
 export interface CodeBlockProps
   extends BlockComponentProps,
@@ -70,7 +74,7 @@ const CodeBlock = forwardRef(function CodeBlock(
       )}
       onClick={handleClick}
     >
-      <CodeMirror
+      <ReactCodeMirror
         value={codeContent}
         basicSetup={false}
         editable={editable}

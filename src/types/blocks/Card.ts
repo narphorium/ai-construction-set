@@ -1,11 +1,17 @@
-import { createHighlightable, Highlightable } from "../behaviors";
+import {
+  createHighlightable,
+  createHighlightableActions,
+  Highlightable,
+  HighlightableActions,
+} from "../behaviors/index.js";
 import {
   Block,
   BlockActions,
   BlockGetter,
   BlockSetter,
   createBlock,
-} from "./Block";
+  createBlockActions,
+} from "./Block.js";
 
 export const CardType = "aics:block.card";
 
@@ -20,13 +26,16 @@ export const createCard = (props: Partial<CardProps> = {}): CardProps => {
   } as CardProps;
 };
 
-export interface CardActions extends BlockActions {}
+export interface CardActions extends BlockActions, HighlightableActions {}
 
 export const createCardActions = (
   get: BlockGetter<CardProps>,
   set: BlockSetter<CardProps>,
 ): CardActions => {
-  return {};
+  return {
+    ...createBlockActions(get, set),
+    ...createHighlightableActions(get, set),
+  };
 };
 
 export type Card = CardProps & CardActions;

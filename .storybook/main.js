@@ -1,5 +1,7 @@
+const path = require("path");
+
 /** @type { import('@storybook/react-vite').StorybookConfig } */
-const config = {
+module.exports = {
   stories: ["../stories/**/*.mdx", "../stories/**/*.stories.@(js|jsx|ts|tsx)"],
   staticDirs: ["../public"],
   addons: [
@@ -16,5 +18,7 @@ const config = {
   docs: {
     autodocs: "tag",
   },
+  typescript: {
+    tsconfigPath: path.resolve(__dirname, "./tsconfig.json"),
+  },
 };
-export default config;

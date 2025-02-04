@@ -1,6 +1,4 @@
-import { LabelType } from "@/types/blocks/Label";
-import { SymbolCodepoints } from "react-material-symbols";
-import { BlockRegistry } from "../src/core/BlockRegistry";
+import { BlockRegistry } from "@/core/BlockRegistry.js";
 import {
   Block,
   Card,
@@ -13,7 +11,8 @@ import {
   SectionType,
   Span,
   SpanType,
-} from "../src/types/blocks";
+} from "@/types/blocks/index.js";
+import { LabelType } from "@/types/blocks/Label.js";
 import {
   type List,
   ListItem,
@@ -27,7 +26,8 @@ import {
   TableType,
   type Tree,
   TreeType,
-} from "../src/types/layouts";
+} from "@/types/layouts/index.js";
+import { SymbolCodepoints } from "react-material-symbols";
 
 export const PlainParagraph = (
   registry: BlockRegistry,

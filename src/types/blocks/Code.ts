@@ -1,5 +1,10 @@
-import { BlockActions, BlockGetter, BlockSetter } from "./Block";
-import { createParagraph, ParagraphProps } from "./Paragraph";
+import {
+  BlockActions,
+  BlockGetter,
+  BlockSetter,
+  createBlock,
+} from "./Block.js";
+import { createParagraph, ParagraphProps } from "./Paragraph.js";
 
 export const CodeType = "aics:block.code";
 

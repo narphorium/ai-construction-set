@@ -1,8 +1,8 @@
+import { BlockRegistry } from "@/core/BlockRegistry.js";
+import { useBlockRenderer } from "@/hooks/useBlockRenderer.js";
+import { useStoryContent } from "@/hooks/useStoryContent.js";
+import { type Block } from "@/types/blocks/index.js";
 import React from "react";
-import { BlockRegistry } from "../src/core/BlockRegistry";
-import { useBlockRenderer } from "../src/hooks/useBlockRenderer";
-import { useStoryContent } from "../src/hooks/useStoryContent";
-import { type Block } from "../src/types/blocks";
 
 export interface BlockStoryProps<T extends Block> {
   builder: (registry: BlockRegistry) => T;

@@ -1,62 +1,98 @@
-import { type StoreApi, createStore } from 'zustand/vanilla'
-import { Block, BlockID, BlockProps } from '../types/blocks'
-import { Behavior, BehaviorProps } from '../types/behaviors'
-import { DocumentID, DocumentProps, type Document } from '../types/Document'
-import { BlockQuery } from './BlockQuery'
-import { BlockRegistry } from './BlockRegistry'
-import { ChildSelector } from '../selectors'
-import { AddChildBlock, BlockTransformation, DeleteBlock, UpdateBehavior, UpdateBlock } from '../transformations/BlockTransformation'
-import { AddRootBlock, DeleteDocument, UpdateDocument } from '../transformations/DocumentTransformation'
-import { AddBlock, AddDocument } from '../transformations/BlockStoreTransformation'
+import { BlockQuery } from "@/core/BlockQuery.js";
+import { BlockRegistry } from "@/core/BlockRegistry.js";
+import { ChildSelector } from "@/selectors/ChildSelector.js";
+import {
+  AddBlock,
+  AddDocument,
+} from "@/transformations/BlockStoreTransformation.js";
+import {
+  AddChildBlock,
+  BlockTransformation,
+  DeleteBlock,
+  UpdateBehavior,
+  UpdateBlock,
+} from "@/transformations/BlockTransformation.js";
+import {
+  AddRootBlock,
+  DeleteDocument,
+  UpdateDocument,
+} from "@/transformations/DocumentTransformation.js";
+import { Behavior, BehaviorProps } from "@/types/behaviors/Behavior.js";
+import { Block, BlockID, BlockProps } from "@/types/blocks/Block.js";
+import { DocumentID, DocumentProps, type Document } from "@/types/Document.js";
+import { createStore, type StoreApi } from "zustand/vanilla";
 
 export interface BlockStoreState {
-  documents: Map<string, Document>
-  blocks: Map<string, Block>
+  documents: Map<string, Document>;
+  blocks: Map<string, Block>;
 }
 
 export interface BlockStoreActions {
   // General
-  applyBlockTransformations: (transformations: BlockTransformation[]) => void
+  applyBlockTransformations: (transformations: BlockTransformation[]) => void;
 
   // Documents
-  addDocument: (document: Document) => DocumentID
-  getDocument: (uuid: DocumentID) => Document | undefined
-  updateDocument: (uuid: DocumentID, updates: Partial<Document> | ((state: DocumentProps) => Partial<DocumentProps>)) => void
-  addRootBlock: <T extends Block>(block: T, document: DocumentID) => BlockID
-  deleteDocument: (uuid: DocumentID) => void
+  addDocument: (document: Document) => DocumentID;
+  getDocument: (uuid: DocumentID) => Document | undefined;
+  updateDocument: (
+    uuid: DocumentID,
+    updates:
+      | Partial<Document>
+      | ((state: DocumentProps) => Partial<DocumentProps>),
+  ) => void;
+  addRootBlock: <T extends Block>(block: T, document: DocumentID) => BlockID;
+  deleteDocument: (uuid: DocumentID) => void;
 
   // Blocks
-  addBlock: <T extends Block>(block: T) => string
+  addBlock: <T extends Block>(block: T) => string;
 
-  addChildBlock: <T extends Block>(block: T, parent: BlockID) => string
-  getBlock: <T extends Block>(uuid: string) => T | undefined
-  getChildBlocks: <T extends Block>(parent: BlockID) => T[]
-  findBlock: (root: Document | Block, selector: BlockQuery, registry: BlockRegistry) => Block | undefined
-  findBlocks: (root: Document | Block, selector: BlockQuery, registry: BlockRegistry) => Block[]
-  updateBlock: <T extends BlockProps>(uuid: BlockID, updates: Partial<T> | ((state: T) => Partial<T>)) => void
-  deleteBlock: (uuid: BlockID) => void
+  addChildBlock: <T extends Block>(block: T, parent: BlockID) => string;
+  getBlock: <T extends Block>(uuid: string) => T | undefined;
+  getChildBlocks: <T extends Block>(parent: BlockID) => T[];
+  findBlock: (
+    root: Document | Block,
+    selector: BlockQuery,
+    registry: BlockRegistry,
+  ) => Block | undefined;
+  findBlocks: (
+    root: Document | Block,
+    selector: BlockQuery,
+    registry: BlockRegistry,
+  ) => Block[];
+  updateBlock: <T extends BlockProps>(
+    uuid: BlockID,
+    updates: Partial<T> | ((state: T) => Partial<T>),
+  ) => void;
+  deleteBlock: (uuid: BlockID) => void;
 
   // Behaviors
-  getBehavior: <T extends Behavior>(uuid: string) => T | undefined
-  updateBehavior: <T extends Behavior>(uid: string, updates: Partial<T> | ((state: T) => Partial<T>)) => void
+  getBehavior: <T extends Behavior>(uuid: string) => T | undefined;
+  updateBehavior: <T extends Behavior>(
+    uid: string,
+    updates: Partial<T> | ((state: T) => Partial<T>),
+  ) => void;
 }
 
-export type BlockStore = BlockStoreState & BlockStoreActions
+export type BlockStore = BlockStoreState & BlockStoreActions;
 
 export const defaultInitState: BlockStoreState = {
   documents: new Map<string, Document>(),
   blocks: new Map<string, Block>(),
-}
+};
 
-const findBlocks = (state: BlockStoreState, root: Block | Document, query: BlockQuery): Block[] => {
+const findBlocks = (
+  state: BlockStoreState,
+  root: Block | Document,
+  query: BlockQuery,
+): Block[] => {
   let roots: Block[] = [];
   if (root instanceof Document) {
     (root as Document).blocks.forEach((blockId) => {
-      const block = state.blocks.get(blockId)
+      const block = state.blocks.get(blockId);
       if (block !== undefined) {
-        roots.push(block)
+        roots.push(block);
       }
-    })
+    });
   } else {
     roots.push(root as Block);
   }
@@ -77,113 +113,130 @@ const findBlocks = (state: BlockStoreState, root: Block | Document, query: Block
     rootMatches = rootMatches.concat(matches);
   }
   return rootMatches;
-}
+};
 
 export const createBlockStore = (
   initState: BlockStoreState = defaultInitState,
-  registry: BlockRegistry = new BlockRegistry()
+  registry: BlockRegistry = new BlockRegistry(),
 ): StoreApi<BlockStore> => {
   return createStore<BlockStore>()((set, get) => ({
     ...initState,
 
     getDocument(uuid: DocumentID) {
-      return get().documents.get(uuid)
+      return get().documents.get(uuid);
     },
 
-    getChildBlockIds: (parent: Block) => new ChildSelector(registry).run(get(), parent),
+    getChildBlockIds: (parent: Block) =>
+      new ChildSelector(registry).run(get(), parent),
 
-    getBlock: <T extends Block>(uuid: BlockID) => get().blocks.get(uuid) as T | undefined,
+    getBlock: <T extends Block>(uuid: BlockID) =>
+      get().blocks.get(uuid) as T | undefined,
 
-    getBehavior: <T extends Behavior>(uuid: BlockID) => get().blocks.get(uuid) as T | undefined,
+    getBehavior: <T extends Behavior>(uuid: BlockID) =>
+      get().blocks.get(uuid) as T | undefined,
 
     getChildBlocks: <T extends Block>(parent: BlockID) => {
-      const parentBlock = get().blocks.get(parent)
+      const parentBlock = get().blocks.get(parent);
       if (parentBlock === undefined) {
-        return []
+        return [];
       }
-      return new ChildSelector(registry).select(get(), parentBlock) as T[]
+      return new ChildSelector(registry).select(get(), parentBlock) as T[];
     },
 
     addDocument(document: Document) {
-      set((state) => new AddDocument(document).apply(state))
-      return document.uuid
+      set((state) => new AddDocument(document).apply(state));
+      return document.uuid;
     },
 
     addBlock: (block: Block): string => {
-      set((state) => new AddBlock(block).apply(state))
-      return block.uuid
+      set((state) => new AddBlock(block).apply(state));
+      return block.uuid;
     },
 
     addRootBlock: <T extends Block>(block: T, document: DocumentID): string => {
-      set((state) => new AddRootBlock(block).apply(state, document))
-      return block.uuid
+      set((state) => new AddRootBlock(block).apply(state, document));
+      return block.uuid;
     },
 
     addChildBlock: <T extends Block>(block: T, parent: BlockID): string => {
-      set((state) => new AddChildBlock(block, parent).apply(state))
-      return block.uuid
+      set((state) => new AddChildBlock(block, parent).apply(state));
+      return block.uuid;
     },
 
-    updateDocument: (document: DocumentID, updates: Partial<DocumentProps> | ((state: DocumentProps) => Partial<DocumentProps>)) => {
+    updateDocument: (
+      document: DocumentID,
+      updates:
+        | Partial<DocumentProps>
+        | ((state: DocumentProps) => Partial<DocumentProps>),
+    ) => {
       set((state) => {
-        if (typeof updates === 'function') {
-          const state = get().documents.get(document) as DocumentProps
+        if (typeof updates === "function") {
+          const state = get().documents.get(document) as DocumentProps;
           if (state === undefined) {
-            throw new Error('Document not found')
+            throw new Error("Document not found");
           }
-          updates = updates(state)
+          updates = updates(state);
         }
-        return new UpdateDocument(updates).apply(state, document)
-      })
+        return new UpdateDocument(updates).apply(state, document);
+      });
     },
 
-    updateBlock: <T extends BlockProps>(block: BlockID, updates: Partial<T> | ((state: T) => Partial<T>)) => {
+    updateBlock: <T extends BlockProps>(
+      block: BlockID,
+      updates: Partial<T> | ((state: T) => Partial<T>),
+    ) => {
       set((state) => {
-        if (typeof updates === 'function') {
-          const state = (get().blocks.get(block) as unknown) as T
+        if (typeof updates === "function") {
+          const state = get().blocks.get(block) as unknown as T;
           if (state === undefined) {
-            throw new Error('Block not found')
+            throw new Error("Block not found");
           }
-          updates = updates(state)
+          updates = updates(state);
         }
-        return new UpdateBlock<T>(updates, block).apply(state)
-      })
+        return new UpdateBlock<T>(updates, block).apply(state);
+      });
     },
 
-    updateBehavior: <T extends BehaviorProps>(block: BlockID, updates: Partial<T> | ((state: T) => Partial<T>)) => {
+    updateBehavior: <T extends BehaviorProps>(
+      block: BlockID,
+      updates: Partial<T> | ((state: T) => Partial<T>),
+    ) => {
       set((state) => {
-        if (typeof updates === 'function') {
-          const state = (get().blocks.get(block) as unknown) as T
+        if (typeof updates === "function") {
+          const state = get().blocks.get(block) as unknown as T;
           if (state === undefined) {
-            throw new Error('Behavior not found')
+            throw new Error("Behavior not found");
           }
-          updates = updates(state)
+          updates = updates(state);
         }
-        return new UpdateBehavior<T>(updates, block).apply(state)
-      })
+        return new UpdateBehavior<T>(updates, block).apply(state);
+      });
     },
 
     deleteDocument: (document: DocumentID) => {
-      set((state) => new DeleteDocument().apply(state, document))
+      set((state) => new DeleteDocument().apply(state, document));
     },
 
     deleteBlock: (block: BlockID) => {
-      set((state) => new DeleteBlock(block).apply(state))
+      set((state) => new DeleteBlock(block).apply(state));
     },
 
     findBlock: (root: Block | Document, selector: BlockQuery) => {
-      const matches = findBlocks(get(), root, selector)
-      return matches.length > 0 ? matches[0] : undefined
+      const matches = findBlocks(get(), root, selector);
+      return matches.length > 0 ? matches[0] : undefined;
     },
 
     findBlocks(root: Block | Document, selector: BlockQuery) {
-      return findBlocks(get(), root, selector)
+      return findBlocks(get(), root, selector);
     },
 
     applyBlockTransformations: (transformations: BlockTransformation[]) => {
       set((state: BlockStoreState) => {
-        return transformations.reduce((acc, transformation) => transformation.apply(acc), state)
-      })
+        return transformations.reduce(
+          (acc, transformation) => transformation.apply(acc),
+          state,
+        );
+      });
     },
-  })) as StoreApi<BlockStore>
-}
+  })) as StoreApi<BlockStore>;
+};

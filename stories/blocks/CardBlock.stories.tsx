@@ -1,6 +1,6 @@
+import { Card } from "@/components/blocks/index.js";
 import React from "react";
-import { Card } from "../../src/components/blocks/Card";
-import { BlockStoryTemplate } from "../BlockStoryTemplate";
+import { BlockStoryTemplate } from "../BlockStoryTemplate.js";
 import {
   CollapsibleSection,
   ListInSection,
@@ -8,7 +8,7 @@ import {
   PlainParagraph,
   PlainSection,
   WrapInCard,
-} from "../storyContent";
+} from "../storyContent.js";
 
 export default {
   component: Card,

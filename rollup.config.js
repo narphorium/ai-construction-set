@@ -24,7 +24,7 @@ const external = [
 const typeDeclarationPlugin = typescript({
   tsconfig: "./tsconfig.json",
   declaration: true,
-  declarationDir: "./dist/types",
+  declarationDir: "./dist/types/src",
   emitDeclarationOnly: true,
   outDir: undefined,
   outputToFilesystem: true,
@@ -50,6 +50,13 @@ const plugins = [
   terser(),
 ];
 
+function onwarn(warning, warn) {
+  if (warning.code === "EVAL" && warning.id?.includes("@storybook")) {
+    return;
+  }
+  warn(warning);
+}
+
 const createConfigRoot = (input, output) => ({
   input,
   output: [
@@ -58,6 +65,7 @@ const createConfigRoot = (input, output) => ({
   ],
   plugins: [...plugins, typeDeclarationPlugin],
   external: external,
+  onwarn,
 });
 
 const createConfig = (input, output) => ({
@@ -66,8 +74,9 @@ const createConfig = (input, output) => ({
     { file: output.cjs, format: "cjs", sourcemap: "inline", globals: globals },
     { file: output.esm, format: "esm", sourcemap: "inline", globals: globals },
   ],
-  plugins: plugins,
+  plugins: [...plugins],
   external: external,
+  onwarn,
 });
 
 export default [

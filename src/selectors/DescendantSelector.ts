@@ -1,6 +1,6 @@
-import { RecursiveBlockSelector } from "./RecursiveBlockSelector";
-import { ChildSelector } from "./ChildSelector";
-import { BlockRegistry } from "../core/BlockRegistry";
+import { BlockRegistry } from "@/core/BlockRegistry.js";
+import { ChildSelector } from "./ChildSelector.js";
+import { RecursiveBlockSelector } from "./RecursiveBlockSelector.js";
 
 export class DescendantSelector extends RecursiveBlockSelector {
   constructor(protected registry: BlockRegistry) {

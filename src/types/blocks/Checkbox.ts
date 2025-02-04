@@ -1,11 +1,11 @@
-import { createHighlightable, Highlightable } from "../behaviors";
+import { createHighlightable, Highlightable } from "../behaviors/index.js";
 import {
   BlockActions,
   BlockGetter,
   BlockSetter,
   createBlock,
   type Block,
-} from "./Block";
+} from "./Block.js";
 
 export const CheckboxType = "aics:block.checkbox";
 

@@ -1,9 +1,12 @@
+import { BlockQuery } from "@/core/BlockQuery.js";
+import { BlockActions, BlockID, BlockProps } from "@/types/blocks/Block.js";
 import { shallow } from "zustand/shallow";
-import { BlockQuery } from "../core/BlockQuery";
-import { BlockActions, BlockID, BlockProps } from "../types/blocks/Block";
-import { useBlockRegistry } from "./useBlockRegistry";
-import { useBlockStoreActions, useBlockStoreSelector } from "./useBlockStore";
-import { useDocument } from "./useDocument";
+import { useBlockRegistry } from "./useBlockRegistry.js";
+import {
+  useBlockStoreActions,
+  useBlockStoreSelector,
+} from "./useBlockStore.js";
+import { useDocument } from "./useDocument.js";
 
 export const useBlock = <P extends BlockProps, A extends BlockActions>(
   selector: BlockID | BlockQuery,

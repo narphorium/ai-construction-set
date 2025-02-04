@@ -1,10 +1,10 @@
-import { BlockComponentProps } from "@/components/blocks/Base";
-import { CollapsibleHeading } from "@/components/blocks/CollapsibleHeading";
-import { CollapsibleSectionContent } from "@/components/blocks/CollapsibleSectionContent";
-import { cn } from "@/styles";
+import { CollapsibleComponentProps } from "@/components/behaviors/withCollapsible.js";
+import { BlockComponentProps } from "@/components/blocks/Base.js";
+import { CollapsibleHeading } from "@/components/blocks/CollapsibleHeading.js";
+import { CollapsibleSectionContent } from "@/components/blocks/CollapsibleSectionContent.js";
+import { cn } from "@/styles/index.js";
 import React, { forwardRef } from "react";
 import { SymbolCodepoints } from "react-material-symbols";
-import { CollapsibleComponentProps } from "../behaviors";
 
 export interface CollapsibleSectionProps
   extends BlockComponentProps,

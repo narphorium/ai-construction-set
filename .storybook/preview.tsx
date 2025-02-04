@@ -1,31 +1,31 @@
 import { DocsContainer } from "@storybook/blocks";
 import React, { useState } from "react";
 import "react-material-symbols/rounded";
-import { createGlobalStyle } from "styled-components";
 import {
   BlockRegistryProvider,
   BlockRendererProvider,
   BlockStoreProvider,
   DocumentProvider,
+  StorybookThemeProvider,
 } from "../src/context";
-import { StorybookThemeProvider } from "../src/context/StorybookThemeProvider";
-import { BlockRenderer } from "../src/core";
-import { DefaultBlockRegistry } from "../src/core/BlockRegistry";
-import { createBlockStore } from "../src/core/BlockStore";
-import { DefaultBlockRenderer } from "../src/core/DefaultBlockRenderer";
-import { useStorybookDarkMode } from "../src/hooks/useStorybookDarkMode";
+import {
+  BlockRenderer,
+  createBlockStore,
+  DefaultBlockRegistry,
+  DefaultBlockRenderer,
+} from "../src/core";
+import { useStorybookDarkMode } from "../src/hooks";
 import "../src/styles/default-theme.css";
 import "../src/styles/index.css";
+import "../src/styles/storybook.css";
 import { createDocument } from "../src/types";
 
-const GlobalStyles = createGlobalStyle`
-    body,
-    .sbdocs-preview .docs-story {
-      background-color: hsl(var(--background)) !important;
-    }
-    `;
-
 const blockRegistry = new DefaultBlockRegistry();
+const blockStore = createBlockStore(undefined, blockRegistry);
+const renderer: BlockRenderer = new DefaultBlockRenderer(
+  blockRegistry,
+  blockStore,
+);
 
 const ExampleContainer = ({
   children,
@@ -38,11 +38,7 @@ const ExampleContainer = ({
   // const { darkMode, setDarkMode } = useStorybookDarkMode();
   const [darkMode, setDarkMode] = useState(false);
   const theme = "default";
-  const blockStore = createBlockStore(undefined, blockRegistry);
-  const renderer: BlockRenderer = new DefaultBlockRenderer(
-    blockRegistry,
-    blockStore,
-  );
+
   const [document, setDocument] = React.useState(
     createDocument("storybook-document"),
   );
@@ -53,7 +49,6 @@ const ExampleContainer = ({
         <BlockStoreProvider store={blockStore}>
           <BlockRendererProvider renderer={renderer}>
             <DocumentProvider document={document}>
-              <GlobalStyles />
               <DocsContainer context={context} {...props}>
                 {children}
               </DocsContainer>
@@ -68,8 +63,6 @@ const ExampleContainer = ({
 const StoryDecorator = (Story: any, context: any) => {
   const { darkMode, setDarkMode } = useStorybookDarkMode();
   const theme = "default";
-  const blockStore = React.useMemo(() => createBlockStore(), []);
-  const renderer = new DefaultBlockRenderer(blockRegistry, blockStore);
   const [document] = React.useState(() => createDocument("storybook-document"));
 
   return (
@@ -78,7 +71,6 @@ const StoryDecorator = (Story: any, context: any) => {
         <BlockStoreProvider store={blockStore}>
           <BlockRendererProvider renderer={renderer}>
             <DocumentProvider document={document}>
-              <GlobalStyles />
               <Story />
             </DocumentProvider>
           </BlockRendererProvider>

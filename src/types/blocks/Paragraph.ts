@@ -1,11 +1,11 @@
-import { createHighlightable, HighlightableProps } from "../behaviors";
+import { createHighlightable, HighlightableProps } from "../behaviors/index.js";
 import {
   BlockActions,
   BlockGetter,
   BlockProps,
   BlockSetter,
   createBlock,
-} from "./Block";
+} from "./Block.js";
 
 export const ParagraphType = "aics:block.paragraph";
 

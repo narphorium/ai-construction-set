@@ -1,12 +1,30 @@
 import { SymbolCodepoints } from "react-material-symbols";
-import { Collapsible, Highlightable } from "../behaviors";
-import { BlockActions, BlockProps, createBlock } from "../blocks";
-import { BlockGetter, BlockSetter } from "../blocks/Block";
+import {
+  BlockActions,
+  BlockGetter,
+  BlockProps,
+  BlockSetter,
+  createBlock,
+  createBlockActions,
+} from "types/blocks/Block.js";
+import {
+  CollapsibleActions,
+  CollapsibleProps,
+  createCollapsibleActions,
+} from "../behaviors/Collapsible.js";
+import {
+  createHighlightableActions,
+  HighlightableActions,
+  HighlightableProps,
+} from "../behaviors/Highlightable.js";
 
 export const ListType = "aics:layout.list";
 export const ListItemType = "aics:block.list-item";
 
-export interface ListItemProps extends BlockProps, Highlightable, Collapsible {
+export interface ListItemProps
+  extends BlockProps,
+    HighlightableProps,
+    CollapsibleProps {
   summary?: string;
   icon?: SymbolCodepoints;
 }
@@ -21,13 +39,20 @@ export const createListItem = (
   } as ListItemProps;
 };
 
-export interface ListItemActions extends BlockActions {}
+export interface ListItemActions
+  extends BlockActions,
+    CollapsibleActions,
+    HighlightableActions {}
 
 export const createListItemActions = (
   get: BlockGetter<ListItemProps>,
   set: BlockSetter<ListItemProps>,
 ): ListItemActions => {
-  return {};
+  return {
+    ...createBlockActions(get, set),
+    ...createCollapsibleActions(get, set),
+    ...createHighlightableActions(get, set),
+  };
 };
 
 export type ListItem = ListItemProps & ListItemActions;

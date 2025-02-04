@@ -1,10 +1,10 @@
+import { Pagination } from "@/components/fragments/Pagination.js";
+import { cn } from "@/styles/index.js";
 import { cva } from "class-variance-authority";
 import React from "react";
-import { cn } from "../../styles";
-import { Pagination } from "../fragments/Pagination";
 
 export const nestedLayoutTitleVariants = cva(
-  "[&_.aics-tree-title]:before:bg-tree relative pl-6 [&_.aics-tree-title]:before:absolute [&_.aics-tree-title]:before:left-2 [&_.aics-tree-title]:before:top-[18px] [&_.aics-tree-title]:before:z-[1] [&_.aics-tree-title]:before:h-[18px] [&_.aics-tree-title]:before:w-0.5 [&_.aics-tree-title]:before:content-['']",
+  "relative pl-6 [&_.aics-tree-title]:before:absolute [&_.aics-tree-title]:before:left-2 [&_.aics-tree-title]:before:top-[18px] [&_.aics-tree-title]:before:z-[1] [&_.aics-tree-title]:before:h-[18px] [&_.aics-tree-title]:before:w-0.5 [&_.aics-tree-title]:before:bg-tree [&_.aics-tree-title]:before:content-['']",
 );
 
 interface NestedLayoutTitleProps {

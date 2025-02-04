@@ -1,3 +1,4 @@
+import { Block } from "@/types/blocks/index.js";
 import { cva } from "class-variance-authority";
 import React, {
   forwardRef,
@@ -9,9 +10,7 @@ import React, {
   type FunctionComponent,
   type Ref,
 } from "react";
-import { Pageable } from "../../types/behaviors";
-import { Block } from "../../types/blocks";
-import { BehaviorComponentProps } from "./Base";
+import { BehaviorComponentProps } from "./Base.js";
 
 const pageableVariants = cva("", {
   variants: {

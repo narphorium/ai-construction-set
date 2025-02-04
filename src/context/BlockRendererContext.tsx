@@ -1,4 +1,4 @@
-import { type BlockRenderer } from "@/core/BlockRenderer";
+import { type BlockRenderer } from "@/core/BlockRenderer.js";
 import React, { createContext, type ReactNode, useRef } from "react";
 
 interface BlockRendererContextProps {

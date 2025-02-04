@@ -3,14 +3,14 @@ import {
   createCollapsible,
   createHighlightable,
   Highlightable,
-} from "../behaviors";
+} from "../behaviors/index.js";
 import {
   Block,
   BlockActions,
   BlockGetter,
   BlockSetter,
   createBlock,
-} from "./Block";
+} from "./Block.js";
 
 export const SectionType = "aics:block.section";
 

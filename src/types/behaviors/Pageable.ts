@@ -4,7 +4,7 @@ import {
   BehaviorGetter,
   BehaviorSetter,
   createBehavior,
-} from "./Behavior";
+} from "./Behavior.js";
 
 export const PageableType = "aics:behavior.pageable";
 

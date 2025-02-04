@@ -1,13 +1,17 @@
-import { BlockRegistry } from "../core/BlockRegistry";
-import { Block } from "../types/blocks/Block";
-import { BlockStoreState } from "../core/BlockStore";
-import { BlockSelector } from "./BlockSelector";
+import { BlockRegistry } from "@/core/BlockRegistry.js";
+import { BlockStoreState } from "@/core/BlockStore.js";
+import { Block } from "@/types/blocks/Block.js";
+import { BlockSelector } from "./BlockSelector.js";
 
 export class BlockPropertyMatcher<T extends Block> extends BlockSelector {
-  private type = "aics:matcher.block-property"
+  private type = "aics:matcher.block-property";
 
-  constructor(protected registry: BlockRegistry, private property: keyof T, private value: any) { 
-    super(registry)
+  constructor(
+    protected registry: BlockRegistry,
+    private property: keyof T,
+    private value: any,
+  ) {
+    super(registry);
   }
 
   match(state: BlockStoreState, root: Block, block: Block): boolean {

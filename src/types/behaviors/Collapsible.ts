@@ -4,7 +4,7 @@ import {
   BehaviorProps,
   BehaviorSetter,
   createBehavior,
-} from "./Behavior";
+} from "@/types/behaviors/Behavior.js";
 
 export const CollapsibleType = "aics:behavior.collapsible";
 
