@@ -9,10 +9,9 @@ import {
   StorybookThemeProvider,
 } from "../src/context";
 import {
-  BlockRenderer,
+  createBlockRenderer,
   createBlockStore,
   DefaultBlockRegistry,
-  DefaultBlockRenderer,
 } from "../src/core";
 import { useStorybookDarkMode } from "../src/hooks";
 import "../src/styles/default-theme.css";
@@ -22,10 +21,7 @@ import { createDocument } from "../src/types";
 
 const blockRegistry = new DefaultBlockRegistry();
 const blockStore = createBlockStore(undefined, blockRegistry);
-const renderer: BlockRenderer = new DefaultBlockRenderer(
-  blockRegistry,
-  blockStore,
-);
+const renderer = createBlockRenderer(blockRegistry, blockStore.getState());
 
 const ExampleContainer = ({
   children,
