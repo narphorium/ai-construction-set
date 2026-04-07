@@ -4,8 +4,8 @@ import {
   BlockGetter,
   BlockProps,
   BlockSetter,
-  createBlock,
-  createBlockActions,
+  createBaseBlock,
+  createBaseBlockActions,
 } from "types/blocks/Block.js";
 import {
   CollapsibleActions,
@@ -33,7 +33,7 @@ export const createListItem = (
   props: Partial<ListItemProps> = {},
 ): ListItemProps => {
   return {
-    ...createBlock(props as Partial<BlockProps>),
+    ...createBaseBlock(props as Partial<BlockProps>),
     ...props,
     type: ListItemType,
   } as ListItemProps;
@@ -49,7 +49,7 @@ export const createListItemActions = (
   set: BlockSetter<ListItemProps>,
 ): ListItemActions => {
   return {
-    ...createBlockActions(get, set),
+    ...createBaseBlockActions(get, set),
     ...createCollapsibleActions(get, set),
     ...createHighlightableActions(get, set),
   };
@@ -61,7 +61,7 @@ export interface ListProps extends BlockProps {}
 
 export const createList = (props: Partial<ListProps> = {}): ListProps => {
   return {
-    ...createBlock(props as Partial<BlockProps>),
+    ...createBaseBlock(props as Partial<BlockProps>),
     ...props,
     type: ListType,
   } as ListProps;

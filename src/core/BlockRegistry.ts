@@ -94,240 +94,223 @@ export interface BehaviorSpec<
   actionsBuilder: BehaviorActionsBuilder<P, A>;
 }
 
-export class BlockRegistry {
-  blocksByType: { [key: string]: any };
-  behaviorsByType: { [key: string]: any };
-  private currentSession: Session | null = null;
+export type BlockRegistry = {
+  blocks: { [key: string]: BlockSpec<any, any> };
+  behaviors: { [key: string]: BehaviorSpec<any, any> };
+};
 
-  constructor() {
-    this.blocksByType = {};
-    this.behaviorsByType = {};
+export const createBlockRegistry = (): BlockRegistry => ({
+  blocks: {},
+  behaviors: {},
+});
+
+export const registerBlock = <P extends BlockProps, A extends BlockActions>(
+  registry: BlockRegistry,
+  spec: BlockSpec<P, A>,
+): BlockRegistry => ({
+  ...registry,
+  blocks: { ...registry.blocks, [spec.name]: spec },
+});
+
+export const registerBehavior = <
+  P extends BehaviorProps,
+  A extends BehaviorActions,
+>(
+  registry: BlockRegistry,
+  spec: BehaviorSpec<P, A>,
+): BlockRegistry => ({
+  ...registry,
+  behaviors: { ...registry.behaviors, [spec.name]: spec },
+});
+
+export const createBlock = <P extends BlockProps>(
+  registry: BlockRegistry,
+  blockType: string,
+  props: Partial<any> = {},
+): P => {
+  const blockSpec = registry.blocks[blockType];
+  if (!blockSpec) {
+    throw new Error(`Block type ${blockType} not registered`);
   }
 
-  generateUUID(): string {
-    return uuid.v4();
+  // Generate a UUID if one is not provided
+  if (!props.uuid) {
+    props.uuid = uuid.v4();
   }
 
-  registerBlock<P extends BlockProps, A extends BlockActions>(
-    spec: BlockSpec<P, A>,
-  ): void {
-    this.blocksByType[spec.name] = spec;
-  }
+  console.log(`Creating block: ${blockType}, uuid: ${props.uuid || "new"}`);
 
-  registerBehavior<P extends BehaviorProps, A extends BehaviorActions>(
-    spec: BehaviorSpec<P, A>,
-  ): void {
-    this.behaviorsByType[spec.name] = spec;
-  }
-
-  createBlock<P extends BlockProps>(
-    blockType: string,
-    parent?: BlockProps,
-    props: Partial<any> = {},
-  ): P {
-    const blockSpec = this.blocksByType[blockType];
-    if (blockSpec === undefined) {
-      throw new Error(`Block type ${blockType} not registered`);
-    }
-
-    // Generate a UUID if one is not provided
-    if (props.uuid === "" || props.uuid === undefined) {
-      props.uuid = this.generateUUID();
-    }
-
-    // Set the parent if provided
-    if (parent !== undefined) {
-      props.parent = parent.uuid;
-      parent.children.push(props.uuid);
-    }
-
-    let block = blockSpec.builder(props as Partial<P>);
-    blockSpec.behaviors.forEach((behaviorType: string) => {
-      const behaviorSpec = this.behaviorsByType[behaviorType];
-      if (behaviorSpec === undefined) {
+  const block = blockSpec.behaviors.reduce(
+    (block, behaviorType) => {
+      const behaviorSpec = registry.behaviors[behaviorType];
+      if (!behaviorSpec) {
         throw new Error(`Behavior type ${behaviorType} not registered`);
       }
-      block = { ...block, ...behaviorSpec.builder(props) };
-    });
+      return { ...block, ...behaviorSpec.builder(props) };
+    },
+    blockSpec.builder(props as Partial<P>),
+  );
 
-    if (this.currentSession) {
-      this.currentSession.addBlock(block);
-    }
+  return block;
+};
 
-    return block;
+export const createBlockActions = <
+  P extends BlockProps,
+  A extends BlockActions,
+>(
+  registry: BlockRegistry,
+  get: BlockGetter<P>,
+  set: BlockSetter<P>,
+): A => {
+  const block = get();
+  const blockSpec = registry.blocks[block.type];
+  if (!blockSpec) {
+    throw new Error(`Block type ${block.type} not registered`);
   }
 
-  createBlockActions<P extends BlockProps, A extends BlockActions>(
-    get: BlockGetter<P>,
-    set: BlockSetter<P>,
-  ): A {
-    const block = get();
-    const blockSpec = this.blocksByType[block.type];
-    if (blockSpec === undefined) {
-      throw new Error(`Block type ${block.type} not registered`);
-    }
-
-    let blockActions = blockSpec.actionsBuilder(get, set);
-    blockSpec.behaviors.forEach((behaviorType: string) => {
-      const behaviorSpec = this.behaviorsByType[behaviorType];
-      if (behaviorSpec === undefined) {
+  return blockSpec.behaviors.reduce(
+    (actions, behaviorType) => {
+      const behaviorSpec = registry.behaviors[behaviorType];
+      if (!behaviorSpec) {
         throw new Error(`Behavior type ${behaviorType} not registered`);
       }
-      blockActions = {
-        ...blockActions,
+      return {
+        ...actions,
         ...behaviorSpec.actionsBuilder(get, set),
       };
-    });
-    return blockActions;
-  }
+    },
+    blockSpec.actionsBuilder(get, set),
+  );
+};
 
-  getBehaviors(blockType: string): string[] {
-    const blockSpec = this.blocksByType[blockType];
-    return blockSpec !== undefined ? blockSpec.behaviors : [];
-  }
+export const getBehaviors = (
+  registry: BlockRegistry,
+  blockType: string,
+): string[] => {
+  const blockSpec = registry.blocks[blockType];
+  return blockSpec ? blockSpec.behaviors : [];
+};
 
-  hasBehavior(blockType: string, behaviorType: string): boolean {
-    const behaviors = this.getBehaviors(blockType);
-    return behaviors.includes(behaviorType);
-  }
+export const hasBehavior = (
+  registry: BlockRegistry,
+  blockType: string,
+  behaviorType: string,
+): boolean => getBehaviors(registry, blockType).includes(behaviorType);
 
-  session(): Session {
-    if (this.currentSession === null) {
-      this.currentSession = new Session(this);
-    }
-    return this.currentSession;
-  }
+export const createDefaultRegistry = (): BlockRegistry => {
+  let registry = createBlockRegistry();
 
-  closeSession(): void {
-    this.currentSession = null;
-  }
-}
+  // Register blocks
+  registry = registerBlock(registry, {
+    name: CheckboxType,
+    builder: createCheckbox,
+    actionsBuilder: createCheckboxActions,
+    behaviors: [HighlightableType],
+  });
 
-class Session {
-  private blocks: BlockProps[] = [];
+  registry = registerBlock(registry, {
+    name: CodeType,
+    builder: createCode,
+    actionsBuilder: createCodeActions,
+    behaviors: [HighlightableType],
+  });
 
-  constructor(private blockRegistry: BlockRegistry) {}
+  registry = registerBlock(registry, {
+    name: ParagraphType,
+    builder: createParagraph,
+    actionsBuilder: createParagraphActions,
+    behaviors: [HighlightableType],
+  });
 
-  addBlock(block: BlockProps): void {
-    this.blocks.push(block);
-  }
+  registry = registerBlock(registry, {
+    name: CardType,
+    builder: createCard,
+    actionsBuilder: createCardActions,
+    behaviors: [HighlightableType],
+  });
 
-  getBlocks(): BlockProps[] {
-    return this.blocks;
-  }
+  registry = registerBlock(registry, {
+    name: SectionType,
+    builder: createSection,
+    actionsBuilder: createSectionActions,
+    behaviors: [HighlightableType, CollapsibleType],
+  });
 
-  close(): void {
-    this.blockRegistry.closeSession();
-  }
-}
+  registry = registerBlock(registry, {
+    name: SpanType,
+    builder: createSpan,
+    actionsBuilder: createSpanActions,
+    behaviors: [HighlightableType],
+  });
 
-export class DefaultBlockRegistry extends BlockRegistry {
-  constructor() {
-    super();
+  registry = registerBlock(registry, {
+    name: LabelType,
+    builder: createLabel,
+    actionsBuilder: createLabelActions,
+    behaviors: [HighlightableType],
+  });
 
-    // Register blocks
-    this.registerBlock({
-      name: CheckboxType,
-      builder: createCheckbox,
-      actionsBuilder: createCheckboxActions,
-      behaviors: [HighlightableType],
-    });
-    this.registerBlock({
-      name: CodeType,
-      builder: createCode,
-      actionsBuilder: createCodeActions,
-      behaviors: [HighlightableType],
-    });
-    this.registerBlock({
-      name: ParagraphType,
-      builder: createParagraph,
-      actionsBuilder: createParagraphActions,
-      behaviors: [HighlightableType],
-    });
-    this.registerBlock({
-      name: CardType,
-      builder: createCard,
-      actionsBuilder: createCardActions,
-      behaviors: [HighlightableType],
-    });
-    this.registerBlock({
-      name: SectionType,
-      builder: createSection,
-      actionsBuilder: createSectionActions,
-      behaviors: [HighlightableType, CollapsibleType],
-    });
-    this.registerBlock({
-      name: SpanType,
-      builder: createSpan,
-      actionsBuilder: createSpanActions,
-      behaviors: [HighlightableType],
-    });
-    this.registerBlock({
-      name: LabelType,
-      builder: createLabel,
-      actionsBuilder: createLabelActions,
-      behaviors: [HighlightableType],
-    });
-    this.registerBlock({
-      name: TableRowType,
-      builder: createTableRow,
-      actionsBuilder: createTableRowActions,
-      behaviors: [HighlightableType],
-    });
+  registry = registerBlock(registry, {
+    name: TableRowType,
+    builder: createTableRow,
+    actionsBuilder: createTableRowActions,
+    behaviors: [HighlightableType],
+  });
 
-    // Register layouts
-    this.registerBlock({
-      name: ListType,
-      builder: createList,
-      actionsBuilder: createListActions,
-      behaviors: [],
-    });
-    this.registerBlock({
-      name: ListItemType,
-      builder: createListItem,
-      actionsBuilder: createListItemActions,
-      behaviors: [CollapsibleType, HighlightableType],
-    });
-    this.registerBlock({
-      name: TableType,
-      builder: createTable,
-      actionsBuilder: createTableActions,
-      behaviors: [HighlightableType, PageableType],
-    });
-    this.registerBlock({
-      name: TableCellType,
-      builder: createTableCell,
-      actionsBuilder: createTableCellActions,
-      behaviors: [HighlightableType],
-    });
-    this.registerBlock({
-      name: TableRowType,
-      builder: createTableRow,
-      actionsBuilder: createTableRowActions,
-      behaviors: [HighlightableType],
-    });
-    this.registerBlock({
-      name: TreeType,
-      builder: createTree,
-      actionsBuilder: createTreeActions,
-      behaviors: [HighlightableType, PageableType],
-    });
+  registry = registerBlock(registry, {
+    name: TableCellType,
+    builder: createTableCell,
+    actionsBuilder: createTableCellActions,
+    behaviors: [HighlightableType],
+  });
 
-    // Register behaviors
-    this.registerBehavior({
-      name: CollapsibleType,
-      builder: createCollapsible,
-      actionsBuilder: createCollapsibleActions,
-    });
-    this.registerBehavior({
-      name: PageableType,
-      builder: createPageable,
-      actionsBuilder: createPageableActions,
-    });
-    this.registerBehavior({
-      name: HighlightableType,
-      builder: createHighlightable,
-      actionsBuilder: createHighlightableActions,
-    });
-  }
-}
+  registry = registerBlock(registry, {
+    name: ListItemType,
+    builder: createListItem,
+    actionsBuilder: createListItemActions,
+    behaviors: [CollapsibleType, HighlightableType],
+  });
+
+  // Register layouts
+  registry = registerBlock(registry, {
+    name: ListType,
+    builder: createList,
+    actionsBuilder: createListActions,
+    behaviors: [HighlightableType],
+  });
+
+  registry = registerBlock(registry, {
+    name: TableType,
+    builder: createTable,
+    actionsBuilder: createTableActions,
+    behaviors: [HighlightableType, PageableType],
+  });
+
+  registry = registerBlock(registry, {
+    name: TreeType,
+    builder: createTree,
+    actionsBuilder: createTreeActions,
+    behaviors: [HighlightableType, PageableType],
+  });
+
+  // Register behaviors
+  registry = registerBehavior(registry, {
+    name: CollapsibleType,
+    builder: createCollapsible,
+    actionsBuilder: createCollapsibleActions,
+  });
+
+  registry = registerBehavior(registry, {
+    name: PageableType,
+    builder: createPageable,
+    actionsBuilder: createPageableActions,
+  });
+
+  registry = registerBehavior(registry, {
+    name: HighlightableType,
+    builder: createHighlightable,
+    actionsBuilder: createHighlightableActions,
+  });
+
+  return registry;
+};

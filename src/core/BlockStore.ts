@@ -1,5 +1,9 @@
 import { BlockQuery } from "@/core/BlockQuery.js";
-import { BlockRegistry } from "@/core/BlockRegistry.js";
+import {
+  BlockRegistry,
+  createBlockActions,
+  createDefaultRegistry,
+} from "@/core/BlockRegistry.js";
 import { ChildSelector } from "@/selectors/ChildSelector.js";
 import {
   AddBlock,
@@ -18,7 +22,12 @@ import {
   UpdateDocument,
 } from "@/transformations/DocumentTransformation.js";
 import { Behavior, BehaviorProps } from "@/types/behaviors/Behavior.js";
-import { Block, BlockID, BlockProps } from "@/types/blocks/Block.js";
+import {
+  Block,
+  BlockActions,
+  BlockID,
+  BlockProps,
+} from "@/types/blocks/Block.js";
 import { DocumentID, DocumentProps, type Document } from "@/types/Document.js";
 import { createStore, type StoreApi } from "zustand/vanilla";
 
@@ -47,7 +56,9 @@ export interface BlockStoreActions {
   addBlock: <T extends Block>(block: T) => string;
 
   addChildBlock: <T extends Block>(block: T, parent: BlockID) => string;
-  getBlock: <T extends Block>(uuid: string) => T | undefined;
+  getBlock: <P extends BlockProps, A extends BlockActions>(
+    uuid: BlockID,
+  ) => (P & A) | undefined;
   getChildBlocks: <T extends Block>(parent: BlockID) => T[];
   findBlock: (
     root: Document | Block,
@@ -115,9 +126,26 @@ const findBlocks = (
   return rootMatches;
 };
 
+const addActionsToBlock = <P extends BlockProps, A extends BlockActions>(
+  uuid: BlockID,
+  registry: BlockRegistry,
+  get: () => BlockStoreState,
+  set: (updates: Partial<BlockStoreState>) => void,
+): P & A => {
+  const block = get().blocks.get(uuid);
+
+  if (!block) {
+    throw new Error("Block not found or multiple blocks found");
+  }
+
+  const blockActions = createBlockActions<P, A>(registry, get, set);
+
+  return { ...block, ...blockActions };
+};
+
 export const createBlockStore = (
   initState: BlockStoreState = defaultInitState,
-  registry: BlockRegistry = new BlockRegistry(),
+  registry: BlockRegistry = createDefaultRegistry(),
 ): StoreApi<BlockStore> => {
   return createStore<BlockStore>()((set, get) => ({
     ...initState,
@@ -129,8 +157,15 @@ export const createBlockStore = (
     getChildBlockIds: (parent: Block) =>
       new ChildSelector(registry).run(get(), parent),
 
-    getBlock: <T extends Block>(uuid: BlockID) =>
-      get().blocks.get(uuid) as T | undefined,
+    getBlock: <P extends BlockProps, A extends BlockActions>(
+      uuid: BlockID,
+    ): (P & A) | undefined => {
+      let block = get().blocks.get(uuid) as P | undefined;
+      if (block === undefined) {
+        throw new Error(`Block with uuid ${uuid} not found`);
+      }
+      return addActionsToBlock<P, A>(uuid, registry, get, set);
+    },
 
     getBehavior: <T extends Behavior>(uuid: BlockID) =>
       get().blocks.get(uuid) as T | undefined,

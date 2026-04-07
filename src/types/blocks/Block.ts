@@ -11,7 +11,9 @@ export interface BlockProps {
   theme?: string;
 }
 
-export const createBlock = (props: Partial<BlockProps> = {}): BlockProps => {
+export const createBaseBlock = (
+  props: Partial<BlockProps> = {},
+): BlockProps => {
   return {
     uuid: "",
     type: "aics:unknown",
@@ -26,7 +28,7 @@ export type BlockSetter<P extends BlockProps> = (state: Partial<P>) => void;
 
 export interface BlockActions {}
 
-export const createBlockActions = (
+export const createBaseBlockActions = (
   get: BlockGetter<BlockProps>,
   set: BlockSetter<BlockProps>,
 ): BlockActions => {

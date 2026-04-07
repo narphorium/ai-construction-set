@@ -3,7 +3,7 @@ import {
   BlockActions,
   BlockGetter,
   BlockSetter,
-  createBlock,
+  createBaseBlock,
   type Block,
 } from "./Block.js";
 
@@ -17,7 +17,7 @@ export const createCheckbox = (
   props: Partial<CheckboxProps> = {},
 ): CheckboxProps => {
   return {
-    ...createBlock(props as Partial<Block>),
+    ...createBaseBlock(props as Partial<Block>),
     ...createHighlightable(props as Partial<Highlightable>),
     checked: false,
     ...props,

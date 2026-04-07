@@ -4,7 +4,7 @@ import {
   BlockGetter,
   BlockProps,
   BlockSetter,
-  createBlock,
+  createBaseBlock,
 } from "./Block.js";
 
 export const SpanType = "aics:block.span";
@@ -16,7 +16,7 @@ export interface SpanProps extends BlockProps, HighlightableProps {
 
 export const createSpan = (props: Partial<SpanProps> = {}): SpanProps => {
   return {
-    ...createBlock(props as Partial<BlockProps>),
+    ...createBaseBlock(props as Partial<BlockProps>),
     ...createHighlightable(props as Partial<HighlightableProps>),
     datatype: "string",
     content: "",

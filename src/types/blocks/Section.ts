@@ -9,7 +9,7 @@ import {
   BlockActions,
   BlockGetter,
   BlockSetter,
-  createBlock,
+  createBaseBlock,
 } from "./Block.js";
 
 export const SectionType = "aics:block.section";
@@ -24,7 +24,7 @@ export const createSection = (
   props: Partial<SectionProps> = {},
 ): SectionProps => {
   return {
-    ...createBlock(props as Partial<Block>),
+    ...createBaseBlock(props as Partial<Block>),
     ...createHighlightable(props as Partial<Highlightable>),
     ...createCollapsible(props as Partial<Collapsible>),
     collapsible: false,

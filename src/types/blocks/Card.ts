@@ -9,8 +9,8 @@ import {
   BlockActions,
   BlockGetter,
   BlockSetter,
-  createBlock,
-  createBlockActions,
+  createBaseBlock,
+  createBaseBlockActions,
 } from "./Block.js";
 
 export const CardType = "aics:block.card";
@@ -19,7 +19,7 @@ export interface CardProps extends Block, Highlightable {}
 
 export const createCard = (props: Partial<CardProps> = {}): CardProps => {
   return {
-    ...createBlock(props as Partial<Block>),
+    ...createBaseBlock(props as Partial<Block>),
     ...createHighlightable(props as Partial<Highlightable>),
     ...props,
     type: CardType,
@@ -33,7 +33,7 @@ export const createCardActions = (
   set: BlockSetter<CardProps>,
 ): CardActions => {
   return {
-    ...createBlockActions(get, set),
+    ...createBaseBlockActions(get, set),
     ...createHighlightableActions(get, set),
   };
 };

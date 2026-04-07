@@ -1,26 +1,31 @@
 import { BlockRegistry } from "@/core/BlockRegistry.js";
+import { BlockStore } from "@/core/BlockStore.js";
+import { useBlockRegistry } from "@/hooks/useBlockRegistry.js";
 import { useBlockRenderer } from "@/hooks/useBlockRenderer.js";
-import { useStoryContent } from "@/hooks/useStoryContent.js";
+import { useBlockStore } from "@/hooks/useBlockStore.js";
 import { type Block } from "@/types/blocks/index.js";
-import React from "react";
+import React, { useMemo } from "react";
 
 export interface BlockStoryProps<T extends Block> {
-  builder: (registry: BlockRegistry) => T;
-  theme?: string;
-  highlighted?: boolean;
+  builder: (registry: BlockRegistry, store: BlockStore) => T;
 }
 
 export const BlockStoryTemplate = <T extends Block>({
   builder,
-  theme,
-  highlighted,
 }: BlockStoryProps<T>): JSX.Element => {
-  const createAndPersistContent = useStoryContent(builder);
-  const block = React.useMemo(
-    () => createAndPersistContent(),
-    [createAndPersistContent],
-  );
+  const registry = useBlockRegistry();
+  const store = useBlockStore();
   const renderer = useBlockRenderer();
+
+  // Use useMemo to ensure the builder function only runs once
+  const block = useMemo(() => {
+    console.log("Calling builder", builder);
+    const block = builder(registry, store);
+    const storedBlock = store.getBlock(block.uuid);
+    return storedBlock;
+  }, [registry, store, builder]);
+
+  console.log("Block", block);
 
   return <>{block && renderer.render(block)}</>;
 };

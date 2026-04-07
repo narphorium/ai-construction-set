@@ -9,7 +9,7 @@ import {
   BlockGetter,
   BlockProps,
   BlockSetter,
-  createBlock,
+  createBaseBlock,
 } from "../blocks/Block.js";
 
 export const TableType = "aics:layout.table";
@@ -24,7 +24,7 @@ export const createTableRow = (
   props: Partial<TableRowProps> = {},
 ): TableRowProps => {
   return {
-    ...createBlock(props as Partial<BlockProps>),
+    ...createBaseBlock(props as Partial<BlockProps>),
     ...createHighlightable(props as Partial<HighlightableProps>),
     isHeader: false,
     ...props,
@@ -39,7 +39,7 @@ export interface TableProps
 
 export const createTable = (props: Partial<TableProps>): TableProps => {
   return {
-    ...createBlock(props as Partial<BlockProps>),
+    ...createBaseBlock(props as Partial<BlockProps>),
     ...createHighlightable(props as Partial<HighlightableProps>),
     ...createPageable(props as Partial<PageableProps>),
     ...props,
@@ -74,7 +74,7 @@ export const createTableCell = (
   props: Partial<TableCellProps> = {},
 ): TableCellProps => {
   return {
-    ...createBlock(props as Partial<BlockProps>),
+    ...createBaseBlock(props as Partial<BlockProps>),
     ...createHighlightable(props as Partial<HighlightableProps>),
     ...props,
     type: TableCellType,

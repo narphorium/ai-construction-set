@@ -1,4 +1,5 @@
 import { BlockQuery } from "@/core/BlockQuery.js";
+import { createBlockActions } from "@/core/BlockRegistry.js";
 import { BlockActions, BlockID, BlockProps } from "@/types/blocks/Block.js";
 import { shallow } from "zustand/shallow";
 import { useBlockRegistry } from "./useBlockRegistry.js";
@@ -18,7 +19,7 @@ export const useBlock = <P extends BlockProps, A extends BlockActions>(
   const block =
     typeof selector === "string"
       ? useBlockStoreSelector(
-          (state) => state.getBlock<P>(selector as BlockID),
+          (state) => state.getBlock<P, A>(selector as BlockID),
           shallow,
         )
       : document
@@ -37,7 +38,7 @@ export const useBlock = <P extends BlockProps, A extends BlockActions>(
     actions.updateBlock(block.uuid, updates);
   };
 
-  const blockActions = registry.createBlockActions<P, A>(get, set);
+  const blockActions = createBlockActions<P, A>(registry, get, set);
 
   return { ...block, ...blockActions };
 };

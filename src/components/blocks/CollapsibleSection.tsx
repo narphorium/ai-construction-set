@@ -14,17 +14,21 @@ export interface CollapsibleSectionProps
   onTransitionEnd?: () => void;
 }
 
-export const CollapsibleSection = forwardRef(function CollapsibleSection({
-  children,
-  collapsed,
-  setCollapsed,
-  summary,
-  icon,
-  className,
-  onTransitionEnd,
-}: CollapsibleSectionProps): JSX.Element {
+export const CollapsibleSection = forwardRef(function CollapsibleSection(
+  {
+    children,
+    collapsed,
+    setCollapsed,
+    summary,
+    icon,
+    className,
+    onTransitionEnd,
+  }: CollapsibleSectionProps,
+  ref: React.Ref<HTMLDivElement>,
+): JSX.Element {
   return (
     <div
+      ref={ref}
       className={cn("group min-h-7 text-sm", className, {
         collapsible: summary !== undefined,
         collapsed: collapsed,

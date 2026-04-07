@@ -1,7 +1,7 @@
+import { TableLayout } from "@/components/layouts/index.js";
 import React from "react";
-import { TableLayout } from "../../src/components/layouts";
-import { BlockStoryTemplate } from "../BlockStoryTemplate";
-import { CollapsibleTable, SimpleTable, WrapInCard } from "../storyContent";
+import { BlockStoryTemplate } from "../BlockStoryTemplate.js";
+import { CollapsibleTable, SimpleTable, WrapInCard } from "../storyContent.js";
 
 export default {
   component: TableLayout,
@@ -11,14 +11,16 @@ export default {
 
 export const Default = () => (
   <BlockStoryTemplate
-    builder={WrapInCard((registry, parent) => SimpleTable(registry, parent))}
+    builder={WrapInCard((registry, store, parent) =>
+      SimpleTable(registry, store, parent),
+    )}
   />
 );
 
 export const Collapsible = () => (
   <BlockStoryTemplate
-    builder={WrapInCard((registry, parent) =>
-      CollapsibleTable(registry, parent),
+    builder={WrapInCard((registry, store, parent) =>
+      CollapsibleTable(registry, store, parent),
     )}
   />
 );
@@ -26,7 +28,7 @@ export const Collapsible = () => (
 export const Highlighted = () => (
   <BlockStoryTemplate
     builder={WrapInCard(
-      (registry, parent) => SimpleTable(registry, parent),
+      (registry, store, parent) => SimpleTable(registry, store, parent),
       true,
     )}
   />

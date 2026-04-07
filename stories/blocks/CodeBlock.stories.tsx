@@ -1,7 +1,7 @@
 import React from "react";
-import { CodeBlock } from "../../src/components/blocks/CodeBlock";
-import { BlockStoryTemplate } from "../BlockStoryTemplate";
-import { SimplePythonCode, WrapInTheme } from "../storyContent";
+import { CodeBlock } from "../../src/components/blocks/CodeBlock.js";
+import { BlockStoryTemplate } from "../BlockStoryTemplate.js";
+import { SimplePythonCode, WrapInTheme } from "../storyContent.js";
 
 export default {
   component: CodeBlock,

@@ -76,7 +76,7 @@ import {
 } from "@/types/layouts/index.js";
 import React, { type ForwardRefExoticComponent } from "react";
 import { SymbolCodepoints } from "react-material-symbols";
-import { BlockRegistry } from "./BlockRegistry.js";
+import { BlockRegistry, getBehaviors } from "./BlockRegistry.js";
 
 export interface BlockRenderer {
   render: (block: Block, parent?: Block) => JSX.Element;
@@ -228,6 +228,9 @@ function renderBlock(
     throw new Error(`Render handler not found for: ${block.type}`);
   }
 
+  console.log(`Rendering block: ${block.type}, uuid: ${block.uuid}`);
+  console.log(block);
+
   if (parent) {
     context.parentByBlock.set(block, parent);
   }
@@ -248,7 +251,7 @@ function renderBlock(
   }
 
   // Add HOCs based on behaviors
-  const behaviors = context.blockRegistry.getBehaviors(block.type);
+  const behaviors = getBehaviors(context.blockRegistry, block.type);
   for (const behavior of behaviors) {
     if (Component) {
       Component = withBehavior(Component, behavior, context);

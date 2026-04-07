@@ -5,4 +5,3 @@ export * from "./useBlockStore.js";
 export * from "./useDarkMode.js";
 export * from "./useDocument.js";
 export * from "./useStorybookDarkMode.js";
-export * from "./useStoryContent.js";

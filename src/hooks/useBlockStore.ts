@@ -1,8 +1,18 @@
 import { BlockStoreContext } from "@/context/BlockStoreContext.js";
 import { BlockStoreActions, type BlockStore } from "@/core/BlockStore.js";
 import { useContext } from "react";
-import { useStore } from "zustand";
 import { shallow } from "zustand/shallow";
+import { useStoreWithEqualityFn } from "zustand/traditional";
+
+export const useBlockStore = (): BlockStore => {
+  const blockStoreContext = useContext(BlockStoreContext);
+
+  if (blockStoreContext === null) {
+    throw new Error("useBlockStore must be used within BlockStoreProvider");
+  }
+
+  return blockStoreContext.getState();
+};
 
 export const useBlockStoreSelector = <Selected>(
   selector: (state: BlockStore) => Selected,
@@ -16,7 +26,7 @@ export const useBlockStoreSelector = <Selected>(
     );
   }
 
-  return useStore(blockStoreContext, selector, equalityFn);
+  return useStoreWithEqualityFn(blockStoreContext, selector, equalityFn);
 };
 
 export const useBlockStoreActions = (): BlockStoreActions => {
@@ -28,7 +38,7 @@ export const useBlockStoreActions = (): BlockStoreActions => {
     );
   }
 
-  return useStore(
+  return useStoreWithEqualityFn(
     blockStoreContext,
     (state) => ({
       applyBlockTransformations: state.applyBlockTransformations,

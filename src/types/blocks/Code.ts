@@ -2,7 +2,7 @@ import {
   BlockActions,
   BlockGetter,
   BlockSetter,
-  createBlock,
+  createBaseBlock,
 } from "./Block.js";
 import { createParagraph, ParagraphProps } from "./Paragraph.js";
 

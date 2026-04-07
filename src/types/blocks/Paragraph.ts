@@ -4,7 +4,7 @@ import {
   BlockGetter,
   BlockProps,
   BlockSetter,
-  createBlock,
+  createBaseBlock,
 } from "./Block.js";
 
 export const ParagraphType = "aics:block.paragraph";
@@ -15,7 +15,7 @@ export const createParagraph = (
   props: Partial<ParagraphProps> = {},
 ): ParagraphProps => {
   return {
-    ...createBlock(props as Partial<BlockProps>),
+    ...createBaseBlock(props as Partial<BlockProps>),
     ...createHighlightable(props as Partial<HighlightableProps>),
     ...props,
     type: ParagraphType,

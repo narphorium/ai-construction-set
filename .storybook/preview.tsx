@@ -11,7 +11,7 @@ import {
 import {
   createBlockRenderer,
   createBlockStore,
-  DefaultBlockRegistry,
+  createDefaultRegistry,
 } from "../src/core";
 import { useStorybookDarkMode } from "../src/hooks";
 import "../src/styles/default-theme.css";
@@ -19,9 +19,7 @@ import "../src/styles/index.css";
 import "../src/styles/storybook.css";
 import { createDocument } from "../src/types";
 
-const blockRegistry = new DefaultBlockRegistry();
-const blockStore = createBlockStore(undefined, blockRegistry);
-const renderer = createBlockRenderer(blockRegistry, blockStore.getState());
+const blockRegistry = createDefaultRegistry();
 
 const ExampleContainer = ({
   children,
@@ -38,6 +36,9 @@ const ExampleContainer = ({
   const [document, setDocument] = React.useState(
     createDocument("storybook-document"),
   );
+
+  const blockStore = createBlockStore(undefined, blockRegistry);
+  const renderer = createBlockRenderer(blockRegistry, blockStore.getState());
 
   return (
     <StorybookThemeProvider theme={theme} darkMode={darkMode}>
@@ -60,6 +61,9 @@ const StoryDecorator = (Story: any, context: any) => {
   const { darkMode, setDarkMode } = useStorybookDarkMode();
   const theme = "default";
   const [document] = React.useState(() => createDocument("storybook-document"));
+
+  const blockStore = createBlockStore(undefined, blockRegistry);
+  const renderer = createBlockRenderer(blockRegistry, blockStore.getState());
 
   return (
     <StorybookThemeProvider theme={theme} darkMode={darkMode}>

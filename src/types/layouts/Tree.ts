@@ -11,7 +11,7 @@ import {
   BlockGetter,
   BlockProps,
   BlockSetter,
-  createBlock,
+  createBaseBlock,
 } from "../blocks/Block.js";
 
 export const TreeType = "aics:layout.tree";
@@ -26,7 +26,7 @@ export interface TreeProps
 
 export const createTree = (props: Partial<TreeProps> = {}): TreeProps => {
   return {
-    ...createBlock(props as Partial<BlockProps>),
+    ...createBaseBlock(props as Partial<BlockProps>),
     ...createHighlightable(props as Partial<HighlightableProps>),
     ...createPageable(props as Partial<PageableProps>),
     ...props,

@@ -1,5 +1,5 @@
 import {
-  DefaultBlockRegistry,
+  createDefaultRegistry,
   type BlockRegistry,
 } from "@/core/BlockRegistry.js";
 import React, { createContext, useRef, type ReactNode } from "react";
@@ -27,7 +27,7 @@ export const BlockRegistryProvider = ({
   if (registry !== undefined) {
     registryRef.current = registry;
   } else if (registryRef.current === undefined) {
-    registryRef.current = new DefaultBlockRegistry();
+    registryRef.current = createDefaultRegistry();
   }
 
   return (
